@@ -15,15 +15,16 @@ Cilj projekta je napraviti web sučelje za upravljanje aktivnostima za vrijeme B
 # Tehnologije
 > TODO korištene tehnologije
 > 
-#Instalcija
+# Instalacija
+>TODO?
 # Članovi tima 
-Ante Mrkonjić
-Antun Požgaj
-Petra Predrijevac
-Petar Kapec
-Klara Zaninović
-Marta Horvat
-Bruno Jurakić
+Ante Mrkonjić  
+Antun Požgaj  
+Petra Predrijevac  
+Petar Kapec  
+Klara Zaninović  
+Marta Horvat  
+Bruno Jurakić  
 
 # Kontribucije
 >Pravila ovise o organizaciji tima i su često izdvojena u CONTRIBUTING.md
