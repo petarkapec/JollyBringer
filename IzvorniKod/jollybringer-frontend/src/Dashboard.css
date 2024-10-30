@@ -1,0 +1,51 @@
+/* src/Dashboard.css */
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f8f8ff; /* Svijetla pozadina */
+}
+
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f8f8ff;
+    height: 100vh;
+}
+
+.dashboard-title {
+    color: #ff4444; /* Jaka crvena boja za naslov */
+    margin-bottom: 20px;
+    font-size: 2em;
+    font-family: 'Courier New', Courier, monospace; /* Malo retro font */
+}
+
+.widgets-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 800px;
+}
+
+.widget {
+    flex: 1;
+    padding: 20px;
+    border: 2px solid #ff4444;
+    border-radius: 10px;
+    background-color: white;
+    text-align: center;
+}
+
+.widget h2 {
+    color: #ff4444;
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.widget p {
+    color: #333;
+    font-size: 1em;
+}

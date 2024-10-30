@@ -1,0 +1,19 @@
+Petar Kapec - inicjalno pokretanje backenda-SpringBoot
+Korištenje packet managera Maven
+inicijaziran projekt pomoću https://start.spring.io/
+
+//ubacivanje osnovnih REST dependencies (Java Spring boot web)
+
+inicijalizacija react frontenda
+
+//instaliranje osnove axios bibilioteke koja omogućuje baratanje s endpointovima (REST)
+
+//omogućavanje CORS-a tako da mogu komunicirati frontend i backend (u trenutnoj inačici dopušteno je iskljucivo sa adrese localhost:3000
+no mozda cemo dopustiti sa svih portova kasnije)
+
+//instaliran react router DOM
+
+//kreirana osnovni mock-up login samo se provjerava jesu li sifra i user admin admin
+
+kreirane komponente Login i dashboard u reactu 
+
