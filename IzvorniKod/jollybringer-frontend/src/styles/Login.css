@@ -1,4 +1,4 @@
-.wrapper {
+.login-wrapper {
     background: transparent;
     width: 420px;
     color: white;
@@ -10,11 +10,11 @@
 }
 
 body {
-    background: url("../../public/assets/img/background.jpg") no-repeat;
+    background: url("/assets/img/background.jpg") no-repeat;
     background-size: cover;
 }
 
-.wrapper h1 {
+.login-wrapper h1 {
     font-size: 36px;
     text-align: center;
 }
@@ -25,14 +25,14 @@ form {
     gap: 20px;
 }
 
-.btn-container {
+.login-btn-container {
     display: flex;
     flex-direction: column;
     gap: 7px;
     padding-top: 20px;
 }
 
-.btn-container button {
+.login-btn-container button {
     width: 100%;
     height: 40px;
     font-size: 18px;
@@ -41,7 +41,7 @@ form {
     color: rgba(33, 37, 47, 0.84);
 }
 
-.btn-container button:hover {
+.login-btn-container button:hover {
     cursor: pointer;
     transition: 0.2s;
     background: lightskyblue;
@@ -52,5 +52,37 @@ form {
     display: flex;
     flex-direction: row;
     text-align: center;
+}
+
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    margin-top: 20px;
+}
+
+.login-input {
+    width: 100%;
+    padding: 10px 10px 10px 20px;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    border-radius: 40px;
+}
+
+.login-submit {
+    width: 100%;
+    padding: 10px;
+    background-color: dodgerblue;
+    color: white;
+    border-radius: 40px;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.login-submit:hover {
+    background-color: lightskyblue;
+    transition: 0.2s;
 }
 
