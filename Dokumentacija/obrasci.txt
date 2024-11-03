@@ -1,0 +1,189 @@
+
+### UC1- registracija na stranicu
+* Glavni sudionik: korisnik
+* Cilj: Registracija novog korisnika na stranicu
+* Sudionici: korisnik, baza podataka
+* Preduvjet: korisnik nije već registriran na stranicu
+* Opis osnovnog tijeka:
+
+> 1. korisnik odabire registraciju na web aplikaciji
+> 2. korisnik upisuje podatke i šalje ih
+> 3. sustav provjerava je li korisnik već registriran i jesu li podatci dobro uneseni
+> 4. korisnik se zapisuje u bazu podataka
+> 5. korisniku se omogućuje pristup web stranici
+
+• Opis mogućih odstupanja:
+> 3.a korisnik nije unio podatke ispravno: prikazuje se poruka da podatci nisu ispravno unešeni
+> 3.b korisnik je već registriran: prikazuje se poruka da je korisnik već registriran na stranicu
+
+
+### UC2- prijava na stranicu
+* Glavni sudionik: registrirani korisnik
+* Cilj: Prijava korisnika na stranicu
+* Sudionici: korisnik, baza podataka
+* Preduvjet: korisnik je već registriran na stranicu
+* Opis osnovnog tijeka:
+
+> 1. korisnik odabire prijavu na web aplikaciji
+> 2. korisnik upisuje podatke i šalje ih
+> 3. sustav provjerava je li korisnik već registriran i jesu li podatci dobro uneseni
+> 4. korisniku se omogućuje pristup web stranici
+
+• Opis mogućih odstupanja:
+> 3.a korisnik nije unio podatke ispravno: prikazuje se poruka da podatci nisu ispravno unešeni
+> 3.b korisnik nije već registriran: prikazuje se poruka da korisnik nije registriran i upućuje ga se na registraciju
+
+### UC3- pregled odbrojavanja do Božića
+* Glavni sudionik: korisnik
+* Cilj: Prikaz pregleda odbrojavanja korisniku
+* Sudionici: korisnik
+* Preduvjet: -
+* Opis osnovnog tijeka:
+
+> 1. korisnik dolazi na web aplikaciju
+> 2. prikazuje mu se odbrojavanje do Božića, s različitim izgledom ovisno je li prijavljen ili nije
+
+
+• Opis mogućih odstupanja:
+-
+
+### UC4 - upravljanje grupama
+* Glavni sudionik: Božićni predsjednik
+* Cilj: Dati mogućnost Božićnom predsjedniku da upravlja svim djelovima svojih grupa
+* Sudionici: Božićni predsjednik, baza podataka
+* Preduvjet: Božićni predsjednik je prijavljen
+* Opis osnovnog tijeka:
+
+> 1. Božićni predsjednik odabire značakjku "Upravljanje grupama" na web sučelju
+> 2. predsjednik odabire "Napravi novu grupu" (UC4.1) i napravi novu grupu, ili odabire "Uredi postojeću grupu"(UC4.2) i odabire želi li dodati novog korisnika u tu grupu (UC4.3)
+> 3. baza podataka se ažurira s novom grupom, ili se novi korisnik doda u postojeću grupu 
+
+• Opis mogućih odstupanja:
+> 2. ime novog korisnika ili nove grupe nije ispravno, sustav javlja korisniku da treba ispraviti podatke
+
+
+### UC5 - dodavanje aktivnosti
+* Glavni sudionik: Božićni predsjednik
+* Cilj: Dati mogućnost Božićnom predsjedniku da dodaje aktivnosti unutar svoje grupe
+* Sudionici: Božićni predsjednik, baza podataka, AI agent
+* Preduvjet: Božićni predsjednik je odabrao postojeću grupu kojoj je predsjednik
+* Opis osnovnog tijeka:
+
+> 1. Božićni predsjednik odabire "Dodavanje aktivnosti" na dashboardu unutar prikaza grupe
+> 2. a.1 Božićni predsjednik odabire "Ručno dodavanje" (UC5.1) i sam unese specifikacije aktivnosti koju želi dodati u grupu
+> 2. a.2 Aktivnost se upiše u bazu podataka ako je ispravno unesena, atributi grupe se ažuriraju
+> 2. b.1 Božićni predsjednik odabire "Dodavanje iz ponuđenih aktivnosti" (UC5.2) i odabere aktivnost iz već ponuđenih
+> 2. b.2 Baza podataka ažurira atribute za tu grupu
+> 2. c.1 Božićni predsjednik odabire "Dodavanje pomoću AI agenta" (UC5.1) i AI agent mu preporuči aktivnost za dodati
+> 2. c.2 Aktivnost se upiše u bazu podataka ako je ispravno unesena, atributi grupe se ažuriraju
+
+• Opis mogućih odstupanja:
+> 2. a.1 specifikacije nisu ispravno unesene, sustav javlja korisniku
+
+
+### UC6 - uređivanje adventskog kalendara
+* Glavni sudionik: Božićni predsjednik
+* Cilj: Dati mogućnost Božićnom predsjedniku da dodaje aktivnosti u "adventski kalendar"
+* Sudionici: Božićni predsjednik, baza podataka
+* Preduvjet: Božićni predsjednik je odabrao postojeću grupu kojoj je predsjednik
+* Opis osnovnog tijeka:
+
+> 1. Božićni predsjednik odabire "Uređivanje adventskog kalendara" na dashboardu unutar prikaza grupe
+> 2. a.1 Božićni predsjednik odabire "Dodavanje aktivnosti" (UC6.1) i dodaje aktivnosti na odabrane načine (UC5)
+> 2. a.2 Aktivnost se upiše u bazu podataka ako je unesena nova, atributi grupe se ažuriraju
+> 2. b.1 Božićni predsjednik odabire "Brisanje aktivnosti" (UC6.2) i briše aktivnost iz kalendara
+> 2. b.2 Baza podataka ažurira atribute za tu grupu
+> 2. c.1 Božićni predsjednik odabire "Sortiranje aktivnosti po danima" (UC6.1) i može premještati aktivnosti iz dana u dan
+> 2. c.2 Atributi grupe unutar baze podataka se ažuriraju
+
+• Opis mogućih odstupanja:
+> 2. a.1 specifikacije nisu ispravno unesene (ako se aktivnost ručno unosi), sustav javlja korisniku
+
+
+### UC7 - pregled aktivnosti
+* Glavni sudionik: sudionik
+* Cilj: Dati mogućnost sudioniku da pregleda aktivnosi i ima interakciju s njima
+* Sudionici: sudionik, baza podataka
+* Preduvjet: sudionik je prijavljen  u sustav i dodan u grupu
+* Opis osnovnog tijeka:
+
+> 1. sudionik odabire što želi raditi na pregledu aktivnosti - Pregledati neodrađenu aktivnost (UC7.2), pregledati adventski kalendar (UC7.12), pregledati odrađene aktivnosti (UC7.1)
+> 2. a.1 sudionik odabire neodrađenu aktivnost, na njoj može: označiti izvršenost(UC7.5), dodati datum izvedbe (UC7.6), dodati vlasnika (UC7.6), predložiti promjene (UC7.7), izbrisati aktivnost (UC7.11)
+> 2. a.2 baza podataka se ažurira na temelju odabira i korisniku se prikaže promijenjena aktivnost
+> 2. b sudionik odabire pregled adventskog kalendara, može vidjeti već otkrivene i sakrivene aktivnosti na kalendaru
+> 2. c. 1 Sudionik odabire odrađenu aktivnost, može ostaviti oznake "Sviđa mi se"(UC7.8) ili "Ne sviđa mi se" (UC7.9)  te komentirati aktivnost (UC7.10)
+> 2. c.2 baza podataka se ažurira na temelju odabira i korisniku se prikaže promijenjena aktivnost
+
+
+• Opis mogućih odstupanja:
+-
+
+### UC8 - pisanje u chat
+* Glavni sudionik: sudionik
+* Cilj: Dati mogućnost sudioniku da razgovara s drugim sudionicima grupe unutar chat sučelja
+* Sudionici: sudionik, baza podataka
+* Preduvjet: sudionik je prijavljen u sustav i dodan u grupu
+* Opis osnovnog tijeka:
+
+> 1. sudionik odabire chat funkciju unutar dashboarda
+> 2. Baza podatka učitava poruke za njegovu grupu
+> 3. korisnik upisuje u chat poruku
+> 4. Poruka se zapisuje u bazu podataka
+
+• Opis mogućih odstupanja:
+-
+
+
+### UC9 - uređivanje korisničkih računa
+* Glavni sudionik: administrator
+* Cilj: Dati mogućnost administratoru da stvara i briše korisničke račune
+* Sudionici: administrator, baza podataka
+* Preduvjet: administrator je prijavljen u sustav
+* Opis osnovnog tijeka:
+
+> 1. administrator odabire "uređivanje korisničkih računa", i zatim "brisanje korisničkih računa"(UC9.1) ili "stvaranje korisničkih računa" (UC9.2)
+> 2. a.1 odabrano je brisanje korisničkih računa, administrator unosi korisnički račun za izbrisati
+> 2. a.2 baza podataka briše korisnički račun
+> 2. a.3 administratoru dolazi poruka da je račun uspješno obrisan
+> 2. b.1 odabrano je stvaranje korisničkih računa, administrator unosi korisnički račun za napraviti, koristeći registraciju kao kod korisnika (UC1)
+> 2. b.2 baza podataka zapisuje korisnički račun
+> 2. b.3 administratoru dolazi poruka da je račun uspješno napravljen
+
+
+• Opis mogućih odstupanja:
+> 2. a.1 administrator unosi neispravan račun, dolazi mu poruka da taaj račun ne postoji
+> 2. b.1 administrator neisprvno unosi račun, dolazi mu poruka daje neispravno unesen
+
+### UC10 - upravljanje aktivnostima, grupama i obavijestima
+* Glavni sudionik: administrator
+* Cilj: Dati mogućnost administratoru da upravlja aktivnostima, grupama i obavijestima
+* Sudionici: administrator, baza podataka
+* Preduvjet: administrator je prijavljen u sustav
+* Opis osnovnog tijeka:
+
+> 1. administrator odabire "upravljanje aktivnostima, grupama i obavijestima", i zatim "uređivanje grupa"(UC10.1) ili "uređivanje obavijesti" (UC10.3) ili "uređivanje aktivnosti" (UC10.2)
+> 2. a.1 administrator odabire uređivanje grupa i uređuje ih ovisno o želji (UC4)
+> 2. a.2 baza podataka se ažurira s promjenama
+> 2. b.1 administrator odabire uređivanje obavijesti i može ih dodavati (UC10.4) ili brisati (UC10.5)
+> 2. b.2 baza podataka se ažurira s promjenama
+> 2. c.1 administrator odabire uređivanje aktivnosti unutar određene grupe i uređuje ih ovisno o želji (UC7, UC5, UC6)
+> 2. c.2 baza podataka se ažurira s promjenama
+
+
+• Opis mogućih odstupanja:
+> 2. a.1 administrator unosi neispravnu grupu ili korisnika, dobiva prikladnu poruku
+> 2. c.1 administrator neispravno unese aktinvnost, dobiva prikladnu poruku
+
+
+### UC11 - pregled obavijesti
+* Glavni sudionik: korisnik
+* Cilj: Dati mogućnost korisniku da vidi obavijesti administratora
+* Sudionici: korisnik, baza podataka
+* Preduvjet: -
+* Opis osnovnog tijeka:
+
+> 1. korisnik odabire obavijesti
+> 2. Baza podataka učitava obavijesti
+> 3. obavijesti se prikazuju na sučelju
+
+• Opis mogućih odstupanja:
