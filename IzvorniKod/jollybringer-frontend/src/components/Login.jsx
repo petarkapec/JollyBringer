@@ -6,7 +6,7 @@ const Login = () => {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate(); // Koristimo useNavigate za preusmeravanje
+  const navigate = useNavigate();
 
   const handleGoogleLogin = () => {
     window.location.href = "/auth/google"

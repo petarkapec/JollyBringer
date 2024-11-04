@@ -86,3 +86,26 @@ form {
     transition: 0.2s;
 }
 
+@media (max-width: 768px) {
+    .login-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 100%;
+        border-radius: 0;
+        border: none;
+        height: 100%;
+        align-items: center;
+        padding: 0;
+    }
+
+    .login-btn-container {
+        width: 70%;
+    }
+
+    .login-test-wrapper {
+        width: 70%;
+    }
+}
+
+
