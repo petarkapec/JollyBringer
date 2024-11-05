@@ -45,7 +45,7 @@
 
 
 • Opis mogućih odstupanja:
--
+>-
 
 ### UC4 - upravljanje grupama
 * Glavni sudionik: Božićni predsjednik
@@ -116,7 +116,7 @@
 
 
 • Opis mogućih odstupanja:
--
+>-
 
 ### UC8 - pisanje u chat
 * Glavni sudionik: sudionik
@@ -131,7 +131,7 @@
 > 4. Poruka se zapisuje u bazu podataka
 
 • Opis mogućih odstupanja:
--
+>-
 
 
 ### UC9 - uređivanje korisničkih računa
@@ -161,7 +161,7 @@
 * Preduvjet: administrator je prijavljen u sustav
 * Opis osnovnog tijeka:
 
-> 1. administrator odabire "upravljanje aktivnostima, grupama i obavijestima", i zatim "uređivanje grupa"(UC10.1) ili "uređivanje obavijesti" (UC10.3) ili "uređivanje aktivnosti" (UC10.2)
+> 1. administrator odabire "upravljanje aktivnostima, grupama i obavijestima", i zatim "uređivanje grupa"(UC10.1) ili "uređivanje aktivnosti" (UC10.2)
 > 2. a.1 administrator odabire uređivanje grupa i uređuje ih ovisno o želji (UC4)
 > 2. a.2 baza podataka se ažurira s promjenama
 > 2. b.1 administrator odabire uređivanje aktivnosti unutar određene grupe i uređuje ih ovisno o želji (UC7, UC5, UC6)
@@ -170,5 +170,4 @@
 
 • Opis mogućih odstupanja:
 > 2. a.1 administrator unosi neispravnu grupu ili korisnika, dobiva prikladnu poruku
-> 2. c.1 administrator neispravno unese aktinvnost, dobiva prikladnu poruku
-
+> 2. b.1 administrator neispravno unese aktivnost, dobiva prikladnu poruku
