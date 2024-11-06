@@ -1,6 +1,7 @@
 import '../styles/Login.css'
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
+import CountdownTimer from "./CountdownTimer.jsx";
 
 const Login = () => {
 
@@ -47,7 +48,7 @@ const Login = () => {
 
         <div className={'aai-login'} onClick={handleAaiLogin}>
           <button>
-            Sign in with AAI@EduHr
+            Sign in with Github
           </button>
         </div>
       </div>
@@ -72,6 +73,7 @@ const Login = () => {
           <button type='submit' className='login-submit'>Login</button>
         </form>
       </div>
+      <CountdownTimer page={'Login'}/>
     </div>
   )
 }

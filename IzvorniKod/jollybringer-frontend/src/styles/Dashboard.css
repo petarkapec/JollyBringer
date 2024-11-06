@@ -43,9 +43,3 @@
     font-size: 20px;
     cursor: pointer;
 }
-
-.dashboard-header-countdown {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-}

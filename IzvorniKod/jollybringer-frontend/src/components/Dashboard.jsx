@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../styles/Dashboard.css';
 import Activities from "./Activities.jsx";
 import Chat from "./Chat.jsx";
+import CountdownTimer from "./CountdownTimer.jsx";
 
 const Dashboard = () => {
 
@@ -9,7 +10,7 @@ const Dashboard = () => {
     <div className="dashboard-container">
       <header className="dashboard-header">
         <div>Jolly Bringer</div>
-        <div className="dashboard-header-countdown">time remaining</div>
+        <CountdownTimer page={'Dashboard'}/>
         <div className='dashboard-header-user-data'>
           <div>Role: User</div>
           <button className="dashboard-header-button">Logout</button>
