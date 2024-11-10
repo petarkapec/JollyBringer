@@ -1,0 +1,4 @@
+package hr.JollyBringer.JollyBringer.rest;
+
+public class ParticipantGroupController {
+}
