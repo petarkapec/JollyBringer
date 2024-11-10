@@ -10,7 +10,6 @@ const calculateTimeLeft = () => {
   const difference = +nextChristmas - +now
   let timeLeft = {}
 
-  console.log(now.getDate())
   if (now.getMonth() === 11 && now.getDate() === 25) {
     // It's December 25
     return timeLeft

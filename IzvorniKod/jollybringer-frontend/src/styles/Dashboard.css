@@ -20,6 +20,7 @@
     margin: 10px 10px 0;
     font-size: 20px;
     height: 70px;
+    z-index: 10;
 }
 
 .logo{
@@ -32,6 +33,7 @@
     flex: 1;
     margin: 10px;
     gap: 10px;
+    z-index: 1;
 }
 
 .dashboard-header-user-data {
@@ -46,4 +48,38 @@
     color: white;
     font-size: 20px;
     cursor: pointer;
+}
+
+.groups {
+    position: relative;
+}
+
+.extended-menu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: black;
+    border: 1px solid white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: 150px;
+    z-index: 1000;
+}
+
+.extended-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.extended-menu li {
+    padding: 8px 16px;
+    cursor: pointer;
+    color: white;
+    border-radius: 8px;
+}
+
+.extended-menu li:hover {
+    background-color: green;
 }
