@@ -11,8 +11,9 @@
 }
 
 body {
-    background: url("/assets/img/background.jpg") no-repeat;
+    background: url("/assets/img/christmas.webp") no-repeat;
     background-size: cover;
+    background-position: center 60%;
 }
 
 .login-wrapper h1 {
@@ -45,7 +46,7 @@ form {
 .login-btn-container button:hover {
     cursor: pointer;
     transition: 0.2s;
-    background: lightskyblue;
+    background: green;
     color: white;
 }
 
@@ -74,7 +75,7 @@ form {
 .login-submit {
     width: 100%;
     padding: 10px;
-    background-color: dodgerblue;
+    background-color: green;
     color: white;
     border-radius: 40px;
     border: 2px solid rgba(0, 0, 0, 0.2);
@@ -83,7 +84,7 @@ form {
 }
 
 .login-submit:hover {
-    background-color: lightskyblue;
+    background-color: rgb(7, 175, 7);
     transition: 0.2s;
 }
 
