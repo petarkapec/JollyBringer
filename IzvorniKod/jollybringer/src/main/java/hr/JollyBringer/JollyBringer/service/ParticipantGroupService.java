@@ -48,7 +48,7 @@ public interface ParticipantGroupService {
      * @throws RequestDeniedException if no participant with given JMBAG,
      * or participant with that JMBAG is already a member of another participant group
      */
-    ParticipantGroup createParticipantGroup(String participantGroupName, String coordinatorJmbag);
+    ParticipantGroup createGroup(String participantGroupName, String coordinatorJmbag);
 
     /**
      * Updates the name of a given participant group.
@@ -58,7 +58,7 @@ public interface ParticipantGroupService {
      * @throws EntityMissingException if entity with the same ID as in parameter does not exist
      * @throws IllegalArgumentException if name is empty or any is <code>null</code>
      */
-    ParticipantGroup updateParticipantGroupName(long participantGroupId, String name);
+    ParticipantGroup updateGroupName(long participantGroupId, String name);
 
     /**
      * Lists all members of participant group, including the coordinator.

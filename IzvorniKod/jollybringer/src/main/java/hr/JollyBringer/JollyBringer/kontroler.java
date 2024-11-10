@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 //PETAR VERZIJA KODA
 
 
-@RestController
-@CrossOrigin(origins = "http://localhost:3000") // Dopušta zahtjeve s React servera
+//@RestController
+//@CrossOrigin(origins = "http://localhost:3000") // Dopušta zahtjeve s React servera
 public class kontroler {
 
-    @GetMapping("/")
+    //@GetMapping("/")
     public String helloWorld() {
         return "Hello, World!";
     }

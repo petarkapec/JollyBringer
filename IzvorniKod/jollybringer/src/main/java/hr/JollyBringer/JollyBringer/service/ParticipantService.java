@@ -2,8 +2,8 @@ package hr.JollyBringer.JollyBringer.service;
 
 import hr.JollyBringer.JollyBringer.domain.Participant;
 import hr.JollyBringer.JollyBringer.domain.Participant;
-import hr.JollyBringer.JollyBringer.service.old.EntityMissingException;
-import hr.JollyBringer.JollyBringer.service.old.RequestDeniedException;
+import hr.JollyBringer.JollyBringer.service.EntityMissingException;
+import hr.JollyBringer.JollyBringer.service.RequestDeniedException;
 import hr.JollyBringer.JollyBringer.service.ParticipantService;
 
 import java.util.List;
