@@ -5,9 +5,20 @@
 }
 
 .countdown-wrapper span:last-child {
-    color: red;
+    color: white;
+    font-family: 'Great Vibes', cursive;
+    font-size: xx-large;
+    white-space: nowrap;
+    letter-spacing: 4px;
 }
 
+.login-countdown-wrapper span:last-child {
+    color: white;
+    font-family: 'Great Vibes', cursive;
+    font-size: xx-large;
+    white-space: nowrap;
+    letter-spacing: 4px;
+}
 .login-countdown-wrapper {
     position: absolute;
     bottom: 2%;

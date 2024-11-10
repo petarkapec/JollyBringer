@@ -1,4 +1,4 @@
-import '../styles/Login.css'
+import '../styles/Login.css';
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import CountdownTimer from "./CountdownTimer.jsx";

@@ -9,7 +9,7 @@ const Dashboard = () => {
   return (
     <div className="dashboard-container">
       <header className="dashboard-header">
-        <div>Jolly Bringer</div>
+        <div className='logo'>Jolly Bringer</div>
         <CountdownTimer page={'Dashboard'}/>
         <div className='dashboard-header-user-data'>
           <div>Role: User</div>
