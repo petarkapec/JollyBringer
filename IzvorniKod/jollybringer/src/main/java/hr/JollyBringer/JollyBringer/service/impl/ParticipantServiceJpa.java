@@ -7,6 +7,8 @@ import hr.JollyBringer.JollyBringer.service.EntityMissingException;
 import hr.JollyBringer.JollyBringer.service.ParticipantService;
 import hr.JollyBringer.JollyBringer.service.RequestDeniedException;
 import org.apache.commons.lang3.EnumUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -19,6 +21,7 @@ import java.util.Optional;
 @Service
 public class ParticipantServiceJpa implements ParticipantService {
 
+    private static final Logger log = LoggerFactory.getLogger(ParticipantServiceJpa.class);
     public final ParticipantRepository participantRepo;
 
     public ParticipantServiceJpa(ParticipantRepository participantRepo) {
@@ -48,6 +51,7 @@ public class ParticipantServiceJpa implements ParticipantService {
             throw new RequestDeniedException(
                     "Participantwith Username" + participant.getUsername() + " already exists"
             );
+        log.atInfo().log("Participant created: " + participant);
         return participantRepo.save(participant);
 
 

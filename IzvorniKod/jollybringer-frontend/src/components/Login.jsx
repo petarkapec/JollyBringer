@@ -36,6 +36,18 @@ const Login = () => {
       alert('Invalid credentials')
     }
   };
+  const handleLogin2 = async (e) => {
+    e.preventDefault();
+    const response = await fetch('http://localhost:8080/home', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+      
+    });
+
+
+  };
 
   return (
     <div className='login-wrapper'>
@@ -46,7 +58,7 @@ const Login = () => {
         </button>
 
 
-        <div className={'aai-login'} onClick={handleAaiLogin}>
+        <div className={'aai-login'} onClick={handleLogin2}>
           <button>
             Sign in with Github
           </button>

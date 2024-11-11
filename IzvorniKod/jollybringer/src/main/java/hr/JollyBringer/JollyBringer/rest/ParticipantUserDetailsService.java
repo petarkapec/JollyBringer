@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -19,7 +18,7 @@ import static org.springframework.security.core.authority.AuthorityUtils.commaSe
 //TODO configure oauth2 and whats needed
 
 //TODO saving password from user and assigning it to them
-@Service
+//@Service
 public class ParticipantUserDetailsService implements UserDetailsService {
     @Value("${hr.JollyBringer.JollyBringer.admin.password}")
     private String adminPassHash;

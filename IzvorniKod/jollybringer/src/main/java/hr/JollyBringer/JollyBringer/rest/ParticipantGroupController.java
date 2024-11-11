@@ -19,6 +19,7 @@ import java.util.Set;
 //TODO add controls for activities
 @RestController
 @RequestMapping("/groups")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ParticipantGroupController {
 
     private final ParticipantService participantService;
