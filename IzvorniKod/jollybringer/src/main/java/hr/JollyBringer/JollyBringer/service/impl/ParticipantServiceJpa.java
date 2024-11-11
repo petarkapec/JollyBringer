@@ -84,6 +84,12 @@ public class ParticipantServiceJpa implements ParticipantService {
         return participant;
     }
 
+    @Override
+    public Participant findByEmail(String email) {
+        Assert.notNull(email, "Username must be given");
+        return participantRepo.findByEmail(email);
+    }
+
     //TODO change if needed
     private void validate(Participant participant) {
         Assert.notNull(participant, "participant object must be given");

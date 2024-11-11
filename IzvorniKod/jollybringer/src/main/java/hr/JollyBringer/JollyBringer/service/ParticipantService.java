@@ -73,4 +73,6 @@ public interface ParticipantService {
      * @throws EntityMissingException if Participant with that ID is not found
      */
     Participant deleteParticipant(long participantId);
+
+    Participant findByEmail(String email);
 }

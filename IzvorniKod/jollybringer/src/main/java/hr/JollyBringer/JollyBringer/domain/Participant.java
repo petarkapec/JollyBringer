@@ -8,12 +8,25 @@ public class Participant {
     @GeneratedValue
     private Long id;
 
+    //TODO mora biti jedinstven
     private String username;
+
     private String password;
 
+    //TODO mora biti jedinstven
     private String email;
 
     private String role;
+
+    public Participant(String username,  String email) {
+        this.username = username;
+        this.email = email;
+        this.role = RoleId.PARTICIPANT.name();
+    }
+
+    public Participant() {
+
+    }
 
     public String getRole() {
         return role;
