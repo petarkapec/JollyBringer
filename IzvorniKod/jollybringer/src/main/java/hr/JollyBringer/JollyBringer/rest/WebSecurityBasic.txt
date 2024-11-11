@@ -1,0 +1,71 @@
+package hr.JollyBringer.JollyBringer.rest;
+
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.context.annotation.Profile;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
+@Configuration
+@EnableMethodSecurity(securedEnabled = true, prePostEnabled = false)
+public class WebSecurityBasic {
+
+    @Value("${progi.frontend.url}")
+    private String frontendUrl;
+
+    @Bean
+    @Profile("oauth-security")
+    public SecurityFilterChain oauthFilterChain(HttpSecurity http) throws Exception {
+        return http
+            .cors().and().csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
+            .oauth2Login(oauth2 -> oauth2
+                .userInfoEndpoint(
+                    userInfoEndpoint -> userInfoEndpoint.userAuthoritiesMapper(this.authorityMapper())
+                )
+                .successHandler(this.oauth2SuccessHandler())  // Postavljanje handlera za uspješan login
+            )
+            .exceptionHandling(handling -> handling.authenticationEntryPoint(new Http403ForbiddenEntryPoint()))
+            .build();
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("http://localhost:5173"); // React frontend URL
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedHeader("*");
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+    // Custom OAuth2 Success Handler
+    private AuthenticationSuccessHandler oauth2SuccessHandler() {
+        return (request, response, authentication) -> {
+            OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
+
+            // Dobijanje korisničkih podataka
+            String email = oauth2User.getAttribute("email");
+            String name = oauth2User.getAttribute("name");
+
+            // Možeš pohraniti korisničke podatke u bazu ili nešto drugo po želji
+
+            // Preusmjerenje na frontend nakon uspješne prijave
+            response.sendRedirect(frontendUrl);  // Ili bilo koji drugi URL na koji želiš preusmjeriti korisnika
+        };
+    }
+    
+}

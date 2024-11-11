@@ -12,6 +12,7 @@
   "dependencies": {
     "18": "^0.0.0",
     "cors": "^2.8.5",
+    "frontend": "file:",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.27.0"
