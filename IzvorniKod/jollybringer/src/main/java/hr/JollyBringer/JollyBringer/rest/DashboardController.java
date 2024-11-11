@@ -5,8 +5,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api")
+@RequestMapping("")
 public class DashboardController {
+
+    @GetMapping("/home")
+    String index(){
+        return "Home here";
+    }
+
+    @GetMapping("/secured")
+    String secured(){
+        return "This is secured";
+    }
 
     @GetMapping("/dashboard")
     String dashboard(){

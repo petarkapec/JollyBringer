@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 //PETAR VERZIJA KODA
 
 
-@RestController
-@CrossOrigin(origins = "http://localhost:5173")
-@RequestMapping("/api") // Postavljanje osnovne putanje
+//@RestController
+//@CrossOrigin(origins = "http://localhost:5173")
+//@RequestMapping("/api") // Postavljanje osnovne putanje
 public class AuthController {
 
     //@PostMapping("/login")
