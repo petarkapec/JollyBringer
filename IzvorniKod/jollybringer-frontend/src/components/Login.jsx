@@ -10,7 +10,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleGoogleLogin = () => {
-    window.location.href = "/auth/google"
+    window.location.href = "http://localhost:8080/oauth2/authorization/google"
   }
 
   const handleAaiLogin = () => {
