@@ -1,0 +1,111 @@
+.login-wrapper {
+    position: relative;
+    background: transparent;
+    width: 420px;
+    color: white;
+    border-radius: 10px;
+    padding: 100px 40px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+body {
+    background: url("/assets/img/christmas.webp") no-repeat;
+    background-size: cover;
+    background-position: center 60%;
+}
+
+.login-wrapper h1 {
+    font-size: 36px;
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.login-btn-container {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding-top: 20px;
+}
+
+.login-btn-container button {
+    width: 100%;
+    height: 40px;
+    font-size: 18px;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    border-radius: 30px;
+    color: rgba(33, 37, 47, 0.84);
+}
+
+.login-btn-container button:hover {
+    cursor: pointer;
+    transition: 0.2s;
+    background: green;
+    color: white;
+}
+
+.github-login {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+}
+
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    margin-top: 20px;
+}
+
+.login-input {
+    width: 100%;
+    padding: 10px 10px 10px 20px;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    border-radius: 40px;
+}
+
+.login-submit {
+    width: 100%;
+    padding: 10px;
+    background-color: green;
+    color: white;
+    border-radius: 40px;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.login-submit:hover {
+    background-color: rgb(7, 175, 7);
+    transition: 0.2s;
+}
+
+@media (max-width: 768px) {
+    .login-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 100%;
+        border-radius: 0;
+        border: none;
+        height: 100%;
+        align-items: center;
+        padding: 0;
+    }
+
+    .login-btn-container {
+        width: 70%;
+    }
+
+    .login-test-wrapper {
+        width: 70%;
+    }
+}
