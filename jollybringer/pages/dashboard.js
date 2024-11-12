@@ -24,8 +24,8 @@ export default function Dashboard() {
     setIsModalVisible(true);
   };
 
-  const handleLogout = () => {
-    signOut();
+  const handleLogout = async () => {
+    await signOut();
   };
 
 

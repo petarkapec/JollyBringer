@@ -24,7 +24,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
+jollybringer/.env
 
 # Runtime data
 pids
