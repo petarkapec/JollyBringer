@@ -1,6 +1,7 @@
 import {useSession, signIn} from 'next-auth/react'
 import {useEffect} from 'react'
 import {useRouter} from 'next/router'
+import CountdownTimer from "../components/CountdownTimer";
 
 const Login = () => {
   const {data: session, status} = useSession()
@@ -25,7 +26,7 @@ const Login = () => {
           <button onClick={() => signIn('github')}>Login with GitHub</button>
         </div>
       </div>
-      {/*<CountdownTimer page={'Login'}/>*/}
+      <CountdownTimer page={'Login'}/>
     </div>
   )
 }
