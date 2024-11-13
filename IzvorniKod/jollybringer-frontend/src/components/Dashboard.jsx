@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
+import axios from 'axios';
 import '../styles/Dashboard.css';
 import Activities from "./Activities.jsx";
 import Chat from "./Chat.jsx";
@@ -11,6 +12,15 @@ const Dashboard = () => {
 
   const handleNewGroupClick = () => {
     setIsModalVisible(true);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await axios.post('http://localhost:8080/logout', {}, { withCredentials: true });
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
   };
 
   return (
@@ -35,7 +45,7 @@ const Dashboard = () => {
               </div>
             )}
           </div>
-          <button className="dashboard-header-button">Logout</button>
+          <button className="dashboard-header-button" onClick={handleLogout}>Logout</button>
         </div>
       </header>
       <div className="dashboard-content">
