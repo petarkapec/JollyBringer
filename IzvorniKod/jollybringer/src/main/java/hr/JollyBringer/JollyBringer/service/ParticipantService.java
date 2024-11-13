@@ -74,5 +74,5 @@ public interface ParticipantService {
      */
     Participant deleteParticipant(long participantId);
 
-    Participant findByEmail(String email);
+    Optional<Participant> findByEmail(String email);
 }

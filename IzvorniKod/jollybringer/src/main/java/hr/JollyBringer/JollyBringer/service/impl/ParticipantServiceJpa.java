@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,7 +90,7 @@ public class ParticipantServiceJpa implements ParticipantService {
     }
 
     @Override
-    public Participant findByEmail(String email) {
+    public Optional<Participant> findByEmail(String email) {
         Assert.notNull(email, "Username must be given");
         return participantRepo.findByEmail(email);
     }

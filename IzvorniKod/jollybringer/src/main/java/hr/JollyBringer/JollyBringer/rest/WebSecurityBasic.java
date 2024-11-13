@@ -1,5 +1,8 @@
 package hr.JollyBringer.JollyBringer.rest;
 
+import hr.JollyBringer.JollyBringer.domain.Participant;
+import hr.JollyBringer.JollyBringer.service.ParticipantService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,8 +19,10 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
@@ -25,6 +30,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+
+import java.io.IOException;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -35,6 +42,12 @@ public class WebSecurityBasic {
 
     @Value("${progi.frontend.url}")
     private String frontendUrl;
+
+    private ParticipantService participantService;
+
+    public WebSecurityBasic(ParticipantService participantService) {
+        this.participantService = participantService;
+    }
 
     @Bean
     @Profile("basic-security")
@@ -60,12 +73,35 @@ public class WebSecurityBasic {
                             .userInfoEndpoint(
                                     userInfoEndpoint -> userInfoEndpoint.userAuthoritiesMapper(this.authorityMapper()))
                             .successHandler(
-                                    (request, response, authentication) -> {
-                                        response.sendRedirect(frontendUrl);
-                                    });
+                                    this::oauth2AuthenticationSuccessHandler);
                 })
+                .logout(logout -> logout
+                        .logoutUrl("/logout") // The URL to trigger logout
+                        .logoutSuccessHandler((request, response, authentication) -> {
+                            // Customize the logout success behavior here
+                            response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+                        })
+                        .invalidateHttpSession(true) // Invalidate the session on logout
+                        .clearAuthentication(true) // Clear authentication information
+                )
                 .exceptionHandling(handling -> handling.authenticationEntryPoint(new Http403ForbiddenEntryPoint()))
                 .build();
+    }
+
+    private void oauth2AuthenticationSuccessHandler(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {
+        // Extract the OAuth2User details
+        OAuth2User oauthUser = (OAuth2User) authentication.getPrincipal();
+
+        // You can retrieve user information like this
+        String email = oauthUser.getAttribute("email");
+        String name = oauthUser.getAttribute("name");
+
+        // Save the user details to your database
+
+        if(!participantService.findByEmail(email).isPresent())
+            participantService.createParticipant(new Participant(name, email));
+
+        httpServletResponse.sendRedirect(frontendUrl);
     }
 
     @Bean
@@ -98,7 +134,7 @@ public class WebSecurityBasic {
     }
 
     @Bean
-    @Profile({ "basic-security", "form-security" })
+    @Profile({ "basic-security", "form-security", "oauth-security" })
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain h2ConsoleSecurityFilterChain(HttpSecurity http) throws Exception {
         http.securityMatcher(PathRequest.toH2Console());
