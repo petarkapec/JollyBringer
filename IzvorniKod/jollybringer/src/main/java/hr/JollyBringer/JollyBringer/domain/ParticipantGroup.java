@@ -19,11 +19,11 @@ public class ParticipantGroup {
     @Size(min=1, max=20)
     private String name;
 
-    @OneToOne
-    private Participant president;
+    @ManyToOne
+    private Participant president; //predsjednik može imati više grupa
 
     @OneToMany
-    private Set<Participant> members;
+    private Set<Participant> members; //grupa ima više sudionika
 
     public ParticipantGroup(String name, Participant president) {
         Assert.hasText(name, "Group name must have text");

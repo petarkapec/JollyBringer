@@ -48,9 +48,9 @@ public class ParticipantServiceJpa implements ParticipantService {
                 "Participant ID must be null, not: " + participant.getId()
         );
 
-        if (participantRepo.countByUsername(participant.getUsername()) > 0)
+        if (participantRepo.countByEmail(participant.getEmail()) > 0)
             throw new RequestDeniedException(
-                    "Participantwith Username" + participant.getUsername() + " already exists"
+                    "Participant with mail" + participant.getEmail() + " already exists"
             );
         log.atInfo().log("Participant created: " + participant);
         return participantRepo.save(participant);
@@ -98,6 +98,6 @@ public class ParticipantServiceJpa implements ParticipantService {
     //TODO change if needed
     private void validate(Participant participant) {
         Assert.notNull(participant, "participant object must be given");
-        Assert.isTrue( EnumUtils.isValidEnum(RoleId.class, participant.getRole()), "Role must be set");
+
     }
 }

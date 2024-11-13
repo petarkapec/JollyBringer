@@ -85,7 +85,7 @@ public class ParticipantGroupController {
     @Secured("ROLE_LEAD")
     public ResponseEntity<?> removeGroupMember(
             @PathVariable("gid") Long gid,
-            @PathVariable("gid") Long pid,
+            @PathVariable("pid") Long pid,
             @AuthenticationPrincipal User u)
     {
         checkAllowedToChangeMembers(gid, u.getUsername());

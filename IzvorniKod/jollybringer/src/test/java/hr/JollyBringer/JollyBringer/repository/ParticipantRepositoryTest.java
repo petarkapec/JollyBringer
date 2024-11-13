@@ -3,6 +3,7 @@ package hr.JollyBringer.JollyBringer.repository;
 
 import hr.JollyBringer.JollyBringer.dao.ParticipantRepository;
 import hr.JollyBringer.JollyBringer.domain.Participant;
+import hr.JollyBringer.JollyBringer.domain.Role;
 import hr.JollyBringer.JollyBringer.domain.RoleId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,7 @@ public class ParticipantRepositoryTest {
         testParticipant.setUsername("testuser");
         testParticipant.setPassword("testpassword");
         testParticipant.setEmail("teste@mail.com");
-        testParticipant.setRole(RoleId.PARTICIPANT.name());
+        testParticipant.setRole(new Role(1L,"PARTICIPANT"));
         // Set other fields if necessary
         participantRepository.save(testParticipant);
     }

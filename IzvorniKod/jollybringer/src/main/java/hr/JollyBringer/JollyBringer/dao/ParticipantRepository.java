@@ -14,4 +14,6 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
     boolean existsByUsernameAndIdNot(String username, Long participantId);
 
     Optional<Participant> findByEmail(String email);
+
+    int countByEmail(String username);
 }

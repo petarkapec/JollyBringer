@@ -1,6 +1,7 @@
 package hr.JollyBringer.JollyBringer.domain;
 
 import jakarta.persistence.*;
+import org.springframework.util.Assert;
 
 @Entity
 public class Participant {
@@ -16,24 +17,30 @@ public class Participant {
     //TODO mora biti jedinstven
     private String email;
 
-    private String role;
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role_id;
 
-    public Participant(String username,  String email) {
+    public Participant(String username,  String email, Role role) {
+        Assert.hasText(username, "Username must have text");
+        Assert.notNull(email, "E-mail must be set");
+        Assert.notNull(email, "Role must be set");
         this.username = username;
         this.email = email;
-        this.role = RoleId.PARTICIPANT.name();
+        this.role_id= role;
+        //this.role = new Role();
     }
 
     public Participant() {
 
     }
 
-    public String getRole() {
-        return role;
+    public Role getRole() {
+        return role_id;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRole(Role role) {
+        this.role_id = role;
     }
 
     public Long getId() {
@@ -69,7 +76,7 @@ public class Participant {
     }
 
     public boolean isPresident() {
-        return RoleId.LEAD.name().equals(role);
+        return "CHRISTMAS PRESIDENT".equals(role_id.getName());
     }
 
 

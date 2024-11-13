@@ -12,7 +12,7 @@ import java.util.Set;
  * Manages participant groups in the system.
  * @see ParticipantGroup
  */
-@Service
+
 public interface ParticipantGroupService {
 
     /**

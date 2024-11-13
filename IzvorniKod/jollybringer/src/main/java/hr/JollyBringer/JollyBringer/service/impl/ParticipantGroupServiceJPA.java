@@ -58,9 +58,9 @@ public class ParticipantGroupServiceJPA implements ParticipantGroupService
         );
         Assert.isTrue(president.isPresident(),
                 "Group president must be a lead, not: " + president);
-        participantGroupRepo.findByMember(president).ifPresent(g -> {
+        /*participantGroupRepo.findByMember(president).ifPresent(g -> {
             throw new RequestDeniedException(president + " already member of " + g);
-        });
+        });*/
         participantGroupRepo.findByName(groupName).ifPresent(g -> {
             throw new RequestDeniedException(groupName + " already name of " + g); }
         );
@@ -109,5 +109,10 @@ public class ParticipantGroupServiceJPA implements ParticipantGroupService
         if (removed)
             participantGroupRepo.save(group);
         return removed;
+    }
+
+    public Optional<ParticipantGroup> findByMember(long participantId) {
+        return participantGroupRepo.findByMember(participantService.fetch(participantId));
+
     }
 }

@@ -1,7 +1,9 @@
 package hr.JollyBringer.JollyBringer.rest;
 
 import hr.JollyBringer.JollyBringer.domain.Participant;
+import hr.JollyBringer.JollyBringer.domain.Role;
 import hr.JollyBringer.JollyBringer.service.ParticipantService;
+import hr.JollyBringer.JollyBringer.service.RoleService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -38,6 +40,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.io.IOException;
 import java.util.List;
 
+import static java.io.IO.println;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
@@ -49,9 +52,12 @@ public class WebSecurityBasic {
     private String frontendUrl;
 
     private final ParticipantService participantService;
+    private final RoleService roleService;
 
-    public WebSecurityBasic(ParticipantService participantService) {
+
+    public WebSecurityBasic(ParticipantService participantService, RoleService roleService) {
         this.participantService = participantService;
+        this.roleService = roleService;
     }
 
     @Bean
@@ -111,11 +117,16 @@ public class WebSecurityBasic {
         // You can retrieve user information like this
         String email = oauthUser.getAttribute("email");
         String name = oauthUser.getAttribute("name");
-
+        println("Authenticated user: " + name + " (" + email + ")");
         // Save the user details to your database
 
-        if(!participantService.findByEmail(email).isPresent())
-            participantService.createParticipant(new Participant(name, email));
+        if(participantService.findByEmail(email).isEmpty()){
+            println("User doesn't exist, adding to base");
+            if(roleService.findByName("PARTICIPANT").isEmpty()){
+                roleService.createRole(new Role(1L, "PARTICIPANT"));
+            }
+            participantService.createParticipant(new Participant(name, email, roleService.findByName("PARTICIPANT").get()));
+        }
 
         httpServletResponse.sendRedirect(frontendUrl + "/dashboard");
     }
