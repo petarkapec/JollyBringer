@@ -19,6 +19,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
@@ -30,8 +31,12 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.io.IOException;
+import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -43,7 +48,7 @@ public class WebSecurityBasic {
     @Value("${progi.frontend.url}")
     private String frontendUrl;
 
-    private ParticipantService participantService;
+    private final ParticipantService participantService;
 
     public WebSecurityBasic(ParticipantService participantService) {
         this.participantService = participantService;
@@ -64,8 +69,18 @@ public class WebSecurityBasic {
     public SecurityFilterChain oauthFilterChain(HttpSecurity http) throws Exception {
 
         return http
+                .cors(cors -> cors.configurationSource(request -> {
+                    var config = new org.springframework.web.cors.CorsConfiguration();
+                    config.setAllowedOrigins(List.of(frontendUrl)); // Update to your frontend URL
+                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    config.setAllowCredentials(true);
+                    config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+                    return config;
+                }))
                 .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers("/check-auth").authenticated();
                     auth.anyRequest().authenticated();
                 })
                 .oauth2Login(oauth2 -> {
@@ -88,6 +103,7 @@ public class WebSecurityBasic {
                 .build();
     }
 
+
     private void oauth2AuthenticationSuccessHandler(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {
         // Extract the OAuth2User details
         OAuth2User oauthUser = (OAuth2User) authentication.getPrincipal();
@@ -101,7 +117,7 @@ public class WebSecurityBasic {
         if(!participantService.findByEmail(email).isPresent())
             participantService.createParticipant(new Participant(name, email));
 
-        httpServletResponse.sendRedirect(frontendUrl);
+        httpServletResponse.sendRedirect(frontendUrl + "/dashboard");
     }
 
     @Bean

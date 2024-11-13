@@ -49,7 +49,7 @@ public class ParticipantController {
         return ResponseEntity.ok(saved);
     }
 
-    @DeleteMapping("/id")
+    @DeleteMapping("/{id}")
     @Secured("ROLE_ADMIN")
     public Participant deleteParticipant(@PathVariable("id") long id){
 
