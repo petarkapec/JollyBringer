@@ -11,19 +11,12 @@ const Dashboard = () => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { role, groups } = useAuth();
-  // const role = 'Admin';
+
+  // const role = 'Participant';
   // const groups = ['Group 1', 'Group 2', 'Group 3'];
 
   const handleNewGroupClick = () => {
-    if (role === 'Participant') {
-      setIsModalVisible(true);
-    } else {
-      // Handle new group creation for President and Admin
-    }
-  };
-
-  const handleAdminRedirect = () => {
-    window.location.href = '/dashboard/admin';
+    setIsModalVisible(true);
   };
 
   const handleLogout = async () => {
@@ -33,6 +26,10 @@ const Dashboard = () => {
     } catch (error) {
       console.error('Error logging out:', error);
     }
+  };
+
+  const handleAdminRedirect = () => {
+    window.location.href = '/dashboard/admin';
   };
 
   return (
@@ -68,7 +65,7 @@ const Dashboard = () => {
         <Activities/>
         <Chat/>
       </div>
-      <Modal isVisible={isModalVisible} onClose={() => setIsModalVisible(false)}/>
+      <Modal isVisible={isModalVisible} onClose={() => setIsModalVisible(false)} role={role} />
     </div>
   );
 };
