@@ -11,6 +11,8 @@ const Dashboard = () => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { role, groups } = useAuth();
+  // const role = 'Admin';
+  // const groups = ['Group 1', 'Group 2', 'Group 3'];
 
   const handleNewGroupClick = () => {
     if (role === 'Participant') {
