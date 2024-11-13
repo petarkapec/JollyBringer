@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 IzvorniKod/jollybringer/src/main/resources/application.properties
 IzvorniKod/jollybringer/src/main/resources/application.properties
+IzvorniKod/jollybringer/api.rest
+IzvorniKod/jollybringer-frontend/api.rest
+IzvorniKod/jollybringer/src/main/resources/application.properties

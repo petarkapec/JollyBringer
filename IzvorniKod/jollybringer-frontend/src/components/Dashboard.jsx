@@ -1,5 +1,6 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import axios from 'axios';
+import useAuth from '../hooks/useAuth';
 import '../styles/Dashboard.css';
 import Activities from "./Activities.jsx";
 import Chat from "./Chat.jsx";
@@ -9,9 +10,18 @@ import Modal from './Modal.jsx';
 const Dashboard = () => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const { role, groups } = useAuth();
 
   const handleNewGroupClick = () => {
-    setIsModalVisible(true);
+    if (role === 'Participant') {
+      setIsModalVisible(true);
+    } else {
+      // Handle new group creation for President and Admin
+    }
+  };
+
+  const handleAdminRedirect = () => {
+    window.location.href = '/dashboard/admin';
   };
 
   const handleLogout = async () => {
@@ -34,13 +44,17 @@ const Dashboard = () => {
             onMouseEnter={() => setIsMenuVisible(true)}
             onMouseLeave={() => setIsMenuVisible(false)}
           >
-            Groups
+            {role}
             {isMenuVisible && (
               <div className="extended-menu">
                 <ul>
-                  <li>Group 1</li>
-                  <li>Group 2</li>
+                  {groups.map(group => (
+                    <li key={group}>{group}</li>
+                  ))}
                   <li onClick={handleNewGroupClick}>+ New group</li>
+                  {(role === 'Admin') && (
+                    <li onClick={handleAdminRedirect}>Admin Dashboard</li>
+                  )}
                 </ul>
               </div>
             )}
