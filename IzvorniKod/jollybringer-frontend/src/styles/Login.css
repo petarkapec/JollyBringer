@@ -32,6 +32,8 @@ form {
     flex-direction: column;
     gap: 7px;
     padding-top: 20px;
+    margin-bottom: 30px;
+    margin-top: 20px;
 }
 
 .login-btn-container button {
@@ -48,44 +50,6 @@ form {
     transition: 0.2s;
     background: green;
     color: white;
-}
-
-.aai-login {
-    display: flex;
-    flex-direction: row;
-    text-align: center;
-}
-
-
-.login-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    margin-top: 20px;
-}
-
-.login-input {
-    width: 100%;
-    padding: 10px 10px 10px 20px;
-    border: 2px solid rgba(0, 0, 0, 0.2);
-    border-radius: 40px;
-}
-
-.login-submit {
-    width: 100%;
-    padding: 10px;
-    background-color: green;
-    color: white;
-    border-radius: 40px;
-    border: 2px solid rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.login-submit:hover {
-    background-color: rgb(7, 175, 7);
-    transition: 0.2s;
 }
 
 @media (max-width: 768px) {
