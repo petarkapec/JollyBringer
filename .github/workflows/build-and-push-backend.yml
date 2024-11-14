@@ -1,11 +1,11 @@
 name: Build and Push Backend Image
 
 on:
-  pull_request:
+  push:
     branches:
-      - '**'  # Tvoja grana
+      - DEV-deploy-test-petar_kapec  # Tvoja grana
     paths:
-      - 'jollybringer/**'  # Ovaj workflow se pokreće samo ako su napravljene promene u ovom direktorijumu
+      - 'Izvorni_kod/jollybringer/**'  # Ovaj workflow se pokreće samo ako su napravljene promene u ovom direktorijumu
   workflow_dispatch:  # Omogućava ručno pokretanje workflow-a putem GitHub interfejsa
 
 jobs:
