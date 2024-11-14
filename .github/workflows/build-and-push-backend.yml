@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - DEV-deploy-test-petar_kapec
-  workflow_dispatch:
-
     paths:
       - 'IzvorniKod/jollybringer/**'      # Trigger only on changes in the /jollybringer directory
   workflow_dispatch:
