@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>hr.JollyBringer</groupId>
-	<artifactId>JollyBringer</artifactId>
+	<artifactId>backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>JollyBringer</name>
 	<description>Božićni asistent</description>
