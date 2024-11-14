@@ -1,8 +1,8 @@
-name: Build and Push Backend Image
+  name: Build and Push Backend Image
 
 on:
   push:
-    branches:
+      branches:
       - DEV-deploy-test-petar_kapec  # Tvoja grana
     paths:
       - 'IzvorniKod/jollybringer/**'  # Ovaj workflow se pokreće samo ako su napravljene promene u ovom direktorijumu
