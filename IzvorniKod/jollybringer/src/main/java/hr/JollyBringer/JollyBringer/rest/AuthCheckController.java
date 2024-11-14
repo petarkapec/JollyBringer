@@ -43,7 +43,7 @@ public class AuthCheckController
         Map<String, Object> response = new HashMap<>();
         response.put("isAuthenticated", authentication != null && authentication.isAuthenticated());
         response.put("role_id", participant.get().getRole().getId());
-        response.put("role_name", participant.get().getRole().getName());
+        response.put("role", participant.get().getRole().getName());
         response.put("username", participant.get().getUsername());
         response.put("email", participant.get().getEmail());
         response.put("user_id", participant.get().getId());

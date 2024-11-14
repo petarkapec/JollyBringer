@@ -120,12 +120,15 @@ public class WebSecurityBasic {
         println("Authenticated user: " + name + " (" + email + ")");
         // Save the user details to your database
 
+        //TODO roles need to be in database on startup
         if(participantService.findByEmail(email).isEmpty()){
             println("User doesn't exist, adding to base");
-            if(roleService.findByName("PARTICIPANT").isEmpty()){
-                roleService.createRole(new Role(1L, "PARTICIPANT"));
+            if(roleService.findByName("Participant").isEmpty()){
+                roleService.createRole(new Role(1L, "Participant"));
+                roleService.createRole(new Role(2L, "Christmas president"));
+                roleService.createRole(new Role(3L, "Admin"));
             }
-            participantService.createParticipant(new Participant(name, email, roleService.findByName("PARTICIPANT").get()));
+            participantService.createParticipant(new Participant(name, email, roleService.findByName("Participant").get()));
         }
 
         httpServletResponse.sendRedirect(frontendUrl + "/dashboard");
