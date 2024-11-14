@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../styles/AdminDashboard.css';
+
 const AdminDashboard = () => {
   const [groups, setGroups] = useState([]);
   const [users, setUsers] = useState([]);
@@ -24,33 +25,49 @@ const AdminDashboard = () => {
     fetchAdminData();
   }, []);
 
+  const handleApproveApplication = async (userId) => {
+    try {
+      await axios.post('http://localhost:8080/admin/approve', { userId }, { withCredentials: true });
+      setApplications(applications.filter(application => application.id !== userId));
+    } catch (error) {
+      console.error('Error approving application:', error);
+    }
+  };
+
   return (
     <div className="admin-dashboard-container">
-      <h1>Admin Dashboard</h1>
-      <section>
-        <h2>All Groups</h2>
-        <ul>
-          {groups.map(group => (
-            <li key={group.id}>{group.name}</li>
-          ))}
-        </ul>
-      </section>
-      <section>
-        <h2>All Users</h2>
-        <ul>
-          {users.map(user => (
-            <li key={user.id}>{user.username}</li>
-          ))}
-        </ul>
-      </section>
-      <section>
-        <h2>Applications for President</h2>
-        <ul>
-          {applications.map(application => (
-            <li key={application.id}>{application.username} - {application.status}</li>
-          ))}
-        </ul>
-      </section>
+      <div className="admin-dashboard-header">
+        <h1>Admin Dashboard</h1>
+      </div>
+      <div className="admin-dashboard-content">
+        <section className="admin-dashboard-section">
+          <h2>All Groups</h2>
+          <ul>
+            {groups.map(group => (
+              <li key={group.id}>{group.name}</li>
+            ))}
+          </ul>
+        </section>
+        <section className="admin-dashboard-section">
+          <h2>All Users</h2>
+          <ul>
+            {users.map(user => (
+              <li key={user.id}>{user.username}</li>
+            ))}
+          </ul>
+        </section>
+        <section className="admin-dashboard-section">
+          <h2>Applications for President</h2>
+          <ul>
+            {applications.map(application => (
+              <li key={application.id}>
+                {application.username}
+                <button onClick={() => handleApproveApplication(application.id)}>Approve</button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
     </div>
   );
 };

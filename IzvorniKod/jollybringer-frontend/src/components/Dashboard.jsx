@@ -10,8 +10,7 @@ import Modal from './Modal.jsx';
 const Dashboard = () => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const { groups, user, loading } = useAuth();
-  const role = 'Christmas President'
+  const { role, groups, user, loading } = useAuth();
 
   if (loading) {
     return <div>Loading...</div>;

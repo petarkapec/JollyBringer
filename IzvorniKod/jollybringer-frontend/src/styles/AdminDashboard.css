@@ -1,39 +1,91 @@
-/* src/styles/AdminDashboard.css */
 .admin-dashboard-container {
-    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100%;
+    background: transparent;
     padding: 20px;
-    background-color: #f4f4f9;
 }
 
-.admin-dashboard-container h1 {
+.admin-dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: rgba(139, 22, 22, 0.4);
+    border: 2px solid rgba(244, 246, 244, 0.2);
+    border-radius: 10px;
+    backdrop-filter: blur(20px);
+    color: white;
+    box-shadow: 0 0 10px white;
+    margin: 10px 10px 0;
+    font-size: 20px;
+    height: 70px;
+    z-index: 10;
+}
+
+.admin-dashboard-header h1 {
     text-align: center;
-    color: #333;
+    color: white;
 }
 
-.admin-dashboard-container section {
-    margin-bottom: 20px;
+.admin-dashboard-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    margin: 10px;
+    gap: 10px;
+    z-index: 1;
+    width: 50%;
 }
 
-.admin-dashboard-container h2 {
-    color: #555;
-    border-bottom: 2px solid #ddd;
+.admin-dashboard-section {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 10px white;
+    color: white;
+    width: 100%;
+    max-width: 800px;
+}
+
+.admin-dashboard-section h2 {
+    color: white;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
     padding-bottom: 5px;
 }
 
-.admin-dashboard-container ul {
+.admin-dashboard-section ul {
     list-style-type: none;
     padding: 0;
 }
 
-.admin-dashboard-container li {
-    background-color: #fff;
+.admin-dashboard-section li {
+    background-color: rgba(0, 0, 0, 0.4);
     margin: 5px 0;
     padding: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 4px;
     transition: background-color 0.3s;
 }
 
-.admin-dashboard-container li:hover {
-    background-color: #f0f0f0;
+.admin-dashboard-section button {
+    background: green;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-left: 20px;
+}
+
+.admin-dashboard-section button:hover {
+    background: darkgreen;
 }
