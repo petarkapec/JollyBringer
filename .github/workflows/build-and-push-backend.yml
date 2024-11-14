@@ -1,7 +1,7 @@
 name: Build and Push Backend Image
 
 on:
-  push:
+  pull_request:
     branches:
       - '**'  # Tvoja grana
     paths:
