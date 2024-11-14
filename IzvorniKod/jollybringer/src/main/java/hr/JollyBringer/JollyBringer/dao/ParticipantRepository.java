@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-//TODO: implement methods
+//TODO: implement method
 public interface ParticipantRepository extends JpaRepository<Participant, Long> {
     Optional<Participant> findByUsername(String username);
 
