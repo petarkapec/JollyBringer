@@ -10,10 +10,12 @@ import Modal from './Modal.jsx';
 const Dashboard = () => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const { role, groups } = useAuth();
+  const { groups, user, loading } = useAuth();
+  const role = 'Christmas President'
 
-  // const role = 'Participant';
-  // const groups = ['Group 1', 'Group 2', 'Group 3'];
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   const handleNewGroupClick = () => {
     setIsModalVisible(true);
@@ -65,7 +67,7 @@ const Dashboard = () => {
         <Activities/>
         <Chat/>
       </div>
-      <Modal isVisible={isModalVisible} onClose={() => setIsModalVisible(false)} role={role} />
+      {isModalVisible && <Modal isVisible={isModalVisible} onClose={() => setIsModalVisible(false)} user={user} role={role}/>}
     </div>
   );
 };

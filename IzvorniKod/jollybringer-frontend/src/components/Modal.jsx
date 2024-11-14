@@ -1,20 +1,13 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/Modal.css';
 import useAuth from '../hooks/useAuth';
 
-const Modal = ({isVisible, onClose, role}) => {
+const Modal = ({ isVisible, onClose, role }) => {
+  const { user } = useAuth();
   const [newGroupName, setNewGroupName] = useState('');
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
-
-  // const allUsers = [
-  //   { id: 1, username: 'Alice' },
-  //   { id: 2, username: 'Bob' },
-  //   { id: 3, username: 'Charlie' },
-  //   { id: 4, username: 'David' },
-  //   { id: 5, username: 'Eve' }
-  //  ]
 
   useEffect(() => {
     if (role !== 'Participant') {
@@ -35,7 +28,7 @@ const Modal = ({isVisible, onClose, role}) => {
       await axios.post('http://localhost:8080/admin/groups', {
         name: newGroupName,
         users: selectedUsers
-      }, {withCredentials: true});
+      }, { withCredentials: true });
       onClose();
     } catch (error) {
       console.error('Error creating group:', error);
@@ -48,6 +41,18 @@ const Modal = ({isVisible, onClose, role}) => {
         ? prevSelectedUsers.filter(id => id !== userId)
         : [...prevSelectedUsers, userId]
     );
+  };
+
+  const handleApplyForPresident = async () => {
+    try {
+      await axios.post('http://localhost:8080/apply', {
+        userId: user.id,
+        applied: true
+      }, { withCredentials: true });
+      onClose();
+    } catch (error) {
+      console.error('Error applying for president:', error);
+    }
   };
 
   if (!isVisible) return null;
@@ -66,7 +71,7 @@ const Modal = ({isVisible, onClose, role}) => {
           <div className="participant-modal-content">
             <h2>Create a Group</h2>
             <p>To create a group, you need to be a Christmas president. Do you want to apply for that role?</p>
-            <button onClick={onClose}>Apply</button>
+            <button onClick={handleApplyForPresident}>Apply</button>
           </div>
         ) : (
           <div className="new-group-form">

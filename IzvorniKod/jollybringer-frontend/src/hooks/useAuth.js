@@ -7,6 +7,7 @@ const useAuth = () => {
   const [loading, setLoading] = useState(true);
   const [role, setRole] = useState('');
   const [groups, setGroups] = useState([]);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -15,6 +16,11 @@ const useAuth = () => {
         setIsAuthenticated(response.data.isAuthenticated);
         setRole(response.data.role);
         setGroups(response.data.groups);
+        setUser({
+          id: response.data.user_id,
+          username: response.data.username,
+          email: response.data.email,
+        });
       } catch (error) {
         setIsAuthenticated(false);
       } finally {
@@ -25,7 +31,7 @@ const useAuth = () => {
     checkAuth();
   }, []);
 
-  return { isAuthenticated, loading, role, groups };
+  return { isAuthenticated, loading, role, groups, user };
 };
 
 export default useAuth;
