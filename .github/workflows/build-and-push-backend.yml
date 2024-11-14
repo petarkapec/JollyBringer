@@ -3,7 +3,7 @@ name: Build and Push Backend Image
 on:
   push:
     branches:
-      - master
+      - DEV-deploy-test-petar_kapec
     paths:
       - 'IzvorniKod/jollybringer/**'      # Trigger only on changes in the /jollybringer directory
   workflow_dispatch:
