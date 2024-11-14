@@ -40,7 +40,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.io.IOException;
 import java.util.List;
 
-import static java.io.IO.println;
+
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
@@ -117,12 +117,12 @@ public class WebSecurityBasic {
         // You can retrieve user information like this
         String email = oauthUser.getAttribute("email");
         String name = oauthUser.getAttribute("name");
-        println("Authenticated user: " + name + " (" + email + ")");
+
         // Save the user details to your database
 
         //TODO roles need to be in database on startup
         if(participantService.findByEmail(email).isEmpty()){
-            println("User doesn't exist, adding to base");
+
             if(roleService.findByName("Participant").isEmpty()){
                 roleService.createRole(new Role(1L, "Participant"));
                 roleService.createRole(new Role(2L, "Christmas president"));
