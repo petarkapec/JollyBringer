@@ -6,6 +6,7 @@ const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8080';
 const Login = () => {
 
   const handleGoogleLogin = () => {
+    console.log("pormjena");
     window.location.href = `${backendUrl}/oauth2/authorization/google`;
   }
 
