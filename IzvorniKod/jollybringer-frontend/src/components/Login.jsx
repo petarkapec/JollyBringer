@@ -6,6 +6,7 @@ const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL || 'http://localho
 const Login = () => {
 
   const handleGoogleLogin = () => {
+    console.log("pormjena");
     window.location.href = `${backendUrl}/oauth2/authorization/google`;
   }
 
