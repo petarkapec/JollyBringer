@@ -49,8 +49,9 @@ Aplikacija uključuje tri vrste korisnika:
 > Java Spring  
 > Postgres SQL
  
-# Instalacija
->TODO?
+# Upute  
+>Frontend u korijenu u terminalu treba pokrenuti uz npm install, npm run dev  
+>Backend pokrenuti klasu JollyBringerApplication    
 
 # Status
 Frontend link https://jollybringer-frontend-latest.onrender.com  
