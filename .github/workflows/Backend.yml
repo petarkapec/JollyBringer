@@ -27,6 +27,8 @@ jobs:
           architecture: x64
           cache: 'maven'
           cache-dependency-path: 'IzvorniKod/jollybringer/pom.xml'
+      - name: Change to the project directory
+        run: cd IzvorniKod
 
       - name: Maven build
         run: mvn clean package -DskipTests
