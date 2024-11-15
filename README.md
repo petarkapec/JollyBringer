@@ -9,7 +9,38 @@ Cilj projekta je napraviti web sučelje za upravljanje aktivnostima za vrijeme B
 
 
 # Funkcijski zahtjevi
-> TODO: Navedite ključne zahtjeve Vašeg projekta.
+3.1 Korisničke uloge
+
+Aplikacija uključuje tri vrste korisnika:
+
+    Sudionici: članovi grupe koji sudjeluju u blagdanskim aktivnostima.
+    Božićni predsjednik: organizator koji upravlja aktivnostima u grupi.
+    Administrator: osoba s najvišim ovlastima koja nadzire aplikaciju i upravlja korisničkim računima.
+
+3.2 Funkcionalnosti za sve korisnike
+
+    Registracija i prijava u aplikaciju.
+    Prikaz odbrojavanja do Božića (dani, sati, minute, sekunde).
+
+3.3 Funkcionalnosti za Božićnog predsjednika
+
+    Kreiranje grupe korisnika.
+    Dodavanje korisnika u grupu.
+    Upravljanje prikazom aktivnosti na dashboardu grupe.
+    Dodavanje aktivnosti i prilagodba dnevnika aktivnosti u adventskom kalendaru.
+    Korištenje AI agenta za automatsko dodavanje aktivnosti.
+
+3.4 Funkcionalnosti za sudionike
+
+    Pregled i interakcija s aktivnostima.
+    Sudjelovanje u chatu.
+    Ažuriranje aktivnosti i davanje povratnih informacija.
+
+3.5 Funkcionalnosti za administratora
+
+    Upravljanje korisničkim računima i grupama.
+    Pristup za nadzor i moderaciju svih dijelova aplikacije.
+
 
 
 # Tehnologije
