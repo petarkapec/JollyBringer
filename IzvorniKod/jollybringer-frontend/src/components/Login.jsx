@@ -1,10 +1,12 @@
 import '../styles/Login.css';
 import CountdownTimer from "./CountdownTimer.jsx";
 
+const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8080';
+
 const Login = () => {
 
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:8080/oauth2/authorization/google"
+    window.location.href = `${backendUrl}/oauth2/authorization/google`;
   }
 
   return (
@@ -20,4 +22,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default Login;

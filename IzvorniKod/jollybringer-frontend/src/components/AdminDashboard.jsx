@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../styles/AdminDashboard.css';
 
+const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8080';
+
 const AdminDashboard = () => {
   const [groups, setGroups] = useState([]);
   const [users, setUsers] = useState([]);
@@ -10,9 +12,9 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchAdminData = async () => {
       try {
-        const groupsResponse = await axios.get('http://localhost:8080/groups', { withCredentials: true });
-        const usersResponse = await axios.get('http://localhost:8080/participants', { withCredentials: true });
-        const applicationsResponse = await axios.get('http://localhost:8080/applications', { withCredentials: true });
+        const groupsResponse = await axios.get(`${backendUrl}/groups`, { withCredentials: true });
+        const usersResponse = await axios.get(`${backendUrl}/participants`, { withCredentials: true });
+        const applicationsResponse = await axios.get(`${backendUrl}/applications`, { withCredentials: true });
         setGroups(groupsResponse.data);
         setUsers(usersResponse.data);
         setApplications(applicationsResponse.data);
@@ -26,7 +28,7 @@ const AdminDashboard = () => {
 
   const handleApproveApplication = async (userId) => {
     try {
-      await axios.post('http://localhost:8080/approve', {
+      await axios.post(`${backendUrl}/approve`, {
         user_id: userId,
         applied: true
       }, { withCredentials: true });

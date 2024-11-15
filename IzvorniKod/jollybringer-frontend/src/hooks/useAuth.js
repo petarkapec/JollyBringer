@@ -9,10 +9,13 @@ const useAuth = () => {
   const [groups, setGroups] = useState([]);
   const [user, setUser] = useState(null);
 
+  const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8080';
+
+
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/check-auth', { withCredentials: true });
+        const response = await axios.get(`${backendUrl}/check-auth`, { withCredentials: true });
         setIsAuthenticated(response.data.isAuthenticated);
         setRole(response.data.role);
         setGroups(response.data.groups);

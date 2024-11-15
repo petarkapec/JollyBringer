@@ -3,6 +3,8 @@ import axios from 'axios';
 import '../styles/Modal.css';
 import useAuth from '../hooks/useAuth';
 
+const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8080';
+
 const Modal = ({ isVisible, onClose, role }) => {
   const { user } = useAuth();
   const [newGroupName, setNewGroupName] = useState('');
@@ -13,7 +15,7 @@ const Modal = ({ isVisible, onClose, role }) => {
     if (role !== 'Participant') {
       const fetchUsers = async () => {
         try {
-          const response = await axios.get('http://localhost:8080/participants/only', { withCredentials: true });
+          const response = await axios.get(`${backendUrl}/participants/only`, { withCredentials: true });
           setAllUsers(response.data);
         } catch (error) {
           console.error('Error fetching users:', error);
@@ -25,7 +27,7 @@ const Modal = ({ isVisible, onClose, role }) => {
 
   const handleCreateGroup = async () => {
     try {
-      await axios.post('http://localhost:8080/groups', {
+      await axios.post(`${backendUrl}/groups`, {
         name: newGroupName,
         users: selectedUsers
       }, { withCredentials: true });
@@ -45,7 +47,7 @@ const Modal = ({ isVisible, onClose, role }) => {
 
   const handleApplyForPresident = async () => {
     try {
-      await axios.post('http://localhost:8080/apply', {
+      await axios.post(`${backendUrl}/apply`, {
         user_id: user.id,
         applied: true
       }, { withCredentials: true });

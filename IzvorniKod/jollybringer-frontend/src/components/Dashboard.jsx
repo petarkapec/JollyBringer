@@ -7,6 +7,8 @@ import Chat from "./Chat.jsx";
 import CountdownTimer from "./CountdownTimer.jsx";
 import Modal from './Modal.jsx';
 
+const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8080';
+
 const Dashboard = () => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -16,7 +18,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchGroups = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/groups', { withCredentials: true });
+        const response = await axios.get(`${backendUrl}/groups`, { withCredentials: true });
         setGroups(response.data);
       } catch (error) {
         console.error('Error fetching groups:', error);
@@ -36,7 +38,7 @@ const Dashboard = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post('http://localhost:8080/logout', {}, { withCredentials: true });
+      await axios.post(`${backendUrl}/logout`, {}, { withCredentials: true });
       window.location.href = '/';
     } catch (error) {
       console.error('Error logging out:', error);
