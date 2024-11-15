@@ -51,7 +51,7 @@ Aplikacija uključuje tri vrste korisnika:
  
 # Upute  
 >Frontend u korijenu u terminalu treba pokrenuti uz npm install, npm run dev  
->Backend pokrenuti klasu JollyBringerApplication    
+>Backend pokrenuti klasu JollyBringerApplication  
 
 # Status
 Frontend link https://jollybringer-frontend-latest.onrender.com  
