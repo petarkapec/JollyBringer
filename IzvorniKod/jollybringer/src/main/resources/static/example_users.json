@@ -148,18 +148,8 @@
     "username": "Noah_Wright",
     "email": "noahwright@example.com",
     "role_id": 3
-  },
-  {
-
-    "username": "Ante Mrkonjić",
-    "email": "antemrkonjic0908@gmail.com",
-    "role_id": 3
-  },
-
-  {
-
-    "username": "legoante",
-    "email": "legoante@gmail.com",
-    "role_id": 2
   }
+
+
+
 ]
