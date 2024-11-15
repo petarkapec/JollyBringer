@@ -84,7 +84,10 @@ public class WebSecurityBasic {
         http
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of(frontendUrl));
+                    config.setAllowedOrigins(List.of(
+                            frontendUrl,
+                            "https://jollybringer-frontend-latest.onrender.com"
+                    ));
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowCredentials(true);
                     config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
