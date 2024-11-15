@@ -1,10 +1,6 @@
 # Koristi Java 21 baziranu sliku kao osnovu
 FROM amazoncorretto:21 AS build
 
-# Instaliraj Maven ručno ako nije uključen u osnovnu sliku
-RUN wget https://archive.apache.org/dist/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz && \
-    tar xzf apache-maven-3.9.6-bin.tar.gz -C /opt && \
-    ln -s /opt/apache-maven-3.9.6/bin/mvn /usr/bin/mvn
 
 # Postavi radni direktorij
 WORKDIR /app
