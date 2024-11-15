@@ -1,31 +1,20 @@
-# Koristi Java 21 baziranu sliku kao osnovu
-FROM amazoncorretto:21 AS build
+# Startna faza
+FROM openjdk:21-jdk-slim
 
+# Instaliraj Maven
+RUN apt-get update && apt-get install -y maven
 
-# Postavi radni direktorij
+# Postavi radni direktorijum
 WORKDIR /app
 
-# Kopiraj POM i instaliraj dependencije (koristi cache za ubrzanje)
-COPY pom.xml .
-RUN mvn dependency:go-offline -B
-
-# Kopiraj cijeli projekt u radni direktorij
+# Kopiraj sve projektne fajlove
 COPY . .
 
-# Izgradi aplikaciju
-RUN mvn clean package -DskipTests
+# Izvrši Maven build
+RUN mvn package -DskipTests
 
-# Koristi manji *JDK* za pokretanje aplikacije
-FROM amazoncorretto:21
+# Kopiraj JAR fajl
+COPY target/*.jar /app.jar
 
-# Postavi radni direktorij za runtime
-WORKDIR /app
-
-# Kopiraj izgradjeni JAR iz faze "build"
-COPY --from=build /app/target/JollyBringer-0.0.1-SNAPSHOT.jar app.jar
-
-# Izloži portove za server i frontend
-EXPOSE 8080 5173
-
-# Pokreni aplikaciju
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+# Definiši komandnu liniju za pokretanje aplikacije
+ENTRYPOINT ["java", "-jar", "/app.jar"]
