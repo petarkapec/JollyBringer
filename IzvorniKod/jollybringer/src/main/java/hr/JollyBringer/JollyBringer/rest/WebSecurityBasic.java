@@ -2,6 +2,7 @@ package hr.JollyBringer.JollyBringer.rest;
 
 import hr.JollyBringer.JollyBringer.domain.Participant;
 import hr.JollyBringer.JollyBringer.domain.Role;
+import hr.JollyBringer.JollyBringer.service.EntityMissingException;
 import hr.JollyBringer.JollyBringer.service.ParticipantService;
 import hr.JollyBringer.JollyBringer.service.RoleService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -124,9 +125,7 @@ public class WebSecurityBasic {
         if(participantService.findByEmail(email).isEmpty()){
 
             if(roleService.findByName("Participant").isEmpty()){
-                roleService.createRole(new Role(1L, "Participant"));
-                roleService.createRole(new Role(2L, "Christmas president"));
-                roleService.createRole(new Role(3L, "Admin"));
+                throw new EntityMissingException(Role.class, "Participant");
             }
             participantService.createParticipant(new Participant(name, email, roleService.findByName("Participant").get()));
         }

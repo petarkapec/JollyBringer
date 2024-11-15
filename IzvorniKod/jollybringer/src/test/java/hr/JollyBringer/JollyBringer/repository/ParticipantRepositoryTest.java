@@ -26,7 +26,6 @@ public class ParticipantRepositoryTest {
     void setUp() {
         testParticipant = new Participant();
         testParticipant.setUsername("testuser");
-        testParticipant.setPassword("testpassword");
         testParticipant.setEmail("teste@mail.com");
         testParticipant.setRole(new Role(1L,"PARTICIPANT"));
         // Set other fields if necessary

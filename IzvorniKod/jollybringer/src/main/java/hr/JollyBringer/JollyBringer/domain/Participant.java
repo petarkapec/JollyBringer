@@ -12,8 +12,6 @@ public class Participant {
     //TODO mora biti jedinstven
     private String username;
 
-    private String password;
-
     //TODO mora biti jedinstven
     private String email;
 
@@ -59,13 +57,6 @@ public class Participant {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public String getEmail() {
         return email;
@@ -76,9 +67,11 @@ public class Participant {
     }
 
     public boolean isPresident() {
-        return "CHRISTMAS PRESIDENT".equals(role_id.getName());
+        return role_id.getId() == 2;
     }
 
-
+    public boolean isAdmin() {
+        return role_id.getId() == 3;
+    }
 
 }

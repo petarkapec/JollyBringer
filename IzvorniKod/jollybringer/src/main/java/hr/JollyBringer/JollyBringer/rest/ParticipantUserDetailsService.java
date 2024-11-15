@@ -39,13 +39,14 @@ public class ParticipantUserDetailsService implements UserDetailsService {
 
     public List<GrantedAuthority> authorities(String username) {
 
-        if ("admin".equals(username))
-            return commaSeparatedStringToAuthorityList("ROLE_ADMIN");
+
         Participant participant = participantService.findByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException("No user '" + username + "'")
         );
+        if (participant.isAdmin())
+            return commaSeparatedStringToAuthorityList("ROLE_ADMIN");
         if (participant.isPresident())
-            return commaSeparatedStringToAuthorityList("ROLE_LEAD, ROLE_PARTICIPANT");
+            return commaSeparatedStringToAuthorityList("ROLE_LEAD");
         else
             return commaSeparatedStringToAuthorityList("ROLE_PARTICIPANT");
 
