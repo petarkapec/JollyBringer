@@ -9,7 +9,7 @@ public class ApplicationRequest {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     private Participant user;
 
     private boolean isApplied;

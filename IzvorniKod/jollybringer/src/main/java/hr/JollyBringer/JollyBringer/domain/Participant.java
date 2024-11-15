@@ -20,7 +20,7 @@ public class Participant  {
     //TODO mora biti jedinstven
     private String username;
 
-    //TODO mora biti jedinstven
+    @Column(unique = true, nullable = false)
     private String email;
 
     @ManyToOne
