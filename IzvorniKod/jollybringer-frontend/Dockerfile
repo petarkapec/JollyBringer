@@ -4,7 +4,7 @@ FROM nginx:alpine
 COPY dist /usr/share/nginx/html
 
 # Izlozi port
-EXPOSE 5173
+EXPOSE 80
 
 # Kopira konfiguraciju nginx-a
 COPY nginx.conf /etc/nginx/conf.d/default.template
