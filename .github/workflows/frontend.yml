@@ -5,7 +5,7 @@ on:
     branches:
       - master
     paths:
-      - 'jollybringer-frontend/**'  # Trigger only on changes in /jollybringer-frontend
+      - 'IzvorniKod/jollybringer-frontend/**'  # Trigger only on changes u `IzvorniKod/jollybringer-frontend`
   workflow_dispatch:
 
 jobs:
@@ -25,30 +25,30 @@ jobs:
       - name: Cache npm dependencies
         uses: actions/cache@v3
         with:
-          path: jollybringer-frontend/node_modules  # Keširaj npm zavisnosti
-          key: ${{ runner.os }}-npm-${{ hashFiles('jollybringer-frontend/package-lock.json') }}
+          path: IzvorniKod/jollybringer-frontend/node_modules  # Keširaj npm zavisnosti
+          key: ${{ runner.os }}-npm-${{ hashFiles('IzvorniKod/jollybringer-frontend/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-npm-
 
       - name: Install dependencies
         run: npm install
-        working-directory: jollybringer-frontend  # Promeni radni direktorijum na `jollybringer-frontend`
+        working-directory: IzvorniKod/jollybringer-frontend  # Postavi radni direktorijum na `IzvorniKod/jollybringer-frontend`
 
       - name: Install Vite manually
-        run: npm install vite --save-dev  # Instaliraj Vite ako nije već instaliran
-        working-directory: jollybringer-frontend  # Promeni radni direktorijum na `jollybringer-frontend`
+        run: npm install vite --save-dev
+        working-directory: IzvorniKod/jollybringer-frontend  # Postavi radni direktorijum na `IzvorniKod/jollybringer-frontend`
 
       - name: Install React plugin for Vite
-        run: npm install @vitejs/plugin-react --save-dev  # Instaliraj React plugin za Vite
-        working-directory: jollybringer-frontend  # Promeni radni direktorijum na `jollybringer-frontend`
+        run: npm install @vitejs/plugin-react --save-dev
+        working-directory: IzvorniKod/jollybringer-frontend  # Postavi radni direktorijum na `IzvorniKod/jollybringer-frontend`
 
       - name: Set executable permissions for Vite
         run: chmod +x node_modules/.bin/vite
-        working-directory: jollybringer-frontend
+        working-directory: IzvorniKod/jollybringer-frontend
 
       - name: Build frontend
-        run: npm run build  # Buildanje aplikacije
-        working-directory: jollybringer-frontend  # Promeni radni direktorijum na `jollybringer-frontend`
+        run: npm run build
+        working-directory: IzvorniKod/jollybringer-frontend  # Postavi radni direktorijum na `IzvorniKod/jollybringer-frontend`
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -63,8 +63,8 @@ jobs:
       - name: Build and push frontend image
         uses: docker/build-push-action@v6
         with:
-          context: ./jollybringer-frontend
-          file: ./jollybringer-frontend/Dockerfile
+          context: ./IzvorniKod/jollybringer-frontend
+          file: ./IzvorniKod/jollybringer-frontend/Dockerfile
           push: true
           tags: ghcr.io/${{ github.repository }}/jollybringer-frontend:latest
 
