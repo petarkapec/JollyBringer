@@ -9,7 +9,7 @@ const useAuth = () => {
   const [groups, setGroups] = useState([]);
   const [user, setUser] = useState(null);
 
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8080';
+  const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL || 'http://localhost:8080';
 
 
   useEffect(() => {

@@ -3,7 +3,7 @@ import axios from 'axios';
 import '../styles/Modal.css';
 import useAuth from '../hooks/useAuth';
 
-const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8080';
+const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL || 'http://localhost:8080';
 
 const Modal = ({ isVisible, onClose, role }) => {
   const { user } = useAuth();

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../styles/AdminDashboard.css';
 
-const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8080';
+const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_URL || 'http://localhost:8080';
 
 const AdminDashboard = () => {
   const [groups, setGroups] = useState([]);
