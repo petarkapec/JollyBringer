@@ -4,11 +4,10 @@ import hr.JollyBringer.JollyBringer.domain.Participant;
 import hr.JollyBringer.JollyBringer.domain.Role;
 import hr.JollyBringer.JollyBringer.service.EntityMissingException;
 import hr.JollyBringer.JollyBringer.service.ParticipantService;
+import hr.JollyBringer.JollyBringer.service.RequestDeniedException;
 import hr.JollyBringer.JollyBringer.service.RoleService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -24,9 +23,15 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.oauth2.core.user.OAuth2UserAuthority;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
@@ -35,11 +40,9 @@ import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -56,9 +59,13 @@ public class WebSecurityBasic {
     private final RoleService roleService;
 
 
+
     public WebSecurityBasic(ParticipantService participantService, RoleService roleService) {
         this.participantService = participantService;
         this.roleService = roleService;
+
+
+
     }
 
     @Bean
@@ -74,47 +81,47 @@ public class WebSecurityBasic {
     @Bean
     @Profile("oauth-security")
     public SecurityFilterChain oauthFilterChain(HttpSecurity http) throws Exception {
-
-        return http
+        http
                 .cors(cors -> cors.configurationSource(request -> {
-                    var config = new org.springframework.web.cors.CorsConfiguration();
-                    config.setAllowedOrigins(List.of(frontendUrl)); // Update to your frontend URL
+                    CorsConfiguration config = new CorsConfiguration();
+                    config.setAllowedOrigins(List.of(frontendUrl));
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowCredentials(true);
                     config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
                     return config;
                 }))
                 .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/check-auth").authenticated();
                     auth.anyRequest().authenticated();
                 })
-                .oauth2Login(oauth2 -> {
-                    oauth2
-                            .userInfoEndpoint(
-                                    userInfoEndpoint -> userInfoEndpoint.userAuthoritiesMapper(this.authorityMapper()))
-                            .successHandler(
-                                    this::oauth2AuthenticationSuccessHandler);
-                })
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(this::oauth2AuthenticationSuccessHandler)
+                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService()))
+                )
                 .logout(logout -> logout
-                        .logoutUrl("/logout") // The URL to trigger logout
+                        .logoutUrl("/logout")
                         .logoutSuccessHandler((request, response, authentication) -> {
-                            // Customize the logout success behavior here
                             response.setStatus(HttpServletResponse.SC_NO_CONTENT);
                         })
-                        .invalidateHttpSession(true) // Invalidate the session on logout
-                        .clearAuthentication(true) // Clear authentication information
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
                 )
-                .exceptionHandling(handling -> handling.authenticationEntryPoint(new Http403ForbiddenEntryPoint()))
-                .build();
+                .exceptionHandling(handling -> handling.authenticationEntryPoint(new Http403ForbiddenEntryPoint()));
+
+        return http.build();
     }
 
-
-    private void oauth2AuthenticationSuccessHandler(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {
-        // Extract the OAuth2User details
-        OAuth2User oauthUser = (OAuth2User) authentication.getPrincipal();
-
+    @Bean
+    public CustomOAuth2UserService customOAuth2UserService() {
+        return new CustomOAuth2UserService(participantService);
+    }
+    private void oauth2AuthenticationSuccessHandler(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {// Extract the OAuth2User details
+       OAuth2User oauthUser = (OAuth2User) authentication.getPrincipal();
+        if (authentication==null){
+            System.out.println("Authentication is null");
+        }
+        else System.out.println("Authentication is NOT null");
         // You can retrieve user information like this
         String email = oauthUser.getAttribute("email");
         String name = oauthUser.getAttribute("name");
@@ -130,6 +137,7 @@ public class WebSecurityBasic {
             participantService.createParticipant(new Participant(name, email, roleService.findByName("Participant").get()));
         }
 
+        System.out.println("Redirecting");
         httpServletResponse.sendRedirect(frontendUrl + "/dashboard");
     }
 
@@ -172,12 +180,33 @@ public class WebSecurityBasic {
         return http.build();
     }
 
-    private GrantedAuthoritiesMapper authorityMapper() {
-        final SimpleAuthorityMapper authorityMapper = new SimpleAuthorityMapper();
 
-        authorityMapper.setDefaultAuthority("ROLE_ADMIN");
 
-        return authorityMapper;
+    @Bean
+    public GrantedAuthoritiesMapper authorityMapper() {
+        return (authorities) -> {
+            Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
+
+            authorities.forEach(authority -> {
+                if (authority instanceof OAuth2UserAuthority) {
+                    OAuth2UserAuthority oauth2UserAuthority = (OAuth2UserAuthority) authority;
+                    Map<String, Object> attributes = oauth2UserAuthority.getAttributes();
+
+                    String email = (String) attributes.get("email");
+                    Participant participant = participantService.findByEmail(email).orElse(null);
+
+                    if (participant != null) {
+                        String roleName = "ROLE_" + participant.getRole().getName().toUpperCase();
+                        mappedAuthorities.add(new SimpleGrantedAuthority(roleName));
+                    } else {
+                        mappedAuthorities.add(new SimpleGrantedAuthority("ROLE_PARTICIPANT"));
+
+                    }
+                }
+                else System.out.println("Authorities NOT mapped");
+            });
+
+            return mappedAuthorities;
+        };
     }
-
 }

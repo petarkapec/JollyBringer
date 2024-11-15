@@ -10,10 +10,10 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchAdminData = async () => {
       try {
-        const groupsResponse = await axios.get('http://localhost:8080/admin/groups', { withCredentials: true });
-        const usersResponse = await axios.get('http://localhost:8080/admin/users', { withCredentials: true });
-        const applicationsResponse = await axios.get('http://localhost:8080/admin/applications', { withCredentials: true });
-
+        const groupsResponse = await axios.get('http://localhost:8080/groups', { withCredentials: true });
+        const usersResponse = await axios.get('http://localhost:8080/participants', { withCredentials: true });
+        const applicationsResponse = await axios.get('http://localhost:8080/applications', { withCredentials: true });
+        console.log( applications.data)
         setGroups(groupsResponse.data);
         setUsers(usersResponse.data);
         setApplications(applicationsResponse.data);
@@ -27,8 +27,11 @@ const AdminDashboard = () => {
 
   const handleApproveApplication = async (userId) => {
     try {
-      await axios.post('http://localhost:8080/admin/approve', { userId }, { withCredentials: true });
-      setApplications(applications.filter(application => application.id !== userId));
+      await axios.post('http://localhost:8080/approve', {
+        user_id: userId,
+        applied: true
+      }, { withCredentials: true });
+      setApplications(applications.filter(application => application.user.id !== userId)); //nije .id nego .user.id
     } catch (error) {
       console.error('Error approving application:', error);
     }
@@ -62,7 +65,7 @@ const AdminDashboard = () => {
             {applications.map(application => (
               <li key={application.id}>
                 {application.username}
-                <button onClick={() => handleApproveApplication(application.id)}>Approve</button>
+                <button onClick={() => handleApproveApplication(application.user.id)}>Approve</button>
               </li>
             ))}
           </ul>
@@ -71,5 +74,6 @@ const AdminDashboard = () => {
     </div>
   );
 };
+//nije .id nego .user.id
 
 export default AdminDashboard;

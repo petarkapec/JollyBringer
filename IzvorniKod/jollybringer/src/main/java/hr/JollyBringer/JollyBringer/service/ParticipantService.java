@@ -75,4 +75,8 @@ public interface ParticipantService {
     Participant deleteParticipant(long participantId);
 
     Optional<Participant> findByEmail(String email);
+
+
+
+    List<Participant> listAllWithRole(String participant);
 }

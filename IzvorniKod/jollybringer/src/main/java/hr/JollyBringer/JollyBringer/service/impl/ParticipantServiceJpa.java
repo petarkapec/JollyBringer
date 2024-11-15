@@ -95,6 +95,11 @@ public class ParticipantServiceJpa implements ParticipantService {
         return participantRepo.findByEmail(email);
     }
 
+    @Override
+    public List<Participant> listAllWithRole(String string) {
+        return participantRepo.findAllWithRole(string);
+    }
+
     //TODO change if needed
     private void validate(Participant participant) {
         Assert.notNull(participant, "participant object must be given");

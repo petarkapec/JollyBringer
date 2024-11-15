@@ -22,9 +22,16 @@ public class ParticipantController {
         this.participantService = participantService;
     }
 
-    @GetMapping("") //možda   @Secured("ROLE_ADMIN")
+    @GetMapping("")
+    //@Secured("ROLE_PARTICIPANT")//možda   @Secured("ROLE_ADMIN")
     public List<Participant> listParticipants() {
         return participantService.listAll();
+    }
+
+    @GetMapping("/only")
+    //@Secured("ROLE_PARTICIPANT")//možda   @Secured("ROLE_ADMIN")
+    public List<Participant> listOnlyParticipants() {
+        return participantService.listAllWithRole("Participant");
     }
 
     @GetMapping("/{id}") //možda   @Secured("ROLE_ADMIN")
@@ -33,14 +40,14 @@ public class ParticipantController {
     }
 
     @PostMapping("")
-    @Secured("ROLE_ADMIN")
+    //@Secured("ROLE_ADMIN")
     public ResponseEntity<Participant> createParticipant(@RequestBody Participant participant){
         Participant saved = participantService.createParticipant(participant);
         return ResponseEntity.created(URI.create("/participants/" + saved.getId())).body(saved);
     }
 
     @PutMapping("/{id}")
-    @Secured("ROLE_ADMIN")
+    //@Secured("ROLE_ADMIN")
     public ResponseEntity<Participant> updateParticipant(@PathVariable("id") long id, @RequestBody Participant participant){
         if (!participant.getId().equals(id))
             throw new IllegalArgumentException("Participant ID must be preserved");
@@ -50,7 +57,7 @@ public class ParticipantController {
     }
 
     @DeleteMapping("/{id}")
-    @Secured("ROLE_ADMIN")
+    //@Secured("ROLE_ADMIN")
     public Participant deleteParticipant(@PathVariable("id") long id){
 
         return  participantService.deleteParticipant(id);

@@ -2,7 +2,7 @@ package hr.JollyBringer.JollyBringer.service.impl;
 
 import hr.JollyBringer.JollyBringer.dao.ApplicationRepository;
 import hr.JollyBringer.JollyBringer.domain.ApplicationRequest;
-import hr.JollyBringer.JollyBringer.domain.Role;
+import hr.JollyBringer.JollyBringer.domain.Participant;
 import hr.JollyBringer.JollyBringer.service.ApplicationService;
 import hr.JollyBringer.JollyBringer.service.EntityMissingException;
 import hr.JollyBringer.JollyBringer.service.RequestDeniedException;
@@ -27,20 +27,26 @@ public class ApplicationServiceJPA implements ApplicationService {
     }
 
     @Override
-    public ApplicationRequest fetch(long userId) {
-        return findById(userId).orElseThrow(
-                () -> new EntityMissingException(ApplicationRequest.class, userId)
+    public ApplicationRequest fetch(long appId) {
+        return findById(appId).orElseThrow(
+                () -> new EntityMissingException(ApplicationRequest.class, appId)
         );
     }
 
     @Override
     public ApplicationRequest createApplicationRequest(ApplicationRequest applicationRequest) {
         Assert.notNull(applicationRequest, "ApplicationRequest object must be given");
-        if (appRepo.countByUserId(applicationRequest.getUserId()) > 0)
+        if (appRepo.countByUser(applicationRequest.getUser()) > 0)
             throw new RequestDeniedException(
-                    "Request with userId" + applicationRequest.getUserId() + " already exists"
+                    "Request with userId" + applicationRequest.getUser().getId() + " already exists"
             );
         return appRepo.save(applicationRequest);
+    }
+
+    @Override
+    public Optional<ApplicationRequest> findByUserId(long userId) {
+
+        return appRepo.findByUserId(userId);
     }
 
     @Override
@@ -51,16 +57,18 @@ public class ApplicationServiceJPA implements ApplicationService {
     @Override
     public ApplicationRequest updateApplicationRequest(ApplicationRequest applicationRequest) {
         Assert.notNull(applicationRequest, "ApplicationRequest object must be given");
-        Long userId = applicationRequest.getUserId();
-        if (!appRepo.existsById(userId))
-            throw new EntityMissingException(Role.class, userId);
+        Participant user = applicationRequest.getUser();
+        if (!appRepo.existsByUser(user))
+            throw new EntityMissingException(ApplicationRequest.class, user);
         return appRepo.save(applicationRequest);
     }
 
     @Override
-    public ApplicationRequest deleteApplicationRequest(long userId) {
-        ApplicationRequest applicationRequest = fetch(userId);
+    public ApplicationRequest deleteApplicationRequest(long appId) {
+        ApplicationRequest applicationRequest = fetch(appId);
         appRepo.delete(applicationRequest);
         return applicationRequest;
     }
+
+
 }

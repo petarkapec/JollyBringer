@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -33,9 +34,12 @@ public class ParticipantGroupController {
     }
 
     @GetMapping("")
+    //@Secured("ROLE_LEAD")
     public List<ParticipantGroup> listGroups() {
         return participantGroupService.listAll();
     }
+
+
 
     @GetMapping("/{id}")//možda samo admin?
     public ParticipantGroup getGroup(@PathVariable("id") Long id) {
@@ -43,9 +47,11 @@ public class ParticipantGroupController {
     }
 
     @PostMapping("")
-    @Secured("ROLE_LEAD")
-    public ResponseEntity<ParticipantGroup> createGroup(@RequestBody CreateGroupDTO dto, @AuthenticationPrincipal User u) {
-        ParticipantGroup saved = participantGroupService.createGroup(dto.getName(), u.getUsername());
+    //@Secured("ROLE_LEAD")
+    public ResponseEntity<ParticipantGroup> createGroup(@RequestBody CreateGroupDTO dto, @AuthenticationPrincipal OAuth2User u) {
+        System.out.println("creating group");
+        ParticipantGroup saved = participantGroupService.createGroup(dto.getName(), u.getAttribute("email"));
+        if (dto.getUsers() != null) participantGroupService.addMembers(saved.getId(), dto.getUsers() );
         return ResponseEntity.created(URI.create("/groups/" + saved.getId())).body(saved);
     }
 
@@ -56,7 +62,7 @@ public class ParticipantGroupController {
 
     //change name of group
     @PatchMapping("/{gid}")
-    @Secured("ROLE_LEAD")
+    //@Secured("ROLE_LEAD")
     public ParticipantGroup patchName(
             @PathVariable("gid") Long groupId,
             @RequestBody CreateGroupDTO dto,
@@ -70,7 +76,7 @@ public class ParticipantGroupController {
 
     //only the president can add members, if he's the president of the searched group
     @PutMapping("/{gid}/members/{pid}")
-    @Secured("ROLE_LEAD")
+    //@Secured("ROLE_LEAD")
     public ResponseEntity<?> addGroupMember(
             @PathVariable("gid") Long gid,
             @PathVariable("pid") Long pid,
@@ -82,7 +88,7 @@ public class ParticipantGroupController {
 
     //only the president can remove members, if he's the president of the searched group
     @DeleteMapping("/{gid}/members/{pid}")
-    @Secured("ROLE_LEAD")
+    //@Secured("ROLE_LEAD")
     public ResponseEntity<?> removeGroupMember(
             @PathVariable("gid") Long gid,
             @PathVariable("pid") Long pid,

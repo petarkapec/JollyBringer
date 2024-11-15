@@ -13,7 +13,7 @@ const Modal = ({ isVisible, onClose, role }) => {
     if (role !== 'Participant') {
       const fetchUsers = async () => {
         try {
-          const response = await axios.get('http://localhost:8080/admin/users', { withCredentials: true });
+          const response = await axios.get('http://localhost:8080/participants/only', { withCredentials: true });
           setAllUsers(response.data);
         } catch (error) {
           console.error('Error fetching users:', error);
@@ -25,7 +25,7 @@ const Modal = ({ isVisible, onClose, role }) => {
 
   const handleCreateGroup = async () => {
     try {
-      await axios.post('http://localhost:8080/admin/groups', {
+      await axios.post('http://localhost:8080/groups', {
         name: newGroupName,
         users: selectedUsers
       }, { withCredentials: true });
@@ -46,7 +46,7 @@ const Modal = ({ isVisible, onClose, role }) => {
   const handleApplyForPresident = async () => {
     try {
       await axios.post('http://localhost:8080/apply', {
-        userId: user.id,
+        user_id: user.id,
         applied: true
       }, { withCredentials: true });
       onClose();

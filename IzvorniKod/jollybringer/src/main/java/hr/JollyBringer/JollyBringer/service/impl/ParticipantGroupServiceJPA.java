@@ -52,15 +52,15 @@ public class ParticipantGroupServiceJPA implements ParticipantGroupService
 
     @Override
     public ParticipantGroup createGroup(String groupName, String presidentUsername) {
-        Participant president = participantService.findByUsername(presidentUsername).orElseThrow(
+        Participant president = participantService.findByEmail(presidentUsername).orElseThrow(
                 // NOTE: not throwing EntityMissingException because that is just for missing resources from URI
-                () -> new RequestDeniedException("No student with username " + presidentUsername)
+                () -> new RequestDeniedException("No student with email " + presidentUsername)
         );
         Assert.isTrue(president.isPresident(),
-                "Group president must be a lead, not: " + president);
-        /*participantGroupRepo.findByMember(president).ifPresent(g -> {
+                "Group president " + presidentUsername + " must be a lead, not: " + president.getRole().getName());
+        participantGroupRepo.findByMember(president).ifPresent(g -> {
             throw new RequestDeniedException(president + " already member of " + g);
-        });*/
+        }); //TODO enable multiple groups
         participantGroupRepo.findByName(groupName).ifPresent(g -> {
             throw new RequestDeniedException(groupName + " already name of " + g); }
         );
@@ -85,6 +85,7 @@ public class ParticipantGroupServiceJPA implements ParticipantGroupService
 
     @Override
     public boolean addMember(long groupId, long participantId) {
+        System.out.println("Adding member " + participantId + " to group " + groupId);
         ParticipantGroup group = fetch(groupId);
         Participant participant = participantService.fetch(participantId);
         Assert.isTrue(!participant.isPresident(), "Must be non-lead to be a member: " + participant);
@@ -109,6 +110,13 @@ public class ParticipantGroupServiceJPA implements ParticipantGroupService
         if (removed)
             participantGroupRepo.save(group);
         return removed;
+    }
+
+    @Override
+    public void addMembers(Long id, List<Long> users) {
+        for (Long userId : users) {
+            addMember(id, userId);
+        }
     }
 
     public Optional<ParticipantGroup> findByMember(long participantId) {

@@ -1,22 +1,34 @@
 package hr.JollyBringer.JollyBringer.domain;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class ApplicationRequest {
     @Id
-    private Long userId;
+    @GeneratedValue
+    private Long id;
+
+    @ManyToOne
+    private Participant user;
 
     private boolean isApplied;
 
-    public Long getUserId() {
-        return userId;
+    public ApplicationRequest(Participant userId, boolean isApplied) {
+        this.isApplied = isApplied;
+        this.user = userId;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public ApplicationRequest() {
+
+    }
+
+    public Participant getUser() {
+        return user;
+    }
+
+    public void setUser(Participant user) {
+        this.user = user;
     }
 
     public boolean isApplied() {
@@ -25,5 +37,13 @@ public class ApplicationRequest {
 
     public void setApplied(boolean applied) {
         isApplied = applied;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

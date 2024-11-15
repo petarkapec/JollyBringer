@@ -93,5 +93,7 @@ public interface ParticipantGroupService {
      * @throws IllegalArgumentException if any argument <code>null</code>
      */
     boolean removeMember(long participantGroupId, long participantId);
+
+    void addMembers(Long id, List<Long> users);
 }
 

@@ -1,10 +1,18 @@
 package hr.JollyBringer.JollyBringer.domain;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.util.Assert;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Entity
-public class Participant {
+public class Participant  {
     @Id
     @GeneratedValue
     private Long id;
@@ -73,5 +81,42 @@ public class Participant {
     public boolean isAdmin() {
         return role_id.getId() == 3;
     }
+/*
+    @Override
+    public Map<String, Object> getAttributes() {
+         Map<String, Object> attributes;
+
+
+           attributes = new HashMap<>();
+            attributes.put("id", this.getId());
+            attributes.put("username", this.getUsername());
+           attributes.put("email", this.getEmail());
+            attributes.put("role_id", this.getRole().getId());
+
+        return attributes;
+
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        switch ((int) role_id.getId()) {
+            case 1:
+                return AuthorityUtils.createAuthorityList("ROLE_PARTICIPANT");
+            case 2:
+                return AuthorityUtils.createAuthorityList("ROLE_LEAD");
+            case 3:
+                return AuthorityUtils.createAuthorityList("ROLE_ADMIN");
+        }
+
+        return AuthorityUtils.createAuthorityList("ROLE_PARTICIPANT");
+    }
+
+    @Override
+    public String getName() {
+        return "";
+    }
+    */
 
 }
+
+
