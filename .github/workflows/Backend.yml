@@ -45,9 +45,9 @@ jobs:
       - name: Build and push backend image
         uses: docker/build-push-action@v6
         with:
-          context: ./IzvorniKod/jollybringer  # Osigurava da Docker build koristi ispravan direktorij
+          context: ./IzvorniKod/jollybringer
           push: true
-          tags: ghcr.io/${{ github.repository }}/jollybringer:latest
+          tags: ghcr.io/petarkapec/jollybringer:latest
 
       - name: Trigger release
         if: ${{ env.BACKEND_DEPLOY_HOOK }}
