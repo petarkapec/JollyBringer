@@ -1,0 +1,11 @@
+.chat {
+    flex: 1;
+    color: white;
+    padding: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgb(255, 255, 255);
+    background: rgba(255, 0, 0, 0.269);
+    backdrop-filter: blur(8px);
+    z-index: 1;
+}

@@ -1,0 +1,74 @@
+package opp.domain;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+/**
+ * An enrolled student, potential member the OPP project group.
+ * Student is uniquely identified by internal system ID (a Long)
+ * or with the official JMBAG (a string of 10 decimal digits).
+ * Neither given nor family name are required.
+ * A student can be a "lead", allowing them to create and coordinate
+ * a group of students.
+ * @see Group
+ * @author Hrvoje Šimić hsimic@croz.net
+ */
+@Entity
+public class Student {
+  @Id
+  @GeneratedValue
+  private Long id;
+
+  @Column(unique=true, nullable=false)
+  @NotNull
+  @Size(min=10, max=10)
+  private String jmbag;
+
+  private String givenName;
+  private String familyName;
+
+  private boolean isLead;
+
+  public Long getId() {
+    return id;
+  }
+
+  public String getJmbag() {
+    return jmbag;
+  }
+
+  public void setJmbag(String jmbag) {
+    this.jmbag = jmbag;
+  }
+
+  public String getGivenName() {
+    return givenName;
+  }
+
+  public void setGivenName(String givenName) {
+    this.givenName = givenName;
+  }
+
+  public String getFamilyName() {
+    return familyName;
+  }
+
+  public void setFamilyName(String familyName) {
+    this.familyName = familyName;
+  }
+
+  public boolean isLead() {
+    return isLead;
+  }
+
+  public void setLead(boolean lead) {
+    isLead = lead;
+  }
+
+  @Override
+  public String toString() {
+    return "Student #" + id + " " + givenName + " " + familyName +
+            (isLead? " LEAD" : "") + ", jmbag=" + jmbag;
+  }
+}
