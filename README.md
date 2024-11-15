@@ -44,10 +44,20 @@ Aplikacija uključuje tri vrste korisnika:
 
 
 # Tehnologije
-> TODO korištene tehnologije
-> 
+> React  
+> Vite    
+> Java Spring  
+> Postgres SQL
+ 
 # Instalacija
 >TODO?
+
+# Status
+Frontend link https://jollybringer-frontend-latest.onrender.com  
+Backend link https://jollybringer-latest.onrender.com  
+Za prvu predaju napravili smo login stranicu uz oauth2 autentikaciju koja vodi na dashboard. Napravili smo funkcionalnost dodavanja korisnika u grupe koja funkcionira na način da se korisnik kroz header prijavi za ulogu Božićnog predsjednika, tu prijavu admin odobrava na admin dashboardu i korisnik postaje predsjednik. Tada predsjednik može u headeru napraviti grupu i dodati korisnike. Također admin u admin dashboardu vidi sve grupe, sve korisnike i sve prijave. Projekt radi lokalno na dev grani, ali deployana stranica ima https problem pa ne može dohvatiti dashboard. Za testiranje admin funkcionalnosti treba dodati u JSON datoteci u backendu svoj email i role_id 3.
+
+
 # Članovi tima 
 Ante Mrkonjić  
 Antun Požgaj  
