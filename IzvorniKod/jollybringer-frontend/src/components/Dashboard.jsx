@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import useAuth from '../hooks/useAuth';
 import '../styles/Dashboard.css';
@@ -10,7 +10,21 @@ import Modal from './Modal.jsx';
 const Dashboard = () => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const { role, groups, user, loading } = useAuth();
+  const [groups, setGroups] = useState([]);
+  const { role, user, loading } = useAuth();
+
+  useEffect(() => {
+    const fetchGroups = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/groups', { withCredentials: true });
+        setGroups(response.data);
+      } catch (error) {
+        console.error('Error fetching groups:', error);
+      }
+    };
+
+    fetchGroups();
+  }, []);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -49,7 +63,7 @@ const Dashboard = () => {
               <div className="extended-menu">
                 <ul>
                   {groups.map(group => (
-                    <li key={group}>{group}</li>
+                    <li key={group.id}>{group.name}</li>
                   ))}
                   <li onClick={handleNewGroupClick}>+ New group</li>
                   {(role === 'Admin') && (

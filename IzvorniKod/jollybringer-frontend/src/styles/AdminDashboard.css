@@ -11,8 +11,16 @@
 
 .admin-dashboard-header {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
+    width: 100%;
+    z-index: 10;
+}
+
+.admin-dashboard-header h1 {
+    text-align: center;
+    color: white;
     padding: 20px;
     background: rgba(139, 22, 22, 0.4);
     border: 2px solid rgba(244, 246, 244, 0.2);
@@ -21,14 +29,9 @@
     color: white;
     box-shadow: 0 0 10px white;
     margin: 10px 10px 0;
-    font-size: 20px;
+    font-size: 30px;
     height: 70px;
     z-index: 10;
-}
-
-.admin-dashboard-header h1 {
-    text-align: center;
-    color: white;
 }
 
 .admin-dashboard-content {
@@ -41,6 +44,41 @@
     gap: 10px;
     z-index: 1;
     width: 50%;
+}
+
+.admin-dashboard-section.users,
+.admin-dashboard-section.groups,
+.admin-dashboard-section.applications {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 10px white;
+    color: white;
+    width: 100%;
+    max-width: 800px;
+    min-height: 100px; /* Minimal height */
+    max-height: 300px; /* Maximum height */
+    overflow: auto; /* Scrollable */
+}
+
+.admin-dashboard-section::-webkit-scrollbar {
+    width: 10px;
+}
+
+.admin-dashboard-section::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.admin-dashboard-section::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 10px;
+}
+
+.admin-dashboard-section::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.6);
 }
 
 .admin-dashboard-section {
@@ -88,4 +126,20 @@
 
 .admin-dashboard-section button:hover {
     background: darkgreen;
+}
+
+.return-button {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 10px white;
+    color: white;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.return-button:hover {
+    background: rgba(255, 255, 255, 0.2);
 }

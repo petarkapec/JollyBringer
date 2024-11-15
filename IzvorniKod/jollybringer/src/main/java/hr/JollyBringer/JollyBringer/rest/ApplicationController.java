@@ -4,10 +4,8 @@ package hr.JollyBringer.JollyBringer.rest;
 import hr.JollyBringer.JollyBringer.domain.ApplicationRequest;
 import hr.JollyBringer.JollyBringer.domain.Participant;
 import hr.JollyBringer.JollyBringer.domain.Role;
-import hr.JollyBringer.JollyBringer.service.ApplicationService;
-import hr.JollyBringer.JollyBringer.service.EntityMissingException;
-import hr.JollyBringer.JollyBringer.service.ParticipantService;
-import hr.JollyBringer.JollyBringer.service.RoleService;
+import hr.JollyBringer.JollyBringer.service.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +19,7 @@ public class ApplicationController {
     private final ApplicationService applicationService;
     private final ParticipantService participantService;
     private final RoleService roleService;
+
     public ApplicationController(ApplicationService applicationService, ParticipantService participantService, RoleService roleService) {
         this.applicationService = applicationService;
         this.participantService = participantService;
@@ -28,13 +27,16 @@ public class ApplicationController {
     }
 
     @PostMapping("/apply")
-    //@Secured("ROLE_PARTICIPANT")
     public ResponseEntity<ApplicationRequest> applyForPresident(@RequestBody ApplicationDTO aplicationRequest) {
-        Participant user = participantService.findById(aplicationRequest.getUser_id())
-                .orElseThrow(() -> new EntityMissingException(Participant.class, aplicationRequest.getUser_id()));
+        try {
+            Participant user = participantService.findById(aplicationRequest.getUser_id())
+                    .orElseThrow(() -> new EntityMissingException(Participant.class, aplicationRequest.getUser_id()));
 
-        ApplicationRequest saved = applicationService.createApplicationRequest(new ApplicationRequest(user, aplicationRequest.isApplied()));
-        return ResponseEntity.created(URI.create("/applications/" + saved.getUser().getId())).body(saved);
+            ApplicationRequest saved = applicationService.createApplicationRequest(new ApplicationRequest(user, aplicationRequest.isApplied()));
+            return ResponseEntity.created(URI.create("/applications/" + saved.getUser().getId())).body(saved);
+        } catch (RequestDeniedException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null); // Return 409 Conflict if application exists
+        }
     }
 
     @GetMapping("/applications")
@@ -56,7 +58,6 @@ public class ApplicationController {
 
         Participant user = participantService.findById(applicationRequest.getUser_id())
                 .orElseThrow(() -> new EntityMissingException(Participant.class, applicationRequest.getUser_id()));
-
 
 
         Role presidentRole = roleService.findByName("President")

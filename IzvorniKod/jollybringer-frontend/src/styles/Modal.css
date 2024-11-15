@@ -84,6 +84,40 @@
     margin: 10px 5px;
 }
 
+.new-group-form ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+    max-height: 300px; /* Maximum height */
+    overflow: auto; /* Scrollable */
+    background: rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 10px white;
+    color: white;
+}
+
+/* Style the scrollbar */
+.new-group-form ul::-webkit-scrollbar {
+    width: 10px;
+}
+
+.new-group-form ul::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.new-group-form ul::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 10px;
+}
+
+.new-group-form ul::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.6);
+}
+
 .participant-modal-content button:hover {
     background: darkgreen;
 }

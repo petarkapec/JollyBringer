@@ -51,7 +51,8 @@ const Modal = ({ isVisible, onClose, role }) => {
       }, { withCredentials: true });
       onClose();
     } catch (error) {
-      console.error('Error applying for president:', error);
+      console.log('You have already applied for the role of Christmas president.');
+      onClose();
     }
   };
 
