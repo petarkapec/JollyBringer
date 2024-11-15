@@ -20,3 +20,4 @@ EXPOSE 8080
 
 # Definiši komandnu liniju za pokretanje aplikacije
 ENTRYPOINT ["java", "-jar", "/app.jar"]
+EXPOSE 8080
