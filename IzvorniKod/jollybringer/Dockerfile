@@ -33,4 +33,3 @@ EXPOSE 8080 5173
 
 # Pokreni aplikaciju
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
-s
