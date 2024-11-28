@@ -100,7 +100,8 @@ public class WebSecurityBasic {
                 })
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(this::oauth2AuthenticationSuccessHandler)
-                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService()))
+                        .userInfoEndpoint(
+                                userInfoEndpoint -> userInfoEndpoint.userAuthoritiesMapper(this.authorityMapper()))
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
@@ -187,29 +188,10 @@ public class WebSecurityBasic {
 
     @Bean
     public GrantedAuthoritiesMapper authorityMapper() {
-        return (authorities) -> {
-            Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
+        final SimpleAuthorityMapper authorityMapper = new SimpleAuthorityMapper();
 
-            authorities.forEach(authority -> {
-                if (authority instanceof OAuth2UserAuthority) {
-                    OAuth2UserAuthority oauth2UserAuthority = (OAuth2UserAuthority) authority;
-                    Map<String, Object> attributes = oauth2UserAuthority.getAttributes();
+        authorityMapper.setDefaultAuthority("ROLE_PARTICIPANT");
 
-                    String email = (String) attributes.get("email");
-                    Participant participant = participantService.findByEmail(email).orElse(null);
-
-                    if (participant != null) {
-                        String roleName = "ROLE_" + participant.getRole().getName().toUpperCase();
-                        mappedAuthorities.add(new SimpleGrantedAuthority(roleName));
-                    } else {
-                        mappedAuthorities.add(new SimpleGrantedAuthority("ROLE_PARTICIPANT"));
-
-                    }
-                }
-                else System.out.println("Authorities NOT mapped");
-            });
-
-            return mappedAuthorities;
-        };
+        return authorityMapper;
     }
 }
