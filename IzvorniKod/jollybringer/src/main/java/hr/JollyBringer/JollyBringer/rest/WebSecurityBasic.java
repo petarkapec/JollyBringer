@@ -76,8 +76,17 @@ public class WebSecurityBasic {
 
         return http
                 .cors(cors -> cors.configurationSource(request -> {
+<<<<<<< Updated upstream
                     var config = new org.springframework.web.cors.CorsConfiguration();
                     config.setAllowedOrigins(List.of(frontendUrl)); // Update to your frontend URL
+=======
+                    CorsConfiguration config = new CorsConfiguration();
+                    config.setAllowedOrigins(List.of(
+                            frontendUrl,
+                            "https://jollybringer-frontend-latest.onrender.com",
+                            "https://a4f1-2a05-4f46-208-ca00-f13e-287-b755-ff5a.ngrok-free.app"
+                    ));
+>>>>>>> Stashed changes
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowCredentials(true);
                     config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
