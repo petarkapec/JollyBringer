@@ -4,7 +4,6 @@ import hr.JollyBringer.JollyBringer.domain.Participant;
 import hr.JollyBringer.JollyBringer.domain.Role;
 import hr.JollyBringer.JollyBringer.service.EntityMissingException;
 import hr.JollyBringer.JollyBringer.service.ParticipantService;
-import hr.JollyBringer.JollyBringer.service.RequestDeniedException;
 import hr.JollyBringer.JollyBringer.service.RoleService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,34 +22,23 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.security.oauth2.core.user.OAuth2UserAuthority;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 
 import java.io.IOException;
-import java.util.*;
-
-
-import static org.springframework.security.config.Customizer.withDefaults;
+import java.util.List;
 
 @Configuration
 @EnableMethodSecurity(securedEnabled = true, prePostEnabled = false)
 public class WebSecurityBasic {
-
 
     @Value("${progi.frontend.url}")
     private String frontendUrl;
@@ -58,51 +46,37 @@ public class WebSecurityBasic {
     private final ParticipantService participantService;
     private final RoleService roleService;
 
-
-
     public WebSecurityBasic(ParticipantService participantService, RoleService roleService) {
         this.participantService = participantService;
         this.roleService = roleService;
-
-
-
-    }
-
-    @Bean
-    @Profile("basic-security")
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated());
-        http.formLogin(withDefaults());
-        http.httpBasic(withDefaults());
-        http.csrf(AbstractHttpConfigurer::disable);
-        return http.build();
     }
 
     @Bean
     @Profile("oauth-security")
     public SecurityFilterChain oauthFilterChain(HttpSecurity http) throws Exception {
         http
+                // Omogući CORS za komunikaciju između različitih domena
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of(
-                            frontendUrl,
-                            "https://jollybringer-frontend-latest.onrender.com"
-                    ));
+                    config.setAllowedOrigins(List.of(frontendUrl, "https://jollybringer-frontend-latest.onrender.com"));
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                    config.setAllowCredentials(true);
+                    config.setAllowCredentials(true); // Ovo omogućava slanje kolačića
                     config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
                     return config;
                 }))
+                // Isključi CSRF (po potrebi)
                 .csrf(AbstractHttpConfigurer::disable)
+                // Omogući autentifikaciju za specifične endpoint-e
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/check-auth").authenticated();
-                    auth.anyRequest().authenticated();
+                    auth.requestMatchers("/check-auth").authenticated(); // /check-auth zahtijeva autentifikaciju
+                    auth.anyRequest().authenticated(); // Sve ostalo također zahtijeva autentifikaciju
                 })
+                // Konfiguracija OAuth2 logina
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(this::oauth2AuthenticationSuccessHandler)
-                        .userInfoEndpoint(
-                                userInfoEndpoint -> userInfoEndpoint.userAuthoritiesMapper(this.authorityMapper()))
+                        .userInfoEndpoint(userInfo -> userInfo.userAuthoritiesMapper(this.authorityMapper()))
                 )
+                // Konfiguracija logout funkcionalnosti
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessHandler((request, response, authentication) -> {
@@ -111,67 +85,43 @@ public class WebSecurityBasic {
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
                 )
+                // Omogući sesije (cookie-based autentifikacija)
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // Kreiraj sesiju ako je potrebna
+                )
+                // Konfiguriraj izuzetke za neautorizirane zahtjeve
                 .exceptionHandling(handling -> handling.authenticationEntryPoint(new Http403ForbiddenEntryPoint()));
 
         return http.build();
     }
 
-    @Bean
-    public CustomOAuth2UserService customOAuth2UserService() {
-        return new CustomOAuth2UserService(participantService);
-    }
-    private void oauth2AuthenticationSuccessHandler(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {// Extract the OAuth2User details
-       OAuth2User oauthUser = (OAuth2User) authentication.getPrincipal();
-        if (authentication==null){
-            System.out.println("Authentication is null");
+    private void oauth2AuthenticationSuccessHandler(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+        OAuth2User oauthUser = (OAuth2User) authentication.getPrincipal();
+
+        if (oauthUser == null) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
         }
-        else System.out.println("Authentication is NOT null");
-        // You can retrieve user information like this
+
         String email = oauthUser.getAttribute("email");
         String name = oauthUser.getAttribute("name");
 
-        // Save the user details to your database
-
-        //TODO roles need to be in database on startup
-        if(participantService.findByEmail(email).isEmpty()){
-
-            if(roleService.findByName("Participant").isEmpty()){
-                throw new EntityMissingException(Role.class, "Participant");
-            }
-            participantService.createParticipant(new Participant(name, email, roleService.findByName("Participant").get()));
+        // Spremi korisnika u bazu ako ne postoji
+        if (participantService.findByEmail(email).isEmpty()) {
+            Role participantRole = roleService.findByName("Participant")
+                    .orElseThrow(() -> new EntityMissingException(Role.class, "Participant"));
+            participantService.createParticipant(new Participant(name, email, participantRole));
         }
 
-        System.out.println("Redirecting");
-        httpServletResponse.sendRedirect(frontendUrl + "/dashboard");
+        // Redirect na frontend nakon uspješne prijave
+        response.sendRedirect(frontendUrl + "/dashboard");
     }
 
     @Bean
-    @Profile("form-security")
-    public SecurityFilterChain spaFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(new AntPathRequestMatcher("/login")).permitAll()
-                .anyRequest().authenticated());
-        http.formLogin(configurer -> {
-                    configurer.successHandler((request, response, authentication) ->
-                                    response.setStatus(HttpStatus.NO_CONTENT.value())
-                            )
-                            .failureHandler(new SimpleUrlAuthenticationFailureHandler());
-                }
-        );
-        http.exceptionHandling(configurer -> {
-            final RequestMatcher matcher = new NegatedRequestMatcher(
-                    new MediaTypeRequestMatcher(MediaType.TEXT_HTML));
-            configurer
-                    .defaultAuthenticationEntryPointFor((request, response, authException) -> {
-                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    }, matcher);
-        });
-        http.logout(configurer -> configurer
-                .logoutUrl("/logout")
-                .logoutSuccessHandler((request, response, authentication) ->
-                        response.setStatus(HttpStatus.NO_CONTENT.value())));
-        http.csrf(AbstractHttpConfigurer::disable);
-        return http.build();
+    public GrantedAuthoritiesMapper authorityMapper() {
+        SimpleAuthorityMapper authorityMapper = new SimpleAuthorityMapper();
+        authorityMapper.setDefaultAuthority("ROLE_PARTICIPANT");
+        return authorityMapper;
     }
 
     @Bean
@@ -180,18 +130,7 @@ public class WebSecurityBasic {
     public SecurityFilterChain h2ConsoleSecurityFilterChain(HttpSecurity http) throws Exception {
         http.securityMatcher(PathRequest.toH2Console());
         http.csrf(AbstractHttpConfigurer::disable);
-        http.headers((headers) -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
+        http.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
         return http.build();
-    }
-
-
-
-    @Bean
-    public GrantedAuthoritiesMapper authorityMapper() {
-        final SimpleAuthorityMapper authorityMapper = new SimpleAuthorityMapper();
-
-        authorityMapper.setDefaultAuthority("ROLE_PARTICIPANT");
-
-        return authorityMapper;
     }
 }
