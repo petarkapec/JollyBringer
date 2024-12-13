@@ -93,7 +93,7 @@ public class WebSecurityBasic {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/check-auth").authenticated();
-                    auth.anyRequest().authenticated();
+                    //auth.anyRequest().authenticated();
                 })
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(this::oauth2AuthenticationSuccessHandler)
