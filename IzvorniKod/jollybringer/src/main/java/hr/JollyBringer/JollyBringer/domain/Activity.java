@@ -15,14 +15,15 @@ public class Activity {
 
     private String date;
 
-    private String activity_status;
+    @Enumerated(EnumType.STRING)
+    private ActivityStatus activity_status;
 
     @ManyToOne
     @JoinColumn(name = "group_id")
     private ParticipantGroup group;
 
 
-    public Activity(String activity_name, String description, String date, String activity_status) {
+    public Activity(String activity_name, String description, String date, ActivityStatus activity_status) {
         this.activity_name = activity_name;
         this.description = description;
         this.date = date;
@@ -64,11 +65,11 @@ public class Activity {
         this.date = date;
     }
 
-    public String getActivity_status() {
+    public ActivityStatus getActivity_status() {
         return activity_status;
     }
 
-    public void setActivity_status(String activity_status) {
+    public void setActivity_status(ActivityStatus activity_status) {
         this.activity_status = activity_status;
     }
 
