@@ -8,7 +8,6 @@ public class Activity {
     @GeneratedValue
     private Long id;
 
-
     private String activity_name;
 
     private String description;
@@ -21,6 +20,9 @@ public class Activity {
     @ManyToOne
     @JoinColumn(name = "group_id")
     private ParticipantGroup group;
+
+    //TODO napraviti createdBy atribut i njegovu logiku
+    private String createdBy;
 
 
     public Activity(String activity_name, String description, String date, ActivityStatus activity_status) {
