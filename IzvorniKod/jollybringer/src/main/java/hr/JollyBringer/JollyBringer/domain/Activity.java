@@ -17,6 +17,10 @@ public class Activity {
 
     private String activity_status;
 
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    private ParticipantGroup group;
+
 
     public Activity(String activity_name, String description, String date, String activity_status) {
         this.activity_name = activity_name;

@@ -10,4 +10,5 @@ public interface ActivityService {
      * @return a list with all Participants
      */
     List<Activity> listAll();
+    Activity createActivity(Activity activity);
 }
