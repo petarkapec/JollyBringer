@@ -1,35 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/Activities.css';
-import activitiesData from '../test_data/activitiesData';
 import ActivityPopup from './ActivityPopup';
+import activitiesData from '../test_data/activitiesData'; // Import the hardcoded data
 
-const Activities = () => {
+const Activities = ({ group }) => {
   const [activities, setActivities] = useState([]);
   const [currentDate, setCurrentDate] = useState(new Date('2023-12-13')); // Hardcoded date for testing
   const [flippedCards, setFlippedCards] = useState([]);
   const [selectedActivity, setSelectedActivity] = useState(null);
 
-  // useEffect(() => {
-  //   const fetchActivities = async () => {
-  //     try {
-  //       const response = await axios.get('http://localhost:8080/activities', { withCredentials: true });
-  //       setActivities(response.data);
-  //     } catch (error) {
-  //       console.error('Error fetching activities:', error);
-  //     }
-  //   };
-
-  //   fetchActivities();
-  // }, []);
-
   useEffect(() => {
-    // hardcoded data for testing
-    setActivities(activitiesData);
+    if (group) {
+      // Filter activities for the selected group
+      const groupActivities = activitiesData.filter(activity => activity.GROUP_ID === group.id);
+      setActivities(groupActivities);
 
-    // Retrieve flipped cards from local storage
-    const savedFlippedCards = JSON.parse(localStorage.getItem('flippedCards')) || [];
-    setFlippedCards(savedFlippedCards);
-  }, []);
+      // Retrieve flipped cards from local storage
+      const savedFlippedCards = JSON.parse(localStorage.getItem('flippedCards')) || [];
+      setFlippedCards(savedFlippedCards);
+    }
+  }, [group]);
 
   const isCardFlippable = (day) => {
     return currentDate.getDate() >= day && currentDate.getMonth() === 11; // December month check
@@ -49,6 +39,10 @@ const Activities = () => {
   const handleClosePopup = () => {
     setSelectedActivity(null);
   };
+
+  if (!group) {
+    return <div className="activities">Please select a group to view activities.</div>;
+  }
 
   return (
     <div className="activities">
