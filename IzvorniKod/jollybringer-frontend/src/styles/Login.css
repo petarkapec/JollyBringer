@@ -11,7 +11,7 @@
 }
 
 body {
-    background: url("/assets/img/christmas.webp") no-repeat;
+    background: url("/assets/img/christmas.webp") repeat;
     background-size: cover;
     background-position: center 60%;
 }

@@ -3,7 +3,7 @@ import axios from 'axios';
 import '../styles/Modal.css';
 import useAuth from '../hooks/useAuth';
 
-const Modal = ({ isVisible, onClose, role }) => {
+const Modal = ({ isVisible, onClose, role, updateGroups, onGroupCreated }) => {
   const { user } = useAuth();
   const [newGroupName, setNewGroupName] = useState('');
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -25,11 +25,14 @@ const Modal = ({ isVisible, onClose, role }) => {
 
   const handleCreateGroup = async () => {
     try {
-      await axios.post('http://localhost:8080/groups', {
+      const response = await axios.post('http://localhost:8080/groups', {
         name: newGroupName,
         users: selectedUsers
       }, { withCredentials: true });
+      const newGroup = response.data;
       onClose();
+      updateGroups(); // Update the groups list
+      onGroupCreated(newGroup); // Set the newly created group as the selected group
     } catch (error) {
       console.error('Error creating group:', error);
     }

@@ -148,6 +148,11 @@
     "username": "Noah_Wright",
     "email": "noahwright@example.com",
     "role_id": 3
+  },
+  {
+    "username": "progitest",
+    "email": "progitest6@gmail.com",
+    "role_id": 2
   }
 
 

@@ -11,6 +11,7 @@ const Dashboard = () => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [groups, setGroups] = useState([]);
+  const [selectedGroup, setSelectedGroup] = useState(null);
   const { role, user, loading } = useAuth();
 
   useEffect(() => {
@@ -25,6 +26,19 @@ const Dashboard = () => {
 
     fetchGroups();
   }, []);
+
+  useEffect(() => {
+    const savedGroup = JSON.parse(localStorage.getItem('selectedGroup'));
+    if (savedGroup) {
+      setSelectedGroup(savedGroup);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (selectedGroup) {
+      localStorage.setItem('selectedGroup', JSON.stringify(selectedGroup));
+    }
+  }, [selectedGroup]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -47,6 +61,24 @@ const Dashboard = () => {
     window.location.href = '/dashboard/admin';
   };
 
+  const handleGroupSelect = (group) => {
+    setSelectedGroup(group);
+  };
+
+  const updateGroups = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/groups', { withCredentials: true });
+      setGroups(response.data);
+    } catch (error) {
+      console.error('Error fetching groups:', error);
+    }
+  };
+
+  const handleGroupCreated = (newGroup) => {
+    setGroups((prevGroups) => [...prevGroups, newGroup]);
+    setSelectedGroup(newGroup);
+  };
+
   return (
     <div className="dashboard-container">
       <header className="dashboard-header">
@@ -63,7 +95,7 @@ const Dashboard = () => {
               <div className="extended-menu">
                 <ul>
                   {groups.map(group => (
-                    <li key={group.id}>{group.name}</li>
+                    <li key={group.id} onClick={() => handleGroupSelect(group)}>{group.name}</li>
                   ))}
                   <li onClick={handleNewGroupClick}>+ New group</li>
                   {(role === 'Admin') && (
@@ -77,10 +109,10 @@ const Dashboard = () => {
         </div>
       </header>
       <div className="dashboard-content">
-        <Activities/>
-        <Chat/>
+        <Activities group={selectedGroup} />
+        <Chat />
       </div>
-      {isModalVisible && <Modal isVisible={isModalVisible} onClose={() => setIsModalVisible(false)} user={user} role={role}/>}
+      {isModalVisible && <Modal isVisible={isModalVisible} onClose={() => setIsModalVisible(false)} user={user} role={role} updateGroups={updateGroups} onGroupCreated={handleGroupCreated} />}
     </div>
   );
 };
