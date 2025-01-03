@@ -48,10 +48,9 @@ public class ActivityServiceJPA implements ActivityService {
         return activityRepository.findById(activityId);
     }
 
-    @Override
-    public Optional<Activity> findByUsername(String username) {
-        Assert.notNull(username, "Username must be given");
-        return activityRepository.findByUsername(username);
+    public Optional<Activity> findByactivityName(String activityName) {
+        Assert.notNull(activityName, "activityName must be given");
+        return activityRepository.findByactivityName(activityName);
     }
 
     @Override
@@ -60,9 +59,9 @@ public class ActivityServiceJPA implements ActivityService {
         Long activityId = activity.getId();
         if (!activityRepository.existsById(activityId))
             throw new EntityMissingException(Activity.class, activityId);
-        if (activityRepository.existsByUsernameAndIdNot(activity.getActivity_name(), activityId))
+        if (activityRepository.existsByactivityNameAndIdNot(activity.getActivityName(), activityId))
             throw new RequestDeniedException(
-                    "Activity with username" + activity.getActivity_name() + " already exists"
+                    "Activity with username" + activity.getActivityName() + " already exists"
             );
         return activityRepository.save(activity);
     }

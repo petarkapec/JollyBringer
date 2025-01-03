@@ -8,7 +8,7 @@ public class Activity {
     @GeneratedValue
     private Long id;
 
-    private String activityName;
+    private String activity_name;
 
     private String description;
 
@@ -26,7 +26,7 @@ public class Activity {
 
 
     public Activity(String activity_name, String description, String date, ActivityStatus activity_status) {
-        this.activityName = activity_name;
+        this.activity_name = activity_name;
         this.description = description;
         this.date = date;
         this.activity_status = activity_status;
@@ -43,12 +43,12 @@ public class Activity {
         this.id = id;
     }
 
-    public String getActivityName() {
-        return activityName;
+    public String getActivity_name() {
+        return activity_name;
     }
 
-    public void setActivityName(String activity_name) {
-        this.activityName = activity_name;
+    public void setActivity_name(String activity_name) {
+        this.activity_name = activity_name;
     }
 
     public String getDescription() {
@@ -79,7 +79,7 @@ public class Activity {
     public String toString() {
         return "Activity{" +
                 "id=" + id +
-                ", activityName='" + activityName + '\'' +
+                ", activity_name='" + activity_name + '\'' +
                 ", description='" + description + '\'' +
                 ", date='" + date + '\'' +
                 ", activity_status='" + activity_status + '\'' +
