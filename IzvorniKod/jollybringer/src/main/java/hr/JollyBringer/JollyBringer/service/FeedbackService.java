@@ -4,6 +4,7 @@ import hr.JollyBringer.JollyBringer.domain.Activity;
 import hr.JollyBringer.JollyBringer.domain.Feedback;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface FeedbackService {
     /**
@@ -12,4 +13,10 @@ public interface FeedbackService {
      */
     List<Feedback> listAll();
     Feedback createFeedback(Feedback feedback);
+    Feedback fetch(long feedbackId);
+    Optional<Feedback> findById(long feedbackId);
+    Feedback deleteFeedback(long feedbackId);
+    Feedback updateFeedback(Feedback feedback);
+
+
 }

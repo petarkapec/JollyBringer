@@ -10,7 +10,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/feedback")
+@RequestMapping("/feedbacks")
 public class FeedbackController {
     @Autowired
     private FeedbackService feedbackService;
@@ -19,10 +19,32 @@ public class FeedbackController {
         return feedbackService.listAll();
     }
 
+    @GetMapping("/{id}") //možda   @Secured("ROLE_ADMIN")
+    public Feedback getFeedback(@PathVariable("id") long id) {
+        return feedbackService.fetch(id);
+    }
+
     @PostMapping("")
     //@Secured("ROLE_ADMIN")
     public ResponseEntity<Feedback> createFeedback(@RequestBody Feedback feedback){
         Feedback saved = feedbackService.createFeedback(feedback);
-        return ResponseEntity.created(URI.create("/feedback/" + saved.getId())).body(saved);
+        return ResponseEntity.created(URI.create("/feedbacks/" + saved.getId())).body(saved);
+    }
+
+    @PutMapping("/{id}")
+    //@Secured("ROLE_ADMIN")
+    public ResponseEntity<Feedback> updateFeedback(@PathVariable("id") long id, @RequestBody Feedback feedback){
+        if (!feedback.getId().equals(id))
+            throw new IllegalArgumentException("feedback ID must be preserved");
+
+        Feedback saved = feedbackService.updateFeedback(feedback);
+        return ResponseEntity.ok(saved);
+    }
+
+    @DeleteMapping("/{id}")
+    //@Secured("ROLE_ADMIN")
+    public Feedback deleteFeedback(@PathVariable("id") long id){
+
+        return  feedbackService.deleteFeedback(id);
     }
 }
