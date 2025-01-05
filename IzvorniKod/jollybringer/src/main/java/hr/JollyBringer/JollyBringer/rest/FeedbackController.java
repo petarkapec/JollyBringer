@@ -24,11 +24,16 @@ public class FeedbackController {
         return feedbackService.fetch(id);
     }
 
-    @PostMapping("")
+    //@PostMapping("")
     //@Secured("ROLE_ADMIN")
-    public ResponseEntity<Feedback> createFeedback(@RequestBody Feedback feedback){
-        Feedback saved = feedbackService.createFeedback(feedback);
-        return ResponseEntity.created(URI.create("/feedbacks/" + saved.getId())).body(saved);
+    //public ResponseEntity<Feedback> createFeedback(@RequestBody Feedback feedback){
+      //  Feedback saved = feedbackService.createFeedback(feedback);
+      //  return ResponseEntity.created(URI.create("/feedbacks/" + saved.getId())).body(saved);
+   // }
+
+    @PostMapping("")
+    public Feedback createFeedback(@RequestBody CreateFeedbackDTO dto) {
+        return feedbackService.createFeedback(dto.getComment(), dto.getActivityName(), dto.getUsername());
     }
 
     @PutMapping("/{id}")

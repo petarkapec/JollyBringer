@@ -1,6 +1,7 @@
 package hr.JollyBringer.JollyBringer.domain;
 
 import jakarta.persistence.*;
+import org.springframework.util.Assert;
 
 @Entity
 public class Feedback {
@@ -18,6 +19,15 @@ public class Feedback {
 
     @Enumerated(EnumType.STRING)
     private IsLiked isLiked = IsLiked.None; //default je none
+
+    public Feedback(String comment, Activity activity, Participant participant) {
+        Assert.hasText(comment, "Comment must have text");
+        Assert.notNull(activity, "Activity must be set");
+        Assert.notNull(participant, "Username must be set");
+        this.comment = comment;
+        this.activity = activity;
+        this.participant = participant;
+    }
 
     public Long getId() {
         return id;

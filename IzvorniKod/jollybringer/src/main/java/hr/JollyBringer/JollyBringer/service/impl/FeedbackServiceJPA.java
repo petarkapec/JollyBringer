@@ -1,12 +1,11 @@
 package hr.JollyBringer.JollyBringer.service.impl;
 
 import hr.JollyBringer.JollyBringer.dao.FeedbackRepository;
+import hr.JollyBringer.JollyBringer.dao.ParticipantGroupRepository;
 import hr.JollyBringer.JollyBringer.domain.Activity;
 import hr.JollyBringer.JollyBringer.domain.Feedback;
 import hr.JollyBringer.JollyBringer.domain.Participant;
-import hr.JollyBringer.JollyBringer.service.EntityMissingException;
-import hr.JollyBringer.JollyBringer.service.FeedbackService;
-import hr.JollyBringer.JollyBringer.service.RequestDeniedException;
+import hr.JollyBringer.JollyBringer.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -20,19 +19,35 @@ public class FeedbackServiceJPA implements FeedbackService {
     @Autowired
     private FeedbackRepository feedbackRepository;
 
+    public final ParticipantService participantService;
+    public final ActivityService activityService;
+
+    public FeedbackServiceJPA(ParticipantService participantService, ActivityService activityService) {
+        this.participantService = participantService;
+        this.activityService = activityService;
+    }
+
+
     @Override
     public List<Feedback> listAll() {
         return feedbackRepository.findAll();
     }
 
     @Override
-    public Feedback createFeedback(Feedback feedback) {
-        validate(feedback);
-        Assert.isNull(feedback.getId(),
-                "Activity ID must be null, not: " + feedback.getId()
-        );
+    public Feedback createFeedback(String comment, String activityName, String username) {
+        Optional<Participant> Optionalparticipant = participantService.findByUsername(username);
+        Optional<Activity> Optionalactivity = activityService.findByactivityName(activityName);
+        if(Optionalparticipant.isPresent() && Optionalactivity.isPresent()){
+            Participant participant = Optionalparticipant.get();
+            Activity activity = Optionalactivity.get();
+            return feedbackRepository.save(new Feedback(comment, activity, participant));
+        } else if(Optionalparticipant.isEmpty()){
+            throw new RequestDeniedException("No participant with username" + username);
+        } else{
+            throw new RequestDeniedException("No activity with name" + activityName);
+        }
 
-        return feedbackRepository.save(feedback);
+
 
     }
 
