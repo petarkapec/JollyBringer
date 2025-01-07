@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ActivityRepository extends JpaRepository<Activity, Long> {
-    Optional<Activity> findByactivityName(String activityName);
-    boolean existsByactivityNameAndIdNot(String activityName, Long activityId);
+    Optional<Activity> findByActivityName(String activityName);
+    boolean existsByActivityNameAndIdNot(String activityName, Long activityId);
 
 
 }

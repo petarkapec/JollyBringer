@@ -92,8 +92,8 @@ public class ParticipantGroupServiceJPA implements ParticipantGroupService
         participantGroupRepo.findByMember(participant).filter(g -> !g.getId().equals(groupId)).ifPresent(g -> {
             throw new RequestDeniedException(participant + " already member of " + g); }
         );
-        if (group.getMembers().size() >= groupMaxSize)
-            throw new RequestDeniedException("Already at max size (" + groupMaxSize + "): " + group);
+        //if (group.getMembers().size() >= groupMaxSize)
+            //throw new RequestDeniedException("Already at max size (" + groupMaxSize + "): " + group);
         boolean added = group.getMembers().add(participant);
         if (added)
             participantGroupRepo.save(group);
@@ -117,6 +117,11 @@ public class ParticipantGroupServiceJPA implements ParticipantGroupService
         for (Long userId : users) {
             addMember(id, userId);
         }
+    }
+
+    @Override
+    public Optional<ParticipantGroup> fetchByName(String name) {
+        return participantGroupRepo.findByName(name);
     }
 
     public Optional<ParticipantGroup> findByMember(long participantId) {
