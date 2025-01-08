@@ -9,6 +9,7 @@ import hr.JollyBringer.JollyBringer.service.ParticipantService;
 import hr.JollyBringer.JollyBringer.service.RequestDeniedException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.Set;
 //TODO: implement methods
 
 @Service
+@Transactional
 public class ParticipantGroupServiceJPA implements ParticipantGroupService
 {
 

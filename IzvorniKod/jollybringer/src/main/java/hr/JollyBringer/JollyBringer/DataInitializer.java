@@ -2,12 +2,15 @@ package hr.JollyBringer.JollyBringer;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import hr.JollyBringer.JollyBringer.domain.Activity;
 import hr.JollyBringer.JollyBringer.domain.Participant;
 import hr.JollyBringer.JollyBringer.domain.ParticipantGroup;
 import hr.JollyBringer.JollyBringer.domain.Role;
+import hr.JollyBringer.JollyBringer.rest.ActivityDTO;
 import hr.JollyBringer.JollyBringer.rest.GroupDTO;
 import hr.JollyBringer.JollyBringer.rest.RoleDTO;
 import hr.JollyBringer.JollyBringer.rest.UserDTO;
+import hr.JollyBringer.JollyBringer.service.ActivityService;
 import hr.JollyBringer.JollyBringer.service.ParticipantGroupService;
 import hr.JollyBringer.JollyBringer.service.ParticipantService;
 import hr.JollyBringer.JollyBringer.service.RoleService;
@@ -33,6 +36,9 @@ public class DataInitializer {
 
   @Autowired
   private RoleService roleService; // Repository for fetching roles
+
+  @Autowired
+  private ActivityService activityService;
 
   private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -82,7 +88,7 @@ public class DataInitializer {
 
       System.out.println("Users successfully initialized from JSON file");
       ///
-      /*
+
       // Load JSON file
       InputStream GroupStream = getClass().getResourceAsStream("/static/groups.json");
       Assert.notNull(GroupStream, "groups.json file not found in resources");
@@ -118,7 +124,28 @@ public class DataInitializer {
       }
 
       System.out.println("Groups successfully initialized from JSON file");
-      */
+
+      //-----------------------------------
+      // Load JSON file
+      InputStream ActivityStream = getClass().getResourceAsStream("/static/activities.json");
+      Assert.notNull(ActivityStream, "activities.json file not found in resources");
+
+      // Parse JSON to list of User DTOs
+      List<ActivityDTO> activities= objectMapper.readValue(ActivityStream, new TypeReference<List<ActivityDTO>>() {
+      });
+
+      // Save each user to the database
+      for (ActivityDTO activityDto : activities) {
+        if(participantGroupService.findById(activityDto.getGroup_id()).isEmpty()) throw new IllegalArgumentException("Group not found for id: " + activityDto.getGroup_id());
+        Activity activity = new Activity(activityDto.getActivityName(), activityDto.getDescription(), activityDto.getDate(), activityDto.getActivity_status(),activityDto.getCreatedBy(), participantGroupService.findById(activityDto.getGroup_id()).get());
+
+        activityService.createActivity(activity);
+
+
+
+      }
+
+      System.out.println("Activities successfully initialized from JSON file");
     } catch (Exception e) {
       e.printStackTrace();
       System.out.println("Failed to initialize users from JSON file");

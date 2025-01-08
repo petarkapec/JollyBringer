@@ -25,11 +25,14 @@ public class Activity {
     private String createdBy;
 
 
-    public Activity(String activity_name, String description, String date, ActivityStatus activity_status) {
+    public Activity(String activity_name, String description, String date, String activity_status, String createdBy, ParticipantGroup group) {
         this.activityName = activity_name;
         this.description = description;
         this.date = date;
-        this.activity_status = activity_status;
+        this.activity_status = ActivityStatus.valueOf(activity_status);
+        this.createdBy = createdBy;
+        this.group = group;
+
     }
 
     public Activity() {
@@ -71,8 +74,8 @@ public class Activity {
         return activity_status;
     }
 
-    public void setActivity_status(ActivityStatus activity_status) {
-        this.activity_status = activity_status;
+    public void setActivity_status(String activity_status) {
+        this.activity_status = ActivityStatus.valueOf(activity_status);
     }
 
     @Override
