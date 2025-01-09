@@ -1,5 +1,23 @@
-const ActivityDetailModal = ({ activity, isOpen, onClose }) => {
+import React from 'react';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import useAuth from '../hooks/useAuth.js';
+
+const ActivityDetailModal = ({ activity, isOpen, onClose, onActivityDeleted }) => {
+  const { role } = useAuth();
+
   if (!isOpen || !activity) return null;
+
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`http://localhost:8080/activities/${activity.ID}`, { withCredentials: true });
+      toast.success('Activity deleted successfully');
+      onActivityDeleted();
+      onClose();
+    } catch (error) {
+      toast.error('Failed to delete activity');
+    }
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
@@ -25,6 +43,14 @@ const ActivityDetailModal = ({ activity, isOpen, onClose }) => {
           <p className="text-xs text-gray-500">
             Status: {activity.ACTIVITY_STATUS}
           </p>
+          {(role === 'President' || role === 'Admin') && (
+            <button
+              onClick={handleDelete}
+              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+            >
+              Delete Activity
+            </button>
+          )}
         </div>
       </div>
     </div>
