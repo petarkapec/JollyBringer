@@ -10,10 +10,14 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-body {
+.login-background {
     background: url("/assets/img/christmas.webp") repeat;
     background-size: cover;
     background-position: center 60%;
+}
+
+body {
+    background: black;
 }
 
 .login-wrapper h1 {
@@ -73,5 +77,3 @@ form {
         width: 70%;
     }
 }
-
-

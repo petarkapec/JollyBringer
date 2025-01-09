@@ -1,11 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import useAuth from '../hooks/useAuth';
-import '../styles/Dashboard.css';
-import Activities from "./Activities.jsx";
-import Chat from "./Chat.jsx";
-import CountdownTimer from "./CountdownTimer.jsx";
-import Modal from './Modal.jsx';
 
 const Dashboard = () => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
@@ -80,39 +75,17 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="dashboard-container">
-      <header className="dashboard-header">
-        <div className='logo'>Jolly Bringer</div>
-        <CountdownTimer page={'Dashboard'}/>
-        <div className='dashboard-header-user-data'>
-          <div
-            className="groups"
-            onMouseEnter={() => setIsMenuVisible(true)}
-            onMouseLeave={() => setIsMenuVisible(false)}
-          >
-            {role}
-            {isMenuVisible && (
-              <div className="extended-menu">
-                <ul>
-                  {groups.map(group => (
-                    <li key={group.id} onClick={() => handleGroupSelect(group)}>{group.name}</li>
-                  ))}
-                  <li onClick={handleNewGroupClick}>+ New group</li>
-                  {(role === 'Admin') && (
-                    <li onClick={handleAdminRedirect}>Admin Dashboard</li>
-                  )}
-                </ul>
-              </div>
-            )}
-          </div>
-          <button className="dashboard-header-button" onClick={handleLogout}>Logout</button>
+    <div className={'bg-black'}>
+      {/*<Header/>*/}
+      qeqwqwe
+      <div className={'flex justify-between'}>
+        <div className={'w-1/2'}>
+          {/*<Activities/>*/}
         </div>
-      </header>
-      <div className="dashboard-content">
-        <Activities group={selectedGroup} />
-        <Chat />
+        <div className={'w-1/2'}>
+          {/*<Chat/>*/}
+        </div>
       </div>
-      {isModalVisible && <Modal isVisible={isModalVisible} onClose={() => setIsModalVisible(false)} user={user} role={role} updateGroups={updateGroups} onGroupCreated={handleGroupCreated} />}
     </div>
   );
 };
