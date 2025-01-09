@@ -70,15 +70,17 @@ const Header = () => {
   };
 
   const handleApplyForPresident = async () => {
-    // try {
-    //   await axios.post('/apply-president');
-    //   setShowRoleModal(false);
-    //   toast.success('Application submitted successfully!');
-    // } catch (error) {
-    //   const errorMessage = error.response?.data?.error || 'Failed to submit application';
-    //   toast.error(errorMessage);
-    //   setShowRoleModal(false);
-    // }
+    try {
+      await axios.post('http://localhost:8080/apply', {
+        user_id: user.id,
+        applied: true
+      }, { withCredentials: true });
+      setShowRoleModal(false);
+      toast.success('Application submitted successfully!');
+    } catch (error) {
+      console.log('You have already applied for the role of Christmas president.');
+      setShowRoleModal(false);
+    }
   };
 
   const handleAdminRedirect = () => {
