@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import useAuth from '../hooks/useAuth';
+import Header from "./Header.jsx";
 
 const Dashboard = () => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
@@ -13,6 +14,7 @@ const Dashboard = () => {
     const fetchGroups = async () => {
       try {
         const response = await axios.get('http://localhost:8080/groups', { withCredentials: true });
+        console.log(response.data)
         setGroups(response.data);
       } catch (error) {
         console.error('Error fetching groups:', error);
@@ -76,7 +78,7 @@ const Dashboard = () => {
 
   return (
     <div className={'bg-black'}>
-      {/*<Header/>*/}
+      <Header/>
       qeqwqwe
       <div className={'flex justify-between'}>
         <div className={'w-1/2'}>
