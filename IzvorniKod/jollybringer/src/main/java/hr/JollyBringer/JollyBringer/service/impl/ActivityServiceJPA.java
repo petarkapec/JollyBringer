@@ -25,6 +25,11 @@ public class ActivityServiceJPA implements ActivityService {
     }
 
     @Override
+    public List<Activity> findByGroupId(long groupId) {
+        return activityRepository.findByGroupId(groupId);
+    }
+
+    @Override
     public Activity fetch(long activityId) {
         return findById(activityId).orElseThrow(
                 () -> new EntityMissingException(Activity.class, activityId)

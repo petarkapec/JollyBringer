@@ -12,5 +12,8 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
     Optional<Activity> findByActivityName(String activityName);
     boolean existsByActivityNameAndIdNot(String activityName, Long activityId);
 
+    List<Activity> findByGroupId(Long groupId);
+
+
 
 }

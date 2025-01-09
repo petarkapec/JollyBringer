@@ -11,6 +11,8 @@ public interface ActivityService {
      */
     List<Activity> listAll();
 
+    List<Activity> findByGroupId(long groupId);
+
     Activity fetch(long activitytId);
     Activity createActivity(Activity activity);
 

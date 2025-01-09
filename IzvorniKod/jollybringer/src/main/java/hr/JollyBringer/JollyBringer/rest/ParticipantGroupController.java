@@ -1,11 +1,15 @@
 package hr.JollyBringer.JollyBringer.rest;
 
+import hr.JollyBringer.JollyBringer.domain.Activity;
 import hr.JollyBringer.JollyBringer.domain.Participant;
 import hr.JollyBringer.JollyBringer.domain.ParticipantGroup;
+import hr.JollyBringer.JollyBringer.service.ActivityService;
 import hr.JollyBringer.JollyBringer.service.ParticipantGroupService;
 import hr.JollyBringer.JollyBringer.service.ParticipantService;
 import hr.JollyBringer.JollyBringer.service.RequestDeniedException;
+import hr.JollyBringer.JollyBringer.service.impl.ActivityServiceJPA;
 import hr.JollyBringer.JollyBringer.service.impl.ParticipantGroupServiceJPA;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,12 +29,14 @@ public class ParticipantGroupController {
 
     private final ParticipantService participantService;
     private final ParticipantGroupService participantGroupService;
+    private final ActivityService activityService;
 
 
 
-    public ParticipantGroupController(ParticipantService participantService, ParticipantGroupService participantGroupService, ParticipantGroupServiceJPA participantGroupServiceJPA) {
+    public ParticipantGroupController(ParticipantService participantService, ParticipantGroupService participantGroupService, ParticipantGroupServiceJPA participantGroupServiceJPA, ActivityService activityService, ActivityServiceJPA activityServiceJPA) {
         this.participantService = participantService;
         this.participantGroupService = participantGroupService;
+        this.activityService = activityService;
     }
 
     @GetMapping("")
@@ -44,6 +50,12 @@ public class ParticipantGroupController {
     @GetMapping("/{id}")//možda samo admin?
     public ParticipantGroup getGroup(@PathVariable("id") Long id) {
         return participantGroupService.fetch(id);
+    }
+
+    @GetMapping("/{groupId}/activities")
+    public ResponseEntity<List<Activity>> getActivitiesByGroupId(@PathVariable Long groupId) {
+        List<Activity> activities = activityService.findByGroupId(groupId);
+        return ResponseEntity.ok(activities);
     }
 
     @PostMapping("")
