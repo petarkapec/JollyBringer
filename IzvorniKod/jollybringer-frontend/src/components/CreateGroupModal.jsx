@@ -21,8 +21,6 @@ export default function CreateGroupModal({ isOpen, onClose, onGroupCreated }) {
 
           const users = usersResponse.data;
           const groups = groupsResponse.data;
-          console.log(users)
-          console.log(groups)
 
           const usersInGroups = groups.flatMap(group => group.members.map(user => user.id));
           const usersNotInGroups = users.filter(user => !usersInGroups.includes(user.id));

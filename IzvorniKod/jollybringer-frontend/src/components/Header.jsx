@@ -1,8 +1,8 @@
-import React, {useEffect, useState, useRef} from 'react';
-import {ToastContainer, toast} from 'react-toastify';
+import React, { useEffect, useState, useRef } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CountdownTimer from "./CountdownTimer.jsx";
-import {Menu} from "lucide-react";
+import { Menu } from "lucide-react";
 import axios from "axios";
 import useAuth from "../hooks/useAuth.js";
 import CreateGroupModal from "./CreateGroupModal.jsx";
@@ -15,10 +15,9 @@ const Header = () => {
   const { role, user, loading } = useAuth();
   const [showRoleModal, setShowRoleModal] = useState(false);
   const menuRef = useRef(null);
-  const [showGroupModal, setShowGroupModal] = useState(false)
-  const [userGroups, setUserGroups] = useState([])
-  const [selectedGroup, setSelectedGroup] = useState()
-
+  const [showGroupModal, setShowGroupModal] = useState(false);
+  const [userGroups, setUserGroups] = useState([]);
+  const [selectedGroup, setSelectedGroup] = useState();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -38,6 +37,19 @@ const Header = () => {
     };
   }, [menuRef]);
 
+  useEffect(() => {
+    const fetchUserGroups = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/groups', { withCredentials: true });
+        const groups = response.data;
+        const userGroups = groups.filter(group => group.members.some(member => member.id === user.id));
+        setUserGroups(userGroups);
+      } catch (error) {
+      }
+    };
+
+    fetchUserGroups();
+  }, [user]);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -45,17 +57,17 @@ const Header = () => {
 
   const handleNewGroup = () => {
     if (role !== 'President' && role !== 'Admin') {
-      setShowRoleModal(true)
-      setIsMenuOpen(false)
+      setShowRoleModal(true);
+      setIsMenuOpen(false);
     } else {
-      setShowGroupModal(true)
-      setIsMenuOpen(false)
+      setShowGroupModal(true);
+      setIsMenuOpen(false);
     }
-  }
+  };
 
   const handleLogout = () => {
-    window.location.href = '/'
-  }
+    window.location.href = '/';
+  };
 
   const handleApplyForPresident = async () => {
     // try {
@@ -65,15 +77,14 @@ const Header = () => {
     // } catch (error) {
     //   const errorMessage = error.response?.data?.error || 'Failed to submit application';
     //   toast.error(errorMessage);
-    //   setShowRoleModal(false)
+    //   setShowRoleModal(false);
     // }
   };
 
-
   const handleAdminRedirect = () => {
-    window.location.href = '/dashboard/admin'
+    window.location.href = '/dashboard/admin';
     setIsMenuOpen(false); // Close menu after clicking
-  }
+  };
 
   const handleGroupClick = (group) => {
     // Store both id and name to have complete group info
@@ -82,7 +93,7 @@ const Header = () => {
       name: group.name
     };
 
-    setSelectedGroup(group.name)
+    setSelectedGroup(group.name);
 
     // Save to localStorage
     localStorage.setItem(SELECTED_GROUP_KEY, JSON.stringify(groupData));
@@ -100,9 +111,9 @@ const Header = () => {
     <>
       <div className={'text-white flex items-center justify-between h-12 border-b py-[34px] px-5 bg-black'}>
         <h1 className={'text-3xl hover:cursor-pointer'} onClick={() => {
-          window.location.href = "/dashboard"
+          window.location.href = "/dashboard";
         }}>Jollybringer</h1>
-        <CountdownTimer page/>
+        <CountdownTimer page />
         <div className={`flex items-center gap-10`}>
           <p className={'text-[16px]'}>Role: {role}</p>
           {selectedGroup && (
@@ -132,14 +143,14 @@ const Header = () => {
                     {group.name}
                   </li>
                 ))}
-              <hr/>
+              <hr />
               <li onClick={handleNewGroup}
                   className={'py-2 px-4 hover:bg-gray-200 cursor-pointer bg-white rounded-[6px] text-black text-center'}>New
                 group
               </li>
               {role === 'Admin' && (
                 <>
-                  <hr/>
+                  <hr />
                   <li onClick={handleAdminRedirect}
                       className={'py-2 px-4 hover:bg-gray-200 cursor-pointer bg-white rounded-[6px] text-black text-center'}>Admin
                   </li>
@@ -153,7 +164,7 @@ const Header = () => {
         <CreateGroupModal
           isOpen={showGroupModal}
           onClose={() => setShowGroupModal(false)}
-          // onGroupCreated={fetchUserGroups}  // Add this prop
+          onGroupCreated={() => fetchUserGroups()}  // Add this prop
         />
       )}
       <RoleModal
