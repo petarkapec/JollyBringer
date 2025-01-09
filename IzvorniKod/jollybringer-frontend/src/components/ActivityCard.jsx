@@ -42,14 +42,14 @@ const ActivityCard = ({ day, activity, onClick }) => {
         <div className="text-xl font-bold mb-2 text-red-600">Day {day}</div>
         {isFlipped ? (
           activity ? (
-            <h3 className="text-lg font-semibold text-gray-300 truncate">
+            <h3 className="text-lg font-semibold text-gray-300 text-[16px]">
               {activity.ACTIVITY_NAME}
             </h3>
           ) : (
             <p className="text-gray-400">No activity planned</p>
           )
         ) : (
-          <p className="text-gray-400">{isEligible ? 'Click to flip' : 'Not yet available'}</p>
+          <p className="text-gray-400">Click to reveal</p>
         )}
       </div>
       {activity && (
