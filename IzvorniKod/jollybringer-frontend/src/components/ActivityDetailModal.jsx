@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import useAuth from '../hooks/useAuth.js';
+import Feedback from './Feedback.jsx';
 
 const ActivityDetailModal = ({ activity, isOpen, onClose, onActivityDeleted }) => {
   const { role } = useAuth();
@@ -51,6 +52,7 @@ const ActivityDetailModal = ({ activity, isOpen, onClose, onActivityDeleted }) =
               Delete Activity
             </button>
           )}
+          <Feedback activityId={activity.ID} />
         </div>
       </div>
     </div>
