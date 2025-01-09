@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import useAuth from '../hooks/useAuth';
 import Header from "./Header.jsx";
+import Activities from "./Activities.jsx";
 
 const Dashboard = () => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
@@ -14,7 +15,6 @@ const Dashboard = () => {
     const fetchGroups = async () => {
       try {
         const response = await axios.get('http://localhost:8080/groups', { withCredentials: true });
-        console.log(response.data)
         setGroups(response.data);
       } catch (error) {
         console.error('Error fetching groups:', error);
@@ -29,6 +29,19 @@ const Dashboard = () => {
     if (savedGroup) {
       setSelectedGroup(savedGroup);
     }
+
+    const handleStorageChange = () => {
+      const updatedGroup = JSON.parse(localStorage.getItem('selectedGroup'));
+      if (updatedGroup) {
+        setSelectedGroup(updatedGroup);
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, []);
 
   useEffect(() => {
@@ -79,10 +92,9 @@ const Dashboard = () => {
   return (
     <div className={'bg-black'}>
       <Header/>
-      qeqwqwe
       <div className={'flex justify-between'}>
         <div className={'w-1/2'}>
-          {/*<Activities/>*/}
+          <Activities selectedGroup={selectedGroup} role={role}/>
         </div>
         <div className={'w-1/2'}>
           {/*<Chat/>*/}

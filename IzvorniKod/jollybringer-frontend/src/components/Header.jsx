@@ -51,6 +51,13 @@ const Header = () => {
     fetchUserGroups();
   }, [user]);
 
+  useEffect(() => {
+    const storedGroup = localStorage.getItem(SELECTED_GROUP_KEY);
+    if (storedGroup) {
+      setSelectedGroup(JSON.parse(storedGroup).name);
+    }
+  }, []);
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -102,11 +109,6 @@ const Header = () => {
     window.dispatchEvent(new Event('storage'));
     // Close the menu
     setIsMenuOpen(false);
-  };
-
-  const getSelectedGroup = () => {
-    const stored = localStorage.getItem(SELECTED_GROUP_KEY);
-    return stored ? JSON.parse(stored) : null;
   };
 
   return (

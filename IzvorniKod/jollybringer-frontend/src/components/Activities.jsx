@@ -1,177 +1,98 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import '../styles/Activities.css';
-import ActivityPopup from './ActivityPopup';
-import {Plus} from 'lucide-react';
-import useAuth from '../hooks/useAuth';
+import { toast } from 'react-toastify';
+import ActivityCard from "./ActivityCard.jsx";
+import CreateActivityModal from "./CreateActivityModal.jsx";
+import ActivityDetailModal from "./ActivityDetailModal.jsx";
 
-const Activities = ({group}) => {
-  const {role} = useAuth();
+const Activities = ({ selectedGroup, role }) => {
   const [activities, setActivities] = useState([]);
-  const [currentDate, setCurrentDate] = useState(new Date('2023-12-13')); // Hardcoded date for testing
-  const [flippedCards, setFlippedCards] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [isPresident, setIsPresident] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
-  const [isFormPopupOpen, setIsFormPopupOpen] = useState(false);
-  const [newActivity, setNewActivity] = useState({
-    activityName: '',
-    description: '',
-    date: '',
-    activity_status: 'Pending',
-    group: {id: group?.id},
-    createdBy: 'Admin',
-  });
+  const [showDetailModal, setShowDetailModal] = useState(false);
 
   useEffect(() => {
-    const fetchActivities = async () => {
-      try {
-        if (group) {
-          const response = await axios.get(`http://localhost:8080/groups/${group.id}/activities`);
-          setActivities(response.data);
-
-          // Retrieve flipped cards from local storage
-          const savedFlippedCards = JSON.parse(localStorage.getItem('flippedCards')) || [];
-          setFlippedCards(savedFlippedCards);
-        }
-      } catch (error) {
-        console.error('Error fetching activities:', error);
-      }
-    };
-
-    fetchActivities();
-  }, [group]);
-
-  const isCardFlippable = (day) => {
-    return currentDate.getDate() >= day && currentDate.getMonth() === 11; // December month check
-  };
-
-  const handleCardClick = (day) => {
-    if (isCardFlippable(day) && !flippedCards.includes(day)) {
-      const newFlippedCards = [...flippedCards, day];
-      setFlippedCards(newFlippedCards);
-      localStorage.setItem('flippedCards', JSON.stringify(newFlippedCards)); // Save to local storage
-    } else if (flippedCards.includes(day)) {
-      const activity = activities.find(act => new Date(act.date).getDate() === day);
-      setSelectedActivity(activity);
+    if (selectedGroup?.id) {
+      fetchActivities();
+    } else {
+      setActivities([]);
+      setIsPresident(false);
+      setLoading(false);
     }
-  };
+  }, [selectedGroup?.id]);
 
-  const handleClosePopup = () => {
-    setSelectedActivity(null);
-  };
-
-  const handleInputChange = (e) => {
-    const {name, value} = e.target;
-    setNewActivity(prevState => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
-  const handleCreateActivity = async (e) => {
-    e.preventDefault();
+  const fetchActivities = async () => {
     try {
-      const response = await axios.post(`http://localhost:8080/groups/${group.id}/activities`, newActivity);
-      const createdActivity = response.data;
-      setActivities(prevActivities => [...prevActivities, createdActivity]);
-      setNewActivity({
-        activityName: '',
-        description: '',
-        date: '',
-        activity_status: 'Pending',
-        group: {id: group.id},
-        createdBy: 'Admin',
-      });
-      setIsFormPopupOpen(false);
+      // const response = await axios.get(`http://localhost:8080/groups/${selectedGroup.id}/activities`);
+      // setActivities(response.data);
     } catch (error) {
-      console.error('Error creating activity:', error);
+      toast.error('Failed to fetch activities');
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (!group) {
-    return <div className="activities">Please select a group to view activities.</div>;
+  const handleActivityClick = (activity) => {
+    setSelectedActivity(activity);
+    setShowDetailModal(true);
+  };
+
+  if (!selectedGroup) {
+    return (
+      <div className="p-4">
+        <h2 className="text-2xl font-bold mb-6">Christmas Activities</h2>
+        <div className="p-4 text-center text-gray-400">
+          Please select a group first
+        </div>
+      </div>
+    );
   }
 
+  if (loading) {
+    return <div className="p-4 text-center text-white">Loading...</div>;
+  }
+
+  const days = Array.from({ length: 25 }, (_, i) => i + 1);
+
   return (
-    <div className="activities">
-      <div className="create-activity-icon" onClick={() => setIsFormPopupOpen(true)}>
-        <h2>Advent Calendar Activities</h2>
-        <Plus size={32}/>
+    <div className="p-4">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold">Christmas Activities</h2>
+        {(role === 'President' || role === 'Admin') && (
+          <button
+            onClick={() => setShowModal(true)}
+            className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
+          >
+            Create Activity
+          </button>
+        )}
       </div>
-      {isFormPopupOpen && (
-        <div className="form-popup-overlay" onClick={() => setIsFormPopupOpen(false)}>
-          <div className="form-popup-content" onClick={(e) => e.stopPropagation()}>
-            <form className="create-activity-form" onSubmit={handleCreateActivity}>
-              <h3>Create New Activity</h3>
-              <input
-                type="text"
-                name="activityName"
-                placeholder="Activity Name"
-                value={newActivity.activityName}
-                onChange={handleInputChange}
-                required
-              />
-              <textarea
-                name="description"
-                placeholder="Description"
-                value={newActivity.description}
-                onChange={handleInputChange}
-                required
-              />
-              <input
-                type="date"
-                name="date"
-                value={newActivity.date}
-                onChange={handleInputChange}
-                required
-              />
-              <button type="submit">Create Activity</button>
-            </form>
-          </div>
-        </div>
-      )}
-      <div className="advent-calendar">
-        {Array.from({length: 25}, (_, index) => {
-          const day = index + 1;
-          const activity = activities.find(act => new Date(act.date).getDate() === day);
-          const isFlipped = flippedCards.includes(day);
-          const canBeFlipped = isCardFlippable(day);
-          return (
-            <div
-              key={day}
-              className={`card ${canBeFlipped ? 'flippable' : 'not-flippable'} ${isFlipped ? 'flipped' : ''}`}
-              onClick={() => handleCardClick(day)}
-            >
-              <div className="card-front">
-                <p>{day}</p>
-              </div>
-              <div className="card-back">
-                {activity ? (
-                  <>
-                    <h3>{activity.activityName}</h3>
-                  </>
-                ) : (
-                  <p>Activity hasn't been created yet</p>
-                )}
-              </div>
-            </div>
-          );
-        })}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        {days.map((day) => (
+          <ActivityCard
+            key={day}
+            day={day}
+            activity={activities.find(a => 
+              new Date(a.date).getDate() === day && 
+              new Date(a.date).getMonth() === 11
+            )}
+            onClick={handleActivityClick}
+          />
+        ))}
       </div>
-      {selectedActivity && (
-        <ActivityPopup
-          activity={selectedActivity}
-          onClose={handleClosePopup}
-          onDelete={async () => {
-            try {
-              await axios.delete(`http://localhost:8080/activities/${selectedActivity.id}`, {withCredentials: true});
-              setActivities(prevActivities => prevActivities.filter(activity => activity.id !== selectedActivity.id));
-              handleClosePopup();
-            } catch (error) {
-              console.error('Error deleting activity:', error);
-            }
-          }}
-        />
-      )}
+      <CreateActivityModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        groupId={selectedGroup.id}
+        onActivityCreated={fetchActivities}
+      />
+      <ActivityDetailModal
+        activity={selectedActivity}
+        isOpen={showDetailModal}
+        onClose={() => setShowDetailModal(false)}
+      />
     </div>
   );
 };
