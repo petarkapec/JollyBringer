@@ -29,7 +29,7 @@ const CreateActivityModal = ({ isOpen, onClose, groupId, onActivityCreated }) =>
     console.log(newActivity)
 
     try {
-      await axios.post(`http://localhost:8080/groups/${groupId}/activities`, newActivity);
+      await axios.post(`http://localhost:8080/groups/${groupId}/activities`, newActivity, { withCredentials: true });
       toast.success('Activity created successfully');
       setFormData({ name: '', date: '', description: '', status: 'Pending' });
       onActivityCreated();

@@ -11,7 +11,7 @@ const ActivityDetailModal = ({ activity, isOpen, onClose, onActivityDeleted }) =
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:8080/activities/${activity.ID}`, { withCredentials: true });
+      await axios.delete(`http://localhost:8080/activities/${activity.id}`, { withCredentials: true });
       toast.success('Activity deleted successfully');
       onActivityDeleted();
       onClose();
@@ -52,7 +52,7 @@ const ActivityDetailModal = ({ activity, isOpen, onClose, onActivityDeleted }) =
               Delete Activity
             </button>
           )}
-          <Feedback activityId={activity.ID} />
+          <Feedback activityId={activity.id} />
         </div>
       </div>
     </div>
