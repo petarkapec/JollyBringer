@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import React, {useEffect, useState, useRef} from 'react';
+import {ToastContainer, toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CountdownTimer from "./CountdownTimer.jsx";
-import { Menu } from "lucide-react";
+import {Menu} from "lucide-react";
 import axios from "axios";
 import useAuth from "../hooks/useAuth.js";
 import CreateGroupModal from "./CreateGroupModal.jsx";
@@ -12,7 +12,7 @@ const SELECTED_GROUP_KEY = 'selectedGroup';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { role, user, loading } = useAuth();
+  const {role, user, loading} = useAuth();
   const [showRoleModal, setShowRoleModal] = useState(false);
   const menuRef = useRef(null);
   const [showGroupModal, setShowGroupModal] = useState(false);
@@ -37,17 +37,18 @@ const Header = () => {
     };
   }, [menuRef]);
 
-  useEffect(() => {
-    const fetchUserGroups = async () => {
-      try {
-        const response = await axios.get('http://localhost:8080/groups', { withCredentials: true });
-        const groups = response.data;
-        const userGroups = groups.filter(group => group.members.some(member => member.id === user.id));
-        setUserGroups(userGroups);
-      } catch (error) {
-      }
-    };
 
+  const fetchUserGroups = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/groups', {withCredentials: true});
+      const groups = response.data;
+      const userGroups = groups.filter(group => group.members.some(member => member.id === user.id));
+      setUserGroups(userGroups);
+    } catch (error) {
+    }
+  }
+
+  useEffect(() => {
     fetchUserGroups();
   }, [user]);
 
@@ -81,7 +82,7 @@ const Header = () => {
       await axios.post('http://localhost:8080/apply', {
         user_id: user.id,
         applied: true
-      }, { withCredentials: true });
+      }, {withCredentials: true});
       setShowRoleModal(false);
       toast.success('Application submitted successfully!');
     } catch (error) {
@@ -117,7 +118,7 @@ const Header = () => {
         <h1 className={'text-3xl hover:cursor-pointer'} onClick={() => {
           window.location.href = "/dashboard";
         }}>Jollybringer</h1>
-        <CountdownTimer page />
+        <CountdownTimer page/>
         <div className={`flex items-center gap-10`}>
           <p className={'text-[16px]'}>Role: {role}</p>
           {selectedGroup && (
@@ -147,14 +148,14 @@ const Header = () => {
                     {group.name}
                   </li>
                 ))}
-              <hr />
+              <hr/>
               <li onClick={handleNewGroup}
                   className={'py-2 px-4 hover:bg-gray-200 cursor-pointer bg-white rounded-[6px] text-black text-center'}>New
                 group
               </li>
               {role === 'Admin' && (
                 <>
-                  <hr />
+                  <hr/>
                   <li onClick={handleAdminRedirect}
                       className={'py-2 px-4 hover:bg-gray-200 cursor-pointer bg-white rounded-[6px] text-black text-center'}>Admin
                   </li>

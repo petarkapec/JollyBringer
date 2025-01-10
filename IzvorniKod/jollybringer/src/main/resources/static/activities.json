@@ -4,7 +4,7 @@
       "description": "An evening of singing Christmas carols with the group.",
       "date": "2023-12-18",
       "activity_status": "InProgress",
-      "group_id": 1,
+      "group_id": 5,
       "createdBy": ""
     },
     {
@@ -12,7 +12,7 @@
       "description": "Decorating the Christmas tree together as a group.",
       "date": "2023-12-05",
       "activity_status": "Done",
-      "group_id": 2,
+      "group_id": 5,
       "createdBy": ""
     },
     {

@@ -34,15 +34,15 @@ const ActivityDetailModal = ({ activity, isOpen, onClose, onActivityDeleted }) =
           </button>
         </div>
         <div className="space-y-4">
-          <p className="text-gray-300">{activity.DESCRIPTION}</p>
+          <p className="text-gray-300">{activity.description}</p>
           <p className="text-sm text-gray-400">
-            Date: {new Date(activity.DATE).toLocaleDateString()}
+            Date: {new Date(activity.date).toLocaleDateString()}
           </p>
           <p className="text-xs text-gray-500">
             Created by: {activity.CREATED_BY}
           </p>
           <p className="text-xs text-gray-500">
-            Status: {activity.ACTIVITY_STATUS}
+            Status: {activity.activity_status}
           </p>
           {(role === 'President' || role === 'Admin') && (
             <button

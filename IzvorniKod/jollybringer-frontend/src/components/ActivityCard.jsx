@@ -43,7 +43,7 @@ const ActivityCard = ({ day, activity, onClick }) => {
         {isFlipped ? (
           activity ? (
             <h3 className="text-lg font-semibold text-gray-300 text-[16px]">
-              {activity.ACTIVITY_NAME}
+              {activity.activityName}
             </h3>
           ) : (
             <p className="text-gray-400">No activity planned</p>

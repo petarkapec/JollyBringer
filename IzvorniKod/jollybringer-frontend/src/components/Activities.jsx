@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import ActivityCard from "./ActivityCard.jsx";
 import CreateActivityModal from "./CreateActivityModal.jsx";
 import ActivityDetailModal from "./ActivityDetailModal.jsx";
+import useAuth from "../hooks/useAuth.js";
 
 const Activities = ({ selectedGroup, role }) => {
   const [activities, setActivities] = useState([]);
@@ -12,6 +13,8 @@ const Activities = ({ selectedGroup, role }) => {
   const [isPresident, setIsPresident] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
+
+  useAuth()
 
   useEffect(() => {
     if (selectedGroup?.id) {
@@ -25,7 +28,7 @@ const Activities = ({ selectedGroup, role }) => {
 
   const fetchActivities = async () => {
     try {
-       const response = await axios.get(`http://localhost:8080/groups/${selectedGroup.id}/activities`);
+       const response = await axios.get(`http://localhost:8080/groups/${selectedGroup.id}/activities`, {withCredentials: true});
        setActivities(response.data);
     } catch (error) {
       toast.error('Failed to fetch activities');
@@ -75,8 +78,8 @@ const Activities = ({ selectedGroup, role }) => {
             key={day}
             day={day}
             activity={activities.find(a => 
-              new Date(a.DATE).getDate() === day &&
-              new Date(a.DATE).getMonth() === 11
+              new Date(a.date).getDate() === day &&
+              new Date(a.date).getMonth() === 11
             )}
             onClick={handleActivityClick}
           />
