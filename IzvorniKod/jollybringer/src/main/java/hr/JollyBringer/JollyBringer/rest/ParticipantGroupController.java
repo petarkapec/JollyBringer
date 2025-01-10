@@ -18,6 +18,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -27,14 +28,14 @@ import java.util.Set;
 //@CrossOrigin(origins = "http://localhost:5173")
 public class ParticipantGroupController {
 
-    private final ParticipantService participantService;
+
     private final ParticipantGroupService participantGroupService;
     private final ActivityService activityService;
 
 
 
     public ParticipantGroupController(ParticipantService participantService, ParticipantGroupService participantGroupService, ParticipantGroupServiceJPA participantGroupServiceJPA, ActivityService activityService, ActivityServiceJPA activityServiceJPA) {
-        this.participantService = participantService;
+
         this.participantGroupService = participantGroupService;
         this.activityService = activityService;
     }
@@ -56,6 +57,14 @@ public class ParticipantGroupController {
     public ResponseEntity<List<Activity>> getActivitiesByGroupId(@PathVariable Long groupId) {
         List<Activity> activities = activityService.findByGroupId(groupId);
         return ResponseEntity.ok(activities);
+    }
+
+    @PostMapping("/{groupId}/activities")
+    public ResponseEntity<List<Activity>> createActivitiesByGroupId(@RequestBody ActivityDTO dto, @PathVariable Long groupId) {
+        Activity activity = new Activity(dto.getActivityName(), dto.getDescription(), dto.getDate(), dto.getActivity_status(), dto.getCreatedBy(), participantGroupService.fetch(dto.getGroup_id()));
+
+        activityService.createActivity(activity);
+        return ResponseEntity.created(URI.create("/groups/" + groupId + "/activities/" +  activity.getId())).body(Collections.singletonList(activity));
     }
 
     @PostMapping("")
