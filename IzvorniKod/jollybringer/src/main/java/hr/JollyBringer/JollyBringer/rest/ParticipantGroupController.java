@@ -58,11 +58,11 @@ public class ParticipantGroupController {
     }
 
     @PostMapping("/{groupId}/activities")
-    public ResponseEntity<List<Activity>> createActivitiesByGroupId(@RequestBody ActivityDTO dto, @PathVariable Long groupId) {
+    public ResponseEntity<List<Activity>> createActivitiesByGroupId(@RequestBody ActivityDTO dto) {
         Activity activity = new Activity(dto.getACTIVITY_NAME(), dto.getDESCRIPTION(), dto.getDATE(), dto.getACTIVITY_STATUS(), dto.getCREATED_BY(), participantGroupService.fetch(dto.getGROUP_ID()));
         System.out.println("creating activity");
         activityService.createActivity(activity);
-        return ResponseEntity.created(URI.create("/groups/" + groupId + "/activities/" +  activity.getId())).body(Collections.singletonList(activity));
+        return ResponseEntity.created(URI.create("/groups/" + dto.getGROUP_ID() + "/activities/" +  activity.getId())).body(Collections.singletonList(activity));
     }
 
     @PostMapping("")
