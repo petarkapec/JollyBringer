@@ -82,7 +82,7 @@ public class WebSecurityBasic {
     @Profile("oauth-security")
     public SecurityFilterChain oauthFilterChain(HttpSecurity http) throws Exception {
         http
-                /*.cors(cors -> cors.configurationSource(request -> {
+                .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
                     config.setAllowedOrigins(List.of(frontendUrl));
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
@@ -98,7 +98,7 @@ public class WebSecurityBasic {
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(this::oauth2AuthenticationSuccessHandler)
                         .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService()))
-                )*/
+                )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessHandler((request, response, authentication) -> {
