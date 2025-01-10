@@ -1,162 +1,138 @@
 [
-    {
-      "activityName": "Christmas Carol Singing",
-      "description": "An evening of singing Christmas carols with the group.",
-      "date": "2023-12-18",
-      "activity_status": "InProgress",
-      "group_id": 5,
-      "createdBy": ""
-    },
-    {
-      "activityName": "Decorating the Christmas Tree",
-      "description": "Decorating the Christmas tree together as a group.",
-      "date": "2023-12-05",
-      "activity_status": "Done",
-      "group_id": 5,
-      "createdBy": ""
-    },
-    {
-      "activityName": "Christmas Cookie Bake-off",
-      "description": "A fun baking competition for Christmas cookies.",
-      "date": "2023-12-10",
-      "activity_status": "InProgress",
-      "group_id": 3,
-      "createdBy": ""
-    },
-    {
-      "activityName": "Santa Hat Crafting",
-      "description": "Get creative and make your own Santa hats!",
-      "date": "2023-12-12",
-      "activity_status": "InProgress",
-      "group_id": 4,
-      "createdBy": ""
-    },
-    {
-      "activityName": "Secret Santa Gift Exchange",
-      "description": "Exchange gifts anonymously with group members.",
-      "date": "2023-12-20",
-      "activity_status": "InProgress",
-      "group_id": 5,
-      "createdBy": ""
-    },
-    {
-      "activityName": "Christmas Dinner Feast",
-      "description": "A Christmas-themed group dinner with festive dishes.",
-      "date": "2023-12-25",
-      "activity_status": "InProgress",
-      "group_id": 3,
-      "createdBy": ""
-    },
-    {
-      "activityName": "Writing Letters to Santa",
-      "description": "A group activity to write letters to Santa.",
-      "date": "2023-12-01",
-      "activity_status": "Done",
-      "group_id": 1,
-      "createdBy": ""
-    },
-    {
-      "activityName": "Gingerbread House Decorating",
-      "description": "Decorate gingerbread houses together as a group.",
-      "date": "2023-12-08",
-      "activity_status": "InProgress",
-      "group_id": 2,
-      "createdBy": ""
-    },
-    {
-      "activityName": "Christmas Movie Night",
-      "description": "Watch Christmas classics like Home Alone and Elf.",
-      "date": "2023-12-15",
-      "activity_status": "InProgress",
-      "group_id": 3,
-      "createdBy": ""
-    },
-    {
-      "activityName": "Ugly Christmas Sweater Contest",
-      "description": "Show off your best worst sweater for Christmas!",
-      "date": "2023-12-14",
-      "activity_status": "Done",
-      "group_id": 4,
-      "createdBy": ""
-    },
-    {
-      "activityName": "Holiday Card Making Workshop",
-      "description": "Make custom holiday cards for friends and family.",
-      "date": "2023-12-09",
-      "activity_status": "InProgress",
-      "group_id": 5,
-      "createdBy": ""
-    },
-    {
-      "activityName": "Christmas Lights Tour",
-      "description": "Visit the best decorated areas in town.",
-      "date": "2023-12-19",
-      "activity_status": "InProgress",
-      "group_id": 3,
-      "createdBy": ""
-    },
-    {
-      "activityName": "Christmas Karaoke",
-      "description": "Sing your favorite Christmas tunes together.",
-      "date": "2023-12-13",
-      "activity_status": "Done",
-      "group_id": 1,
-      "createdBy": ""
-    },
-    {
-      "activityName": "Winter Wonderland Hike",
-      "description": "Explore a snowy trail in the spirit of the season.",
-      "date": "2023-12-16",
-      "activity_status": "InProgress",
-      "group_id": 2,
-      "createdBy": ""
-    },
-    {
-      "activityName": "Wrapping Gifts for Charities",
-      "description": "Wrap gifts to donate to those in need this holiday season.",
-      "date": "2023-12-22",
-      "activity_status": "InProgress",
-      "group_id": 3,
-      "createdBy": ""
-    },
-    {
-      "activityName": "Christmas Ornament Crafting",
-      "description": "Create custom ornaments to decorate the tree.",
-      "date": "2023-12-07",
-      "activity_status": "InProgress",
-      "group_id": 4,
-      "createdBy": ""
-    },
-    {
-      "activityName": "Hot Cocoa Social",
-      "description": "Warm up with hot cocoa, cookies, and group bonding.",
-      "date": "2023-12-23",
-      "activity_status": "InProgress",
-      "group_id": 5,
-      "createdBy": ""
-    },
-    {
-      "activityName": "Christmas Carol Flash Mob",
-      "description": "Surprise everyone with a Christmas carol flash mob!",
-      "date": "2023-12-17",
-      "activity_status": "InProgress",
-      "group_id": 3,
-      "createdBy": ""
-    },
-    {
-      "activityName": "Snowman Building Contest",
-      "description": "Build the tallest and most creative snowman!",
-      "date": "2023-12-11",
-      "activity_status": "Done",
-      "group_id": 1,
-      "createdBy": ""
-    },
-    {
-      "activityName": "Christmas Puzzles and Trivia Night",
-      "description": "Solve puzzles and answer Christmas-themed trivia.",
-      "date": "2023-12-21",
-      "activity_status": "InProgress",
-      "group_id": 2,
-      "createdBy": ""
-    }
-  ]
+  {
+    "activity_NAME": "Christmas Carol Singing",
+    "description": "An evening of singing Christmas carols with the group.",
+    "date": "2023-12-18",
+    "activity_STATUS": "InProgress",
+    "group_ID": 5,
+    "created_BY": ""
+  },
+  {
+    "activity_NAME": "Decorating the Christmas Tree",
+    "description": "Decorating the Christmas tree together as a group.",
+    "date": "2023-12-05",
+    "activity_STATUS": "Done",
+    "group_ID": 5,
+    "created_BY": ""
+  },
+  {
+    "activity_NAME": "Christmas Cookie Bake-off",
+    "description": "A fun baking competition for Christmas cookies.",
+    "date": "2023-12-10",
+    "activity_STATUS": "InProgress",
+    "group_ID": 3,
+    "created_BY": ""
+  },
+  {
+    "activity_NAME": "Santa Hat Crafting",
+    "description": "Get creative and make your own Santa hats!",
+    "date": "2023-12-12",
+    "activity_STATUS": "InProgress",
+    "group_ID": 4,
+    "created_BY": ""
+  },
+  {
+    "activity_NAME": "Secret Santa Gift Exchange",
+    "description": "Exchange gifts anonymously with group members.",
+    "date": "2023-12-20",
+    "activity_STATUS": "InProgress",
+    "group_ID": 5,
+    "created_BY": ""
+  },
+  {
+    "activity_NAME": "Christmas Dinner Feast",
+    "description": "A Christmas-themed group dinner with festive dishes.",
+    "date": "2023-12-25",
+    "activity_STATUS": "InProgress",
+    "group_ID": 3,
+    "created_BY": ""
+  },
+  {
+    "activity_NAME": "Writing Letters to Santa",
+    "description": "A group activity to write letters to Santa.",
+    "date": "2023-12-01",
+    "activity_STATUS": "Done",
+    "group_ID": 1,
+    "created_BY": ""
+  },
+  {
+    "activity_NAME": "Gingerbread House Decorating",
+    "description": "Decorate gingerbread houses together as a group.",
+    "date": "2023-12-08",
+    "activity_STATUS": "InProgress",
+    "group_ID": 2,
+    "created_BY": ""
+  },
+  {
+    "activity_NAME": "Christmas Movie Night",
+    "description": "Watch Christmas classics like Home Alone and Elf.",
+    "date": "2023-12-15",
+    "activity_STATUS": "InProgress",
+    "group_ID": 3,
+    "created_BY": ""
+  },
+  {
+    "activity_NAME": "Ugly Christmas Sweater Contest",
+    "description": "Show off your best worst sweater for Christmas!",
+    "date": "2023-12-14",
+    "activity_STATUS": "Done",
+    "group_ID": 4,
+    "created_BY": ""
+  },
+  {
+    "activity_NAME": "Holiday Card Making Workshop",
+    "description": "Make custom holiday cards for friends and family.",
+    "date": "2023-12-09",
+    "activity_STATUS": "InProgress",
+    "group_ID": 5,
+    "created_BY": ""
+  },
+  {
+    "activity_NAME": "Christmas Lights Tour",
+    "description": "Visit the best decorated areas in town.",
+    "date": "2023-12-19",
+    "activity_STATUS": "InProgress",
+    "group_ID": 3,
+    "created_BY": ""
+  },
+  {
+    "activity_NAME": "Christmas Karaoke",
+    "description": "Sing your favorite Christmas tunes together.",
+    "date": "2023-12-13",
+    "activity_STATUS": "Done",
+    "group_ID": 1,
+    "created_BY": ""
+  },
+  {
+    "activity_NAME": "Winter Wonderland Hike",
+    "description": "Explore a snowy trail in the spirit of the season.",
+    "date": "2023-12-16",
+    "activity_STATUS": "InProgress",
+    "group_ID": 2,
+    "created_BY": ""
+  },
+  {
+    "activity_NAME": "Wrapping Gifts for Charities",
+    "description": "Wrap gifts to donate to those in need this holiday season.",
+    "date": "2023-12-22",
+    "activity_STATUS": "InProgress",
+    "group_ID": 3,
+    "created_BY": ""
+  },
+  {
+    "activity_NAME": "Christmas Ornament Crafting",
+    "description": "Create custom ornaments to decorate the tree.",
+    "date": "2023-12-07",
+    "activity_STATUS": "InProgress",
+    "group_ID": 4,
+    "created_BY": ""
+  },
+  {
+    "activity_NAME": "Hot Cocoa Social",
+    "description": "Warm up with hot cocoa and good conversation.",
+    "date": "2023-12-17",
+    "activity_STATUS": "InProgress",
+    "group_ID": 5,
+    "created_BY": ""
+  }
+]

@@ -9,9 +9,7 @@ import hr.JollyBringer.JollyBringer.service.ParticipantService;
 import hr.JollyBringer.JollyBringer.service.RequestDeniedException;
 import hr.JollyBringer.JollyBringer.service.impl.ActivityServiceJPA;
 import hr.JollyBringer.JollyBringer.service.impl.ParticipantGroupServiceJPA;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -61,8 +59,8 @@ public class ParticipantGroupController {
 
     @PostMapping("/{groupId}/activities")
     public ResponseEntity<List<Activity>> createActivitiesByGroupId(@RequestBody ActivityDTO dto, @PathVariable Long groupId) {
-        Activity activity = new Activity(dto.getActivityName(), dto.getDescription(), dto.getDate(), dto.getActivity_status(), dto.getCreatedBy(), participantGroupService.fetch(dto.getGroup_id()));
-
+        Activity activity = new Activity(dto.getACTIVITY_NAME(), dto.getDESCRIPTION(), dto.getDATE(), dto.getACTIVITY_STATUS(), dto.getCREATED_BY(), participantGroupService.fetch(dto.getGROUP_ID()));
+        System.out.println("creating activity");
         activityService.createActivity(activity);
         return ResponseEntity.created(URI.create("/groups/" + groupId + "/activities/" +  activity.getId())).body(Collections.singletonList(activity));
     }
