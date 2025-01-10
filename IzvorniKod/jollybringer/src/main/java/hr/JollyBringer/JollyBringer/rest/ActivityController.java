@@ -34,7 +34,7 @@ public class ActivityController {
         return activityService.listAll();
     }
 
-    @GetMapping("/{activityId}/feedback")
+    @GetMapping("/{activityId}/feedbacks")
     public ResponseEntity<List<Feedback>> getFeedbackByActivityId(@PathVariable Long activityId) {
         List<Feedback> feedbacks = feedbackService.findByActivityId(activityId);
         return ResponseEntity.ok(feedbacks);

@@ -13,7 +13,7 @@ const Feedback = ({ activityId }) => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/activities/${activityId}/feedback`, { withCredentials: true });
+        const response = await axios.get(`http://localhost:8080/activities/${activityId}/feedbacks`, { withCredentials: true });
         setComments(response.data);
       } catch (error) {
         toast.error('Failed to fetch comments');

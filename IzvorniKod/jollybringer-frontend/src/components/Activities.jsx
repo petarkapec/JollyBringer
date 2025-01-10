@@ -25,8 +25,8 @@ const Activities = ({ selectedGroup, role }) => {
 
   const fetchActivities = async () => {
     try {
-      // const response = await axios.get(`http://localhost:8080/groups/${selectedGroup.id}/activities`);
-      // setActivities(response.data);
+       const response = await axios.get(`http://localhost:8080/groups/${selectedGroup.id}/activities`);
+       setActivities(response.data);
     } catch (error) {
       toast.error('Failed to fetch activities');
     } finally {
