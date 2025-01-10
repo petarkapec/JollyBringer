@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,8 +35,8 @@ public class AuthCheckController
     }
 
     @GetMapping
-    public ResponseEntity<?> checkAuth( @AuthenticationPrincipal OidcUser oidcUser, Authentication authentication) {
-        Optional<Participant> participant = participantService.findByEmail(oidcUser.getAttribute("email"));
+    public ResponseEntity<?> checkAuth(OAuth2AuthenticationToken token, Authentication authentication) {
+        Optional<Participant> participant = participantService.findByEmail(token.getPrincipal().getAttribute("email"));
 
         if (participant.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");

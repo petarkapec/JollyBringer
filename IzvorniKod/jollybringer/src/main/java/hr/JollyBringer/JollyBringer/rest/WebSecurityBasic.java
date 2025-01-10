@@ -4,7 +4,6 @@ import hr.JollyBringer.JollyBringer.domain.Participant;
 import hr.JollyBringer.JollyBringer.domain.Role;
 import hr.JollyBringer.JollyBringer.service.EntityMissingException;
 import hr.JollyBringer.JollyBringer.service.ParticipantService;
-import hr.JollyBringer.JollyBringer.service.RequestDeniedException;
 import hr.JollyBringer.JollyBringer.service.RoleService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,15 +20,10 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
-import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2UserAuthority;
 import org.springframework.security.web.SecurityFilterChain;
@@ -68,15 +62,6 @@ public class WebSecurityBasic {
 
     }
 
-    @Bean
-    @Profile("basic-security")
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated());
-        http.formLogin(withDefaults());
-        http.httpBasic(withDefaults());
-        http.csrf(AbstractHttpConfigurer::disable);
-        return http.build();
-    }
 
     @Bean
     @Profile("oauth-security")
@@ -97,7 +82,7 @@ public class WebSecurityBasic {
                 })
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(this::oauth2AuthenticationSuccessHandler)
-                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService()))
+                        //.userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService()))
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
@@ -112,10 +97,11 @@ public class WebSecurityBasic {
         return http.build();
     }
 
+    /*
     @Bean
     public CustomOAuth2UserService customOAuth2UserService() {
         return new CustomOAuth2UserService(participantService);
-    }
+    }*/
     private void oauth2AuthenticationSuccessHandler(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {// Extract the OAuth2User details
        OAuth2User oauthUser = (OAuth2User) authentication.getPrincipal();
         if (authentication==null){
@@ -141,34 +127,7 @@ public class WebSecurityBasic {
         httpServletResponse.sendRedirect(frontendUrl + "/dashboard");
     }
 
-    @Bean
-    @Profile("form-security")
-    public SecurityFilterChain spaFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(new AntPathRequestMatcher("/login")).permitAll()
-                .anyRequest().authenticated());
-        http.formLogin(configurer -> {
-                    configurer.successHandler((request, response, authentication) ->
-                                    response.setStatus(HttpStatus.NO_CONTENT.value())
-                            )
-                            .failureHandler(new SimpleUrlAuthenticationFailureHandler());
-                }
-        );
-        http.exceptionHandling(configurer -> {
-            final RequestMatcher matcher = new NegatedRequestMatcher(
-                    new MediaTypeRequestMatcher(MediaType.TEXT_HTML));
-            configurer
-                    .defaultAuthenticationEntryPointFor((request, response, authException) -> {
-                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    }, matcher);
-        });
-        http.logout(configurer -> configurer
-                .logoutUrl("/logout")
-                .logoutSuccessHandler((request, response, authentication) ->
-                        response.setStatus(HttpStatus.NO_CONTENT.value())));
-        http.csrf(AbstractHttpConfigurer::disable);
-        return http.build();
-    }
+
 
     @Bean
     @Profile({ "basic-security", "form-security", "oauth-security" })
@@ -181,7 +140,7 @@ public class WebSecurityBasic {
     }
 
 
-
+    /*
     @Bean
     public GrantedAuthoritiesMapper authorityMapper() {
         return (authorities) -> {
@@ -209,4 +168,6 @@ public class WebSecurityBasic {
             return mappedAuthorities;
         };
     }
+    */
+
 }
