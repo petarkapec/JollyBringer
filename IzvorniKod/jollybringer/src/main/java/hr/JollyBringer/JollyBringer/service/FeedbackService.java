@@ -18,5 +18,7 @@ public interface FeedbackService {
     Feedback deleteFeedback(long feedbackId);
     Feedback updateFeedback(Feedback feedback);
 
+    List<Feedback> findByActivityId(long activityId);
+
 
 }

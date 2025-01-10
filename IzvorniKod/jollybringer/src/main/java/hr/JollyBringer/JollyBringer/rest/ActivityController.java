@@ -1,7 +1,14 @@
 package hr.JollyBringer.JollyBringer.rest;
 
 import hr.JollyBringer.JollyBringer.domain.Activity;
+import hr.JollyBringer.JollyBringer.domain.Feedback;
 import hr.JollyBringer.JollyBringer.service.ActivityService;
+import hr.JollyBringer.JollyBringer.service.FeedbackService;
+import hr.JollyBringer.JollyBringer.service.ParticipantGroupService;
+import hr.JollyBringer.JollyBringer.service.ParticipantService;
+import hr.JollyBringer.JollyBringer.service.impl.ActivityServiceJPA;
+import hr.JollyBringer.JollyBringer.service.impl.FeedbackServiceJPA;
+import hr.JollyBringer.JollyBringer.service.impl.ParticipantGroupServiceJPA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +20,24 @@ import java.util.List;
 @RequestMapping("/activities")
 public class ActivityController {
 
-    @Autowired
-    private ActivityService activityService;
+
+    private final ActivityService activityService;
+    private final FeedbackService feedbackService;
+
+    public ActivityController(FeedbackService feedbackService, FeedbackServiceJPA feedbackServiceJPA, ActivityService activityService, ActivityServiceJPA activityServiceJPA) {
+        this.feedbackService = feedbackService;
+        this.activityService = activityService;
+    }
+
     @GetMapping("")
     public List<Activity> getActivities() {
         return activityService.listAll();
+    }
+
+    @GetMapping("/{activityId}/feedback")
+    public ResponseEntity<List<Feedback>> getFeedbackByActivityId(@PathVariable Long activityId) {
+        List<Feedback> feedbacks = feedbackService.findByActivityId(activityId);
+        return ResponseEntity.ok(feedbacks);
     }
 
     @PostMapping("")

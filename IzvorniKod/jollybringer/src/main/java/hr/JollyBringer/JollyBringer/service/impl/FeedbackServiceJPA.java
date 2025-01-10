@@ -83,6 +83,11 @@ public class FeedbackServiceJPA implements FeedbackService {
         return feedbackRepository.save(feedback);
     }
 
+    @Override
+    public List<Feedback> findByActivityId(long activityId) {
+        return feedbackRepository.findByActivityId(activityId);
+    }
+
     private void validate(Feedback feedback) {
         Assert.notNull(feedback, "activity object must be given");
 

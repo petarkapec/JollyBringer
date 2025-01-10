@@ -12,6 +12,7 @@ public class Feedback {
     private String comment;
 
     @ManyToOne
+    @JoinColumn(name = "activity_id")
     private Activity activity;
 
     @ManyToOne

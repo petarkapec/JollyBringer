@@ -8,4 +8,6 @@ import java.util.List;
 public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
     boolean existsByIdNot(Long participantId);
 
+    List<Feedback> findByActivityId(Long activityId);
+
 }

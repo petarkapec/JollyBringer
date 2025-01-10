@@ -4,7 +4,8 @@
     "presidentEmail": "benjaminmartin@example.com",
     "users": [
       "johndoe@example.com",
-      "janesmith@example.com"
+      "janesmith@example.com",
+      "antewert1@gmail.com"
     ]
   },
   {
@@ -29,6 +30,7 @@
     "users": [
       "chrismiller@example.com",
       "amandawilson@example.com"
+
     ]
   },
   {
