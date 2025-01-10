@@ -44,7 +44,7 @@
       "description": "A Christmas-themed group dinner with festive dishes.",
       "date": "2023-12-25",
       "activity_status": "InProgress",
-      "group_id": 6,
+      "group_id": 3,
       "createdBy": ""
     },
     {
@@ -92,7 +92,7 @@
       "description": "Visit the best decorated areas in town.",
       "date": "2023-12-19",
       "activity_status": "InProgress",
-      "group_id": 6,
+      "group_id": 3,
       "createdBy": ""
     },
     {
@@ -140,7 +140,7 @@
       "description": "Surprise everyone with a Christmas carol flash mob!",
       "date": "2023-12-17",
       "activity_status": "InProgress",
-      "group_id": 6,
+      "group_id": 3,
       "createdBy": ""
     },
     {
