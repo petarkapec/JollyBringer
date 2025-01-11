@@ -95,5 +95,7 @@ public interface ParticipantGroupService {
     boolean removeMember(long participantGroupId, long participantId);
 
     void addMembers(Long id, List<Long> users);
+
+    Optional<ParticipantGroup> fetchByName(String name);
 }
 

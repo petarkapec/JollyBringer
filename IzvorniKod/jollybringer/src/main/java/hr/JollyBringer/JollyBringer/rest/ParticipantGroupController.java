@@ -1,19 +1,22 @@
 package hr.JollyBringer.JollyBringer.rest;
 
+import hr.JollyBringer.JollyBringer.domain.Activity;
 import hr.JollyBringer.JollyBringer.domain.Participant;
 import hr.JollyBringer.JollyBringer.domain.ParticipantGroup;
+import hr.JollyBringer.JollyBringer.service.ActivityService;
 import hr.JollyBringer.JollyBringer.service.ParticipantGroupService;
 import hr.JollyBringer.JollyBringer.service.ParticipantService;
 import hr.JollyBringer.JollyBringer.service.RequestDeniedException;
+import hr.JollyBringer.JollyBringer.service.impl.ActivityServiceJPA;
 import hr.JollyBringer.JollyBringer.service.impl.ParticipantGroupServiceJPA;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -23,14 +26,16 @@ import java.util.Set;
 //@CrossOrigin(origins = "http://localhost:5173")
 public class ParticipantGroupController {
 
-    private final ParticipantService participantService;
+
     private final ParticipantGroupService participantGroupService;
+    private final ActivityService activityService;
 
 
 
-    public ParticipantGroupController(ParticipantService participantService, ParticipantGroupService participantGroupService, ParticipantGroupServiceJPA participantGroupServiceJPA) {
-        this.participantService = participantService;
+    public ParticipantGroupController(ParticipantService participantService, ParticipantGroupService participantGroupService, ParticipantGroupServiceJPA participantGroupServiceJPA, ActivityService activityService, ActivityServiceJPA activityServiceJPA) {
+
         this.participantGroupService = participantGroupService;
+        this.activityService = activityService;
     }
 
     @GetMapping("")
@@ -44,6 +49,20 @@ public class ParticipantGroupController {
     @GetMapping("/{id}")//možda samo admin?
     public ParticipantGroup getGroup(@PathVariable("id") Long id) {
         return participantGroupService.fetch(id);
+    }
+
+    @GetMapping("/{groupId}/activities")
+    public ResponseEntity<List<Activity>> getActivitiesByGroupId(@PathVariable Long groupId) {
+        List<Activity> activities = activityService.findByGroupId(groupId);
+        return ResponseEntity.ok(activities);
+    }
+
+    @PostMapping("/{groupId}/activities")
+    public ResponseEntity<List<Activity>> createActivitiesByGroupId(@RequestBody ActivityDTO dto) {
+        Activity activity = new Activity(dto.getACTIVITY_NAME(), dto.getDESCRIPTION(), dto.getDATE(), dto.getACTIVITY_STATUS(), dto.getCREATED_BY(), participantGroupService.fetch(dto.getGROUP_ID()));
+        System.out.println("creating activity");
+        activityService.createActivity(activity);
+        return ResponseEntity.created(URI.create("/groups/" + dto.getGROUP_ID() + "/activities/" +  activity.getId())).body(Collections.singletonList(activity));
     }
 
     @PostMapping("")

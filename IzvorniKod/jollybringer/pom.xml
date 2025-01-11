@@ -12,7 +12,7 @@
 	<artifactId>JollyBringer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>JollyBringer</name>
-	<description>Božićni asistent</description>
+	<DESCRIPTION>Božićni asistent</DESCRIPTION>
 	<url/>
 	<licenses>
 		<license/>

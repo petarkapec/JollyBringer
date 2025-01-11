@@ -20,6 +20,7 @@ public class ParticipantGroup {
     private String name;
 
     @ManyToOne
+    @JoinColumn(name = "president")
     private Participant president; //predsjednik može imati više grupa
 
     @OneToMany

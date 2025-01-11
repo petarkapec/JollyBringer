@@ -1,3 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
 @font-face {
     font-family: Roboto;
     src: url("/assets/fonts/Roboto-Regular.ttf") format('truetype');
@@ -19,19 +24,15 @@
     box-sizing: border-box;
 }
 
-body {
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    min-height: 100vh;
+#root {
+    background-color: black;
+    height: 100vh;
+    width: 100vw;
 }
 
-#root {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 1;
-    animation: fadeIn 0.5s ease-in-out;
-    color: white;
+html, body {
+    background-color: black;
+    height: 100%;
+    width: 100%;
 }
 
