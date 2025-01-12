@@ -9,7 +9,7 @@ const CreateActivityModal = ({ isOpen, onClose, groupId, onActivityCreated }) =>
     name: '',
     description: '',
     date: '',
-    status: 'Pending'
+    status: 'InProgress'
   });
 
   if (!isOpen) return null;
@@ -31,7 +31,7 @@ const CreateActivityModal = ({ isOpen, onClose, groupId, onActivityCreated }) =>
     try {
       await axios.post(`http://localhost:8080/groups/${groupId}/activities`, newActivity, { withCredentials: true });
       toast.success('Activity created successfully');
-      setFormData({ name: '', date: '', description: '', status: 'Pending' });
+      setFormData({ name: '', date: '', description: '', status: 'InProgress' });
       onActivityCreated();
       onClose();
     } catch (error) {

@@ -30,7 +30,7 @@ const Feedback = ({ activityId }) => {
         activity_id: activityId,
         participant_id: user.id,
         comment: newComment,
-        is_liked: isLiked
+        isLiked: isLiked ? 'Like' : 'Dislike'
       }, { withCredentials: true });
       setComments([...comments, response.data]);
       setNewComment('');
@@ -75,11 +75,11 @@ const Feedback = ({ activityId }) => {
       </form>
       <div className="space-y-4 max-h-64 overflow-y-auto">
         {comments.map((comment) => (
-          <div key={comment.ID} className="bg-gray-800 p-4 rounded-md">
-            <p className="text-sm text-gray-300">{comment.COMMENT}</p>
+          <div key={comment.id} className="bg-gray-800 p-4 rounded-md">
+            <p className="text-sm text-gray-300">{comment.comment}</p>
             <div className="flex items-center justify-between mt-2">
-              <span className="text-xs text-gray-500">By: {comment.PARTICIPANT_ID}</span>
-              {comment.IS_LIKED && <ThumbsUp className="text-green-500" />}
+              <span className="text-xs text-gray-500">By: {comment.participant.username}</span>
+              {comment.isLiked && <ThumbsUp className="text-green-500" />}
             </div>
           </div>
         ))}

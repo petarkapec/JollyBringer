@@ -49,7 +49,7 @@ const ActivityDetailModal = ({ activity, isOpen, onClose, onActivityDeleted }) =
               Delete Activity
             </button>
           )}
-          <Feedback activityId={activity.id} />
+          <Feedback activityId={activity.id}/>
         </div>
       </div>
     </div>
