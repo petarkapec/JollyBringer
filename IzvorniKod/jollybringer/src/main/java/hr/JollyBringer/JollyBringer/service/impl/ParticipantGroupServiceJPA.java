@@ -58,8 +58,8 @@ public class ParticipantGroupServiceJPA implements ParticipantGroupService
                 // NOTE: not throwing EntityMissingException because that is just for missing resources from URI
                 () -> new RequestDeniedException("No student with email " + presidentUsername)
         );
-        Assert.isTrue(president.isPresident(),
-                "Group president " + presidentUsername + " must be a lead, not: " + president.getRole().getName());
+        Assert.isTrue(president.isPresident() || president.isAdmin(),
+                "Group president " + presidentUsername + " must be a lead or admin, not: " + president.getRole().getName());
         participantGroupRepo.findByMember(president).ifPresent(g -> {
             throw new RequestDeniedException(president + " already member of " + g);
         }); //TODO enable multiple groups
