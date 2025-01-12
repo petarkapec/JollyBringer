@@ -3,6 +3,7 @@ import axios from 'axios';
 import useAuth from '../hooks/useAuth';
 import Header from "./Header.jsx";
 import Activities from "./Activities.jsx";
+import Chat from "./Chat.jsx"
 
 const Dashboard = () => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
@@ -97,7 +98,7 @@ const Dashboard = () => {
           <Activities selectedGroup={selectedGroup} role={role}/>
         </div>
         <div className={'w-1/2'}>
-          {/*<Chat/>*/}
+           <Chat/>
         </div>
       </div>
     </div>
