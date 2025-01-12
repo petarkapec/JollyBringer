@@ -78,6 +78,7 @@ public class WebSecurityBasic {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/check-auth").permitAll(); //Todo mozda tu da radi deploy treba permitAll
+                    auth.requestMatchers("/ai/generate").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .oauth2Login(oauth2 -> oauth2
