@@ -72,11 +72,11 @@ const AdminDashboard = () => {
       <div className="p-8">
         <h1 className="text-3xl font-bold mb-6">President Role Applications</h1>
         {applications.length === 0 ? (
-          <p className="text-gray-500">No pending applications</p>
+          <p className="text-gray-400">No pending applications</p>
         ) : (
-          <div className="bg-gray-800 rounded-lg shadow overflow-hidden">
-            <table className="min-w-full divide-y divide-gray-700">
-              <thead className="bg-gray-700">
+          <div className="bg-customGray rounded-lg shadow overflow-hidden">
+            <table className="min-w-full divide-y divide-customGrayLighter">
+              <thead className="bg-customGrayLighter">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">User Name</th>
                   <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">User Email</th>
@@ -84,7 +84,7 @@ const AdminDashboard = () => {
                   <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
-              <tbody className="bg-gray-800 divide-y divide-gray-700">
+              <tbody className="bg-customGray divide-y divide-customGrayLighter">
                 {applications.map((application) => (
                   <tr key={application.id}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">{application.user.username}</td>
@@ -104,18 +104,18 @@ const AdminDashboard = () => {
 
         <h2 className="text-3xl font-bold mb-6 mt-8">Groups</h2>
         {groups.length === 0 ? (
-          <p className="text-gray-500">No groups available</p>
+          <p className="text-customGrayLighter">No groups available</p>
         ) : (
-          <div className="bg-gray-800 rounded-lg shadow overflow-hidden">
-            <table className="min-w-full divide-y divide-gray-700">
-              <thead className="bg-gray-700">
+          <div className="bg-customGray rounded-lg shadow overflow-hidden">
+            <table className="min-w-full divide-y divide-customGrayLighter">
+              <thead className="bg-customGrayLighter">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Group Name</th>
                   <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Group President</th>
                   <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
-              <tbody className="bg-gray-800 divide-y divide-gray-700">
+              <tbody className="bg-customGray divide-y divide-customGrayLighter">
                 {groups.map((group) => (
                   <tr key={group.id}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">{group.name}</td>
@@ -132,18 +132,18 @@ const AdminDashboard = () => {
 
         <h2 className="text-3xl font-bold mb-6 mt-8">Users</h2>
         {users.length === 0 ? (
-          <p className="text-gray-500">No users available</p>
+          <p className="text-customGrayLighter">No users available</p>
         ) : (
-          <div className="bg-gray-800 rounded-lg shadow overflow-hidden">
-            <table className="min-w-full divide-y divide-gray-700">
-              <thead className="bg-gray-700">
+          <div className="bg-customGray rounded-lg shadow overflow-hidden">
+            <table className="min-w-full divide-y divide-customGrayLighter">
+              <thead className="bg-customGrayLighter">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">User Name</th>
                   <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">User Email</th>
                   <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
-              <tbody className="bg-gray-800 divide-y divide-gray-700">
+              <tbody className="bg-customGray divide-y divide-customGrayLighter">
                 {users.map((user) => (
                   <tr key={user.id}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">{user.username}</td>
