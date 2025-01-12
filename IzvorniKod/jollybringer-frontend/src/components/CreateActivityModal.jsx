@@ -18,12 +18,12 @@ const CreateActivityModal = ({ isOpen, onClose, groupId, onActivityCreated }) =>
     e.preventDefault();
 
     const newActivity = {
-      ACTIVITY_NAME: formData.name,
-      DESCRIPTION: formData.description,
-      DATE: formData.date,
-      ACTIVITY_STATUS: formData.status,
-      GROUP_ID: groupId,
-      CREATED_BY: user.username
+      activity_name: formData.name,
+      description: formData.description,
+      date: formData.date,
+      activity_status: formData.status,
+      group_id: groupId,
+      created_by: user.username
     };
 
     console.log(newActivity)
