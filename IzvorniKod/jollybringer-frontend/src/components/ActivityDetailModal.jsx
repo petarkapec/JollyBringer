@@ -11,11 +11,11 @@ const ActivityDetailModal = ({ activity, isOpen, onClose, onActivityDeleted }) =
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:8080/activities/${activity.id}`, { withCredentials: true });
+      onActivityDeleted(activity.id);
       toast.success('Activity deleted successfully');
-      onActivityDeleted();
       onClose();
     } catch (error) {
+      console.log(error)
       toast.error('Failed to delete activity');
     }
   };
@@ -37,9 +37,6 @@ const ActivityDetailModal = ({ activity, isOpen, onClose, onActivityDeleted }) =
           <p className="text-gray-300">{activity.description}</p>
           <p className="text-sm text-gray-400">
             Date: {new Date(activity.date).toLocaleDateString()}
-          </p>
-          <p className="text-xs text-gray-500">
-            Created by: {activity.CREATED_BY}
           </p>
           <p className="text-xs text-gray-500">
             Status: {activity.activity_status}

@@ -42,6 +42,11 @@ const Activities = ({ selectedGroup, role }) => {
     setShowDetailModal(true);
   };
 
+  const handleActivityDeleted = async (activityId) => {
+    await axios.delete(`http://localhost:8080/activities/${activityId}`, { withCredentials: true });
+    setActivities((prevActivities) => prevActivities.filter(activity => activity.id !== activityId));
+  };
+
   if (!selectedGroup) {
     return (
       <div className="p-4">
@@ -82,6 +87,7 @@ const Activities = ({ selectedGroup, role }) => {
               new Date(a.date).getMonth() === 11
             )}
             onClick={handleActivityClick}
+            onActivityDeleted={handleActivityDeleted}
           />
         ))}
       </div>
