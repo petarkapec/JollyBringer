@@ -1,12 +1,11 @@
 [
   {
     "groupname": "Group1",
-    "presidentEmail": "benjaminmartin@example.com",
+    "presidentEmail": "antewert1@gmail.com",
     "users": [
       "johndoe@example.com",
       "janesmith@example.com",
-      "antewert1@gmail.com"
-    ]
+      "benjaminmartin@example.com"    ]
   },
   {
     "groupname": "Group2",
