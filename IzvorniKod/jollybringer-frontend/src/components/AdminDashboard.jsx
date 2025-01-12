@@ -42,6 +42,28 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleDeleteGroup = async (groupId) => {
+    try {
+      await axios.delete(`http://localhost:8080/groups/${groupId}`, { withCredentials: true });
+      setGroups(groups.filter(group => group.id !== groupId));
+      toast.success('Group deleted successfully');
+    } catch (error) {
+      console.error('Error deleting group:', error);
+      toast.error('Failed to delete group');
+    }
+  };
+
+  const handleDeleteUser = async (userId) => {
+    try {
+      await axios.delete(`http://localhost:8080/participants/${userId}`, { withCredentials: true });
+      setUsers(users.filter(user => user.id !== userId));
+      toast.success('User deleted successfully');
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      toast.error('Failed to delete user');
+    }
+  };
+
   if (isLoading) return <div className="flex justify-center items-center h-full">Loading...</div>;
 
   return (
@@ -87,22 +109,22 @@ const AdminDashboard = () => {
           <div className="bg-gray-800 rounded-lg shadow overflow-hidden">
             <table className="min-w-full divide-y divide-gray-700">
               <thead className="bg-gray-700">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Group Name</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Group President</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Actions</th>
-              </tr>
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Group Name</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Group President</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Actions</th>
+                </tr>
               </thead>
               <tbody className="bg-gray-800 divide-y divide-gray-700">
-              {groups.map((group) => (
-                <tr key={group.id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">{group.name}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">{group.president.username}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Delete</button>
-                  </td>
-                </tr>
-              ))}
+                {groups.map((group) => (
+                  <tr key={group.id}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">{group.name}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">{group.president.username}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <button onClick={() => handleDeleteGroup(group.id)} className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Delete</button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -127,7 +149,7 @@ const AdminDashboard = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-sm">{user.username}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">{user.email}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <button className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Delete</button>
+                      <button onClick={() => handleDeleteUser(user.id)} className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Delete</button>
                     </td>
                   </tr>
                 ))}
