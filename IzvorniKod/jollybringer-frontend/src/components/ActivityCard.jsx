@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ActivityDetailModal from './ActivityDetailModal';
 
-const ActivityCard = ({ day, activity, onClick }) => {
+const ActivityCard = ({ day, activity, onClick, onActivityDeleted }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const currentDate = new Date('12.12.2024.');
@@ -57,6 +57,7 @@ const ActivityCard = ({ day, activity, onClick }) => {
           activity={activity}
           isOpen={showDetailModal}
           onClose={() => setShowDetailModal(false)}
+          onActivityDeleted={onActivityDeleted}
         />
       )}
     </>

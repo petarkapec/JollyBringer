@@ -148,16 +148,21 @@ const Header = () => {
                     {group.name}
                   </li>
                 ))}
-              <hr/>
-              <li onClick={handleNewGroup}
-                  className={'py-2 px-4 hover:bg-gray-200 cursor-pointer bg-white rounded-[6px] text-black text-center'}>New
-                group
-              </li>
+              {userGroups.length === 0 && (
+                <>
+                  <hr/>
+                  <li onClick={handleNewGroup}
+                      className={'py-2 px-4 hover:bg-gray-200 cursor-pointer bg-white rounded-[6px] text-black text-center'}>
+                    New group
+                  </li>
+                </>
+              )}
               {role === 'Admin' && (
                 <>
                   <hr/>
                   <li onClick={handleAdminRedirect}
-                      className={'py-2 px-4 hover:bg-gray-200 cursor-pointer bg-white rounded-[6px] text-black text-center'}>Admin
+                      className={'py-2 px-4 hover:bg-gray-200 cursor-pointer bg-white rounded-[6px] text-black text-center'}>
+                    Admin
                   </li>
                 </>
               )}
