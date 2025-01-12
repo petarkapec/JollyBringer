@@ -136,8 +136,8 @@ public class DataInitializer {
 
       // Save each user to the database
       for (ActivityDTO activityDto : activities) {
-        if(participantGroupService.findById(activityDto.getGROUP_ID()).isEmpty()) throw new IllegalArgumentException("Group not found for id: " + activityDto.getGROUP_ID());
-        Activity activity = new Activity(activityDto.getACTIVITY_NAME(), activityDto.getDESCRIPTION(), activityDto.getDATE(), activityDto.getACTIVITY_STATUS(),activityDto.getCREATED_BY(), participantGroupService.findById(activityDto.getGROUP_ID()).get());
+        if(participantGroupService.findById(activityDto.getGroup_id()).isEmpty()) throw new IllegalArgumentException("Group not found for id: " + activityDto.getGroup_id());
+        Activity activity = new Activity(activityDto.getActivity_name(), activityDto.getDescription(), activityDto.getDate(), activityDto.getActivity_status(),activityDto.getCreated_by(), participantGroupService.findById(activityDto.getGroup_id()).get());
 
         activityService.createActivity(activity);
 

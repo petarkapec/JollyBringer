@@ -2,85 +2,85 @@ package hr.JollyBringer.JollyBringer.rest;
 
 public class ActivityDTO {
 
-    private String ACTIVITY_NAME;
-    private String DESCRIPTION;
-    private String DATE;
-    private String ACTIVITY_STATUS; // Enum type as a String
-    private Long GROUP_ID; // Matches GROUP_ID in JSON
-    private String CREATED_BY;
+    private String activity_name;
+    private String description;
+    private String date;
+    private String activity_status; // Enum type as a String
+    private Long group_id; // Matches group_id in JSON
+    private String created_by;
 
     // Constructors
     public ActivityDTO() {
     }
 
-    public ActivityDTO(String ACTIVITY_NAME, String DESCRIPTION, String DATE, String ACTIVITY_STATUS, Long GROUP_ID, String CREATED_BY) {
-        this.ACTIVITY_NAME = ACTIVITY_NAME;
-        this.DESCRIPTION = DESCRIPTION;
-        this.DATE = DATE;
-        this.ACTIVITY_STATUS = ACTIVITY_STATUS;
-        this.GROUP_ID = GROUP_ID;
-        this.CREATED_BY = CREATED_BY;
+    public ActivityDTO(String activity_name, String description, String date, String activity_status, Long group_id, String created_by) {
+        this.activity_name = activity_name;
+        this.description = description;
+        this.date = date;
+        this.activity_status = activity_status;
+        this.group_id = group_id;
+        this.created_by = created_by;
     }
 
     // Getters and Setters
-    public String getACTIVITY_NAME() {
-        return ACTIVITY_NAME;
+    public String getActivity_name() {
+        return activity_name;
     }
 
-    public void setACTIVITY_NAME(String ACTIVITY_NAME) {
-        this.ACTIVITY_NAME = ACTIVITY_NAME;
+    public void setActivity_name(String activity_name) {
+        this.activity_name = activity_name;
     }
 
-    public String getDESCRIPTION() {
-        return DESCRIPTION;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDESCRIPTION(String DESCRIPTION) {
-        this.DESCRIPTION = DESCRIPTION;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public String getDATE() {
-        return DATE;
+    public String getDate() {
+        return date;
     }
 
-    public void setDATE(String DATE) {
-        this.DATE = DATE;
+    public void setDate(String date) {
+        this.date = date;
     }
 
-    public String getACTIVITY_STATUS() {
-        return ACTIVITY_STATUS;
+    public String getActivity_status() {
+        return activity_status;
     }
 
-    public void setACTIVITY_STATUS(String activity_status) {
-        this.ACTIVITY_STATUS = activity_status;
+    public void setActivity_status(String activity_status) {
+        this.activity_status = activity_status;
     }
 
-    public Long getGROUP_ID() {
-        return GROUP_ID;
+    public Long getGroup_id() {
+        return group_id;
     }
 
-    public void setGROUP_ID(Long GROUP_ID) {
-        this.GROUP_ID = GROUP_ID;
+    public void setGroup_id(Long group_id) {
+        this.group_id = group_id;
     }
 
-    public String getCREATED_BY() {
-        return CREATED_BY;
+    public String getCreated_by() {
+        return created_by;
     }
 
-    public void setCREATED_BY(String CREATED_BY) {
-        this.CREATED_BY = CREATED_BY;
+    public void setCreated_by(String created_by) {
+        this.created_by = created_by;
     }
 
     // toString() method for debugging
     @Override
     public String toString() {
         return "ActivityDTO{" +
-                "ACTIVITY_NAME='" + ACTIVITY_NAME + '\'' +
-                ", DESCRIPTION='" + DESCRIPTION + '\'' +
-                ", DATE='" + DATE + '\'' +
-                ", activity_status='" + ACTIVITY_STATUS + '\'' +
-                ", GROUP_ID=" + GROUP_ID +
-                ", CREATED_BY='" + CREATED_BY + '\'' +
+                "activity_name='" + activity_name + '\'' +
+                ", description='" + description + '\'' +
+                ", date='" + date + '\'' +
+                ", activity_status='" + activity_status + '\'' +
+                ", group_id=" + group_id +
+                ", created_by='" + created_by + '\'' +
                 '}';
     }
 }
