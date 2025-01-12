@@ -13,6 +13,7 @@ public interface FeedbackService {
      */
     List<Feedback> listAll();
     Feedback createFeedback(String comment, String activityName, String username);
+    Feedback createFeedback(Feedback feedback);
     Feedback fetch(long feedbackId);
     Optional<Feedback> findById(long feedbackId);
     Feedback deleteFeedback(long feedbackId);

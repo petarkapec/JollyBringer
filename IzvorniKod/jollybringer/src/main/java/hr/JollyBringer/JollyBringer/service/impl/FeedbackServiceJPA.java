@@ -52,6 +52,16 @@ public class FeedbackServiceJPA implements FeedbackService {
     }
 
     @Override
+    public Feedback createFeedback(Feedback feedback) {
+        validate(feedback);
+        Assert.isNull(feedback.getId(),
+                "Activity ID must be null, not: " + feedback.getId()
+        );
+
+        return feedbackRepository.save(feedback);
+    }
+
+    @Override
     public Feedback fetch(long feedbackId) {
         return findById(feedbackId).orElseThrow(
                 () -> new EntityMissingException(Feedback.class, feedbackId)

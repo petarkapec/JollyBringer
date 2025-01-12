@@ -16,6 +16,7 @@ public class Feedback {
     private Activity activity;
 
     @ManyToOne
+    @JoinColumn(name = "participant_id")
     private Participant participant;
 
     @Enumerated(EnumType.STRING)

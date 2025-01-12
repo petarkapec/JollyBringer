@@ -38,6 +38,7 @@ public class Activity {
     public Activity() {
     }
 
+
     public Long getId() {
         return id;
     }
