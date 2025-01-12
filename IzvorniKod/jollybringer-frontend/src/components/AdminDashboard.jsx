@@ -12,9 +12,9 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchAdminData = async () => {
       try {
-        const groupsResponse = await axios.get('http://localhost:8080/groups', { withCredentials: true });
-        const usersResponse = await axios.get('http://localhost:8080/participants', { withCredentials: true });
-        const applicationsResponse = await axios.get('http://localhost:8080/applications', { withCredentials: true });
+        const groupsResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/groups`, { withCredentials: true });
+        const usersResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/participants`, { withCredentials: true });
+        const applicationsResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/applications`, { withCredentials: true });
         setGroups(groupsResponse.data);
         setUsers(usersResponse.data);
         setApplications(applicationsResponse.data);
@@ -30,7 +30,7 @@ const AdminDashboard = () => {
 
   const handleApproveApplication = async (userId) => {
     try {
-      await axios.post('http://localhost:8080/approve', {
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/approve`, {
         user_id: userId,
         applied: true
       }, { withCredentials: true });

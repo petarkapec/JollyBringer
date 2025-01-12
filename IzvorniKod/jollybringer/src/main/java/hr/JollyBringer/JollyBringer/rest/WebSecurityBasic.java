@@ -69,7 +69,7 @@ public class WebSecurityBasic {
         http
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of(frontendUrl));
+                    config.setAllowedOrigins(List.of(frontendUrl, "https://jollybringer-frontend-latest-fdv9.onrender.com"));
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowCredentials(true);
                     config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
@@ -77,7 +77,8 @@ public class WebSecurityBasic {
                 }))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/check-auth").authenticated(); //Todo mozda tu da radi deploy treba permitAll
+                    auth.requestMatchers("/check-auth").permitAll(); //Todo mozda tu da radi deploy treba permitAll
+                    auth.requestMatchers("/ai/generate").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .oauth2Login(oauth2 -> oauth2

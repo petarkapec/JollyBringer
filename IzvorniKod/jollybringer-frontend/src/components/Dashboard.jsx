@@ -14,7 +14,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchGroups = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/groups', { withCredentials: true });
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/groups`, { withCredentials: true });
         setGroups(response.data);
       } catch (error) {
         console.error('Error fetching groups:', error);
@@ -60,7 +60,7 @@ const Dashboard = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post('http://localhost:8080/logout', {}, { withCredentials: true });
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/logout`, {}, { withCredentials: true });
       window.location.href = '/';
     } catch (error) {
       console.error('Error logging out:', error);

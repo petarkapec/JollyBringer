@@ -4,7 +4,7 @@ import CountdownTimer from "./CountdownTimer.jsx";
 const Login = () => {
 
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:8080/oauth2/authorization/google"
+    window.location.href = `${import.meta.env.VITE_BACKEND_URL}/oauth2/authorization/google`;
   }
 
   return (
@@ -22,4 +22,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default Login;
