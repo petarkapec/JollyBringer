@@ -16,38 +16,37 @@ public class FeedbackDTO {
         this.is_liked = isLiked != null ? isLiked : "None";
     }
 
-    public Long getActivityId() {
+    public Long getActivity_id() {
         return activity_id;
     }
 
-    public void setActivityId(Long activityId) {
-        this.activity_id = activityId;
-    }
-
-    public Long getParticipantId() {
+    public Long getParticipant_id() {
         return participant_id;
-    }
-
-    public void setParticipantId(Long participantId) {
-        this.participant_id = participantId;
     }
 
     public String getComment() {
         return comment;
     }
 
+    public String getIs_liked() {
+        return is_liked;
+    }
+
+    public void setActivity_id(Long activity_id) {
+        this.activity_id = activity_id;
+    }
+
+    public void setParticipant_id(Long participant_id) {
+        this.participant_id = participant_id;
+    }
+
     public void setComment(String comment) {
         this.comment = comment;
     }
 
-    public String getIsLiked() {
-        return is_liked;
+    public void setIs_liked(String is_liked) {
+        this.is_liked = is_liked;
     }
-
-    public void setIsLiked(String isLiked) {
-        this.is_liked = isLiked;
-    }
-
 
     @Override
     public String toString() {
