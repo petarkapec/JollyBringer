@@ -62,11 +62,11 @@ public class ActivityController {
         System.out.println(dto);
         Feedback feedback = new Feedback(
                 dto.getComment(),
-                activityService.fetch(dto.getActivityId()),
-                participantService.fetch(dto.getParticipantId())
+                activityService.fetch(dto.getActivity_id()),
+                participantService.fetch(dto.getParticipant_id())
         );
         feedbackService.createFeedback(feedback);
-        return ResponseEntity.created(URI.create("/activities/" + dto.getActivityId() + "/feedback/" + feedback.getId()))
+        return ResponseEntity.created(URI.create("/activities/" + dto.getActivity_id() + "/feedback/" + feedback.getId()))
                 .body(feedback);
     }
 
