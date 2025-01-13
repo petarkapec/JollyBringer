@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { createWebSocket } from "./websocket";
 import '../styles/Chat.css';
 
@@ -6,6 +6,14 @@ const Chat = ({ user }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [socket, setSocket] = useState(null);
+
+  // Ref za automatsko skrolovanje
+  const messagesEndRef = useRef(null);
+
+  // Funkcija za automatsko skrolovanje
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   // Funkcija za dohvaćanje zadnjih 7 poruka
   const fetchLast7Messages = async () => {
@@ -34,10 +42,15 @@ const Chat = ({ user }) => {
     };
   }, []);
 
+  // Skroluj na dno kada se poruke promene
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   const sendMessage = () => {
     if (socket && socket.readyState === WebSocket.OPEN) {
       const message = {
-       username: user.email,
+        username: user.email,
         content: newMessage,
         timestamp: new Date().toISOString(),
       };
@@ -52,13 +65,18 @@ const Chat = ({ user }) => {
     <div className="chat-container">
       <h2 className="chat-header">Chatroom</h2>
       <div className="messages-container">
-        {messages.map((msg, index) => (
-          <div key={index} className="message">
-            <strong className="sender">{msg.username}:</strong> 
-            <span>{msg.content}</span> 
-            <em className="timestamp">({msg.timestamp})</em>
-          </div>
-        ))}
+        {messages
+          .slice()
+          .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)) // Sortiramo po vremenu
+          .map((msg, index) => (
+            <div key={index} className="message">
+              <strong className="sender">{msg.username}:</strong>
+              <span>{msg.content}</span>
+              <em className="timestamp">({msg.timestamp})</em>
+            </div>
+          ))}
+        {/* Ref za kraj liste poruka */}
+        <div ref={messagesEndRef} />
       </div>
       <div className="input-container">
         <input
@@ -68,7 +86,9 @@ const Chat = ({ user }) => {
           placeholder="Type a message"
           className="input-message"
         />
-        <button onClick={sendMessage} className="send-button">Send</button>
+        <button onClick={sendMessage} className="send-button">
+          Send
+        </button>
       </div>
     </div>
   );

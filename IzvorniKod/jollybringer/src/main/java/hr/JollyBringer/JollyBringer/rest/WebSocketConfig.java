@@ -10,8 +10,11 @@ import hr.JollyBringer.JollyBringer.service.impl.ChatMessageServiceJPA;
 import hr.JollyBringer.JollyBringer.service.impl.ParticipantServiceJpa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketHandler;
+
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
@@ -24,6 +27,7 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Configuration
 @EnableWebSocket
@@ -34,6 +38,10 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Autowired
     private ParticipantService participantServiceJpa;
 
+    private final CopyOnWriteArrayList<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
+
+
+
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         // Definiraj WebSocket endpoint i handler
@@ -43,6 +51,18 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     public WebSocketHandler webSocketHandler() {
         return new TextWebSocketHandler() {
+
+            @Override
+            public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+                sessions.add(session);
+                System.out.println("New WebSocket connection established: " + session.getId());
+            }
+
+            @Override
+            public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+                sessions.remove(session);
+                System.out.println("WebSocket connection closed: " + session.getId());
+            }
             @Override
             public void handleTextMessage(org.springframework.web.socket.WebSocketSession session, org.springframework.web.socket.TextMessage message) throws Exception {
                 // Ovdje možemo obraditi primljene poruke
@@ -93,6 +113,14 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
                 // Spremi poruku u bazu
                 chatMessageService.saveMessage(savedMessage);
+
+                // Emituj poruku svim klijentima
+                TextMessage outgoingMessage = new TextMessage(objectMapper.writeValueAsString(incomingMessage));
+                for (WebSocketSession clientSession : sessions) {
+                    if (clientSession.isOpen()) {
+                        clientSession.sendMessage(outgoingMessage);
+                    }
+                }
             }
         };
     }
