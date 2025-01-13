@@ -1,8 +1,8 @@
-import React, {useEffect, useState, useRef} from 'react';
-import {ToastContainer, toast} from 'react-toastify';
+import React, { useEffect, useState, useRef } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CountdownTimer from "./CountdownTimer.jsx";
-import {Menu} from "lucide-react";
+import { Menu } from "lucide-react";
 import axios from "axios";
 import useAuth from "../hooks/useAuth.js";
 import CreateGroupModal from "./CreateGroupModal.jsx";
@@ -10,9 +10,9 @@ import RoleModal from "./RoleModal.jsx";
 
 const SELECTED_GROUP_KEY = 'selectedGroup';
 
-const Header = () => {
+const Header = ({ onGroupSelect }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const {role, user, loading} = useAuth();
+  const { role, user, loading } = useAuth();
   const [showRoleModal, setShowRoleModal] = useState(false);
   const menuRef = useRef(null);
   const [showGroupModal, setShowGroupModal] = useState(false);
@@ -40,7 +40,7 @@ const Header = () => {
 
   const fetchUserGroups = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/groups', {withCredentials: true});
+      const response = await axios.get('http://localhost:8080/groups', { withCredentials: true });
       const groups = response.data;
       const userGroups = groups.filter(group => group.members.some(member => member.id === user.id));
       setUserGroups(userGroups);
@@ -82,7 +82,7 @@ const Header = () => {
       await axios.post('http://localhost:8080/apply', {
         user_id: user.id,
         applied: true
-      }, {withCredentials: true});
+      }, { withCredentials: true });
       setShowRoleModal(false);
       toast.success('Application submitted successfully!');
     } catch (error) {
@@ -97,18 +97,7 @@ const Header = () => {
   };
 
   const handleGroupClick = (group) => {
-    // Store both id and name to have complete group info
-    const groupData = {
-      id: group.id,
-      name: group.name
-    };
-
-    setSelectedGroup(group.name);
-
-    // Save to localStorage
-    localStorage.setItem(SELECTED_GROUP_KEY, JSON.stringify(groupData));
-    window.dispatchEvent(new Event('storage'));
-    // Close the menu
+    onGroupSelect(group);
     setIsMenuOpen(false);
   };
 
@@ -118,7 +107,7 @@ const Header = () => {
         <h1 className={'text-3xl hover:cursor-pointer'} onClick={() => {
           window.location.href = "/dashboard";
         }}>Jollybringer</h1>
-        <CountdownTimer page/>
+        <CountdownTimer page />
         <div className={`flex items-center gap-10`}>
           <p className={'text-[16px]'}>Role: {role}</p>
           {selectedGroup && (
@@ -150,7 +139,7 @@ const Header = () => {
                 ))}
               {userGroups.length === 0 && (
                 <>
-                  <hr/>
+                  <hr />
                   <li onClick={handleNewGroup}
                       className={'py-2 px-4 hover:bg-gray-200 cursor-pointer bg-white rounded-[6px] text-black text-center'}>
                     New group
@@ -159,7 +148,7 @@ const Header = () => {
               )}
               {role === 'Admin' && (
                 <>
-                  <hr/>
+                  <hr />
                   <li onClick={handleAdminRedirect}
                       className={'py-2 px-4 hover:bg-gray-200 cursor-pointer bg-white rounded-[6px] text-black text-center'}>
                     Admin

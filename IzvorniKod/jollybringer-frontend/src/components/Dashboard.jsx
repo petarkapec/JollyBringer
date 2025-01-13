@@ -91,10 +91,10 @@ const Dashboard = () => {
 
   return (
     <div className={'bg-black'}>
-      <Header/>
+      <Header onGroupSelect={handleGroupSelect} />
       <div className={'flex justify-between'}>
         <div className={'w-1/2'}>
-          <Activities selectedGroup={selectedGroup} role={role}/>
+          <Activities selectedGroup={selectedGroup} role={role} />
         </div>
         <div className={'w-1/2'}>
           {/*<Chat/>*/}
