@@ -98,7 +98,7 @@ const Dashboard = () => {
           <Activities selectedGroup={selectedGroup} role={role}/>
         </div>
         <div className={'w-1/2'}>
-           <Chat/>
+           <Chat user={user}/>
         </div>
       </div>
     </div>

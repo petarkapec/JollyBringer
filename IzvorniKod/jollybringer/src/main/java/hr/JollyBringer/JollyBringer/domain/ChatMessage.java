@@ -2,17 +2,35 @@ package hr.JollyBringer.JollyBringer.domain;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.*;
 
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+@Entity
+@Table(name = "chatmessage")
 public class ChatMessage {
-    private String sender;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "participant_id", nullable = false)
+    private Participant participant; // Links to the Participant entity
+
+    @Column(nullable = false)
     private String content;
+
+    @Column(nullable = false)
     private String timestamp;
 
     // Constructors
     public ChatMessage() {}
 
-    public ChatMessage(String sender, String content, String timestamp) {
-        this.sender = sender;
+    public ChatMessage(Participant participant, String content, String timestamp) {
+        this.participant = participant;
         this.content = content;
         this.timestamp = timestamp;
     }
@@ -28,12 +46,20 @@ public class ChatMessage {
     }
 
     // Getters and Setters
-    public String getSender() {
-        return sender;
+    public Long getId() {
+        return id;
     }
 
-    public void setSender(String sender) {
-        this.sender = sender;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Participant getParticipant() {
+        return participant;
+    }
+
+    public void setParticipant(Participant participant) {
+        this.participant = participant;
     }
 
     public String getContent() {

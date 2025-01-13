@@ -2,34 +2,49 @@ import React, { useState, useEffect } from "react";
 import { createWebSocket } from "./websocket";
 import '../styles/Chat.css';
 
-const Chat = () => {
+const Chat = ({ user }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [socket, setSocket] = useState(null);
 
+  // Funkcija za dohvaćanje zadnjih 7 poruka
+  const fetchLast7Messages = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/poruke/last7", { withCredentials: true });
+      const data = await response.json();
+      setMessages(data); // Postavi zadnjih 7 poruka
+    } catch (error) {
+      console.error("Error fetching last 7 messages:", error);
+    }
+  };
+
   useEffect(() => {
-    const wsUrl = "ws://localhost:8080/chat"; // Replace with your WebSocket server URL
+    // Dohvati zadnjih 7 poruka kada se komponenta učita
+    fetchLast7Messages();
+
+    const wsUrl = "ws://localhost:8080/chat"; // WebSocket URL
     const ws = createWebSocket(wsUrl, (message) => {
-      setMessages((prevMessages) => [...prevMessages, message]); // Add the new message to the list
+      setMessages((prevMessages) => [...prevMessages, message]); // Dodaj novu poruku
     });
 
     setSocket(ws);
 
-    // Clean up the WebSocket connection on component unmount
     return () => {
-      ws.close();
+      ws.close(); // Zatvori WebSocket kada komponenta bude demontirana
     };
   }, []);
 
   const sendMessage = () => {
     if (socket && socket.readyState === WebSocket.OPEN) {
       const message = {
-        sender: "User1",
+        participant: {
+          id: user.id,  // Ovo je userId
+        },
         content: newMessage,
         timestamp: new Date().toISOString(),
       };
-      socket.send(JSON.stringify(message)); // Send the message
-      setNewMessage(""); // Clear the input
+      socket.send(JSON.stringify(message)); // Pošaljite poruku
+      setNewMessage(""); // Očisti input
     } else {
       console.warn("WebSocket is not connected");
     }
@@ -41,7 +56,7 @@ const Chat = () => {
       <div className="messages-container">
         {messages.map((msg, index) => (
           <div key={index} className="message">
-            <strong className="sender">{msg.sender}:</strong> 
+            <strong className="sender">{msg.username}:</strong> 
             <span>{msg.content}</span> 
             <em className="timestamp">({msg.timestamp})</em>
           </div>
