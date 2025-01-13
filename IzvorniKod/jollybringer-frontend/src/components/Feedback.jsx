@@ -8,7 +8,7 @@ const Feedback = ({ activityId }) => {
   const { user } = useAuth();
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
-  const [isLiked, setIsLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState('Dislike');
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -30,11 +30,11 @@ const Feedback = ({ activityId }) => {
         activity_id: activityId,
         participant_id: user.id,
         comment: newComment,
-        isLiked: isLiked ? 'Like' : 'Dislike'
+        is_liked: isLiked
       }, { withCredentials: true });
       setComments([...comments, response.data]);
       setNewComment('');
-      setIsLiked(false);
+      setIsLiked('Dislike');
       toast.success('Comment added successfully');
     } catch (error) {
       toast.error('Failed to add comment');
@@ -42,7 +42,7 @@ const Feedback = ({ activityId }) => {
   };
 
   const handleLikeToggle = () => {
-    setIsLiked(!isLiked);
+    setIsLiked(isLiked === 'Like' ? 'Dislike' : 'Like');
   };
 
   return (
@@ -61,7 +61,7 @@ const Feedback = ({ activityId }) => {
           <button
             type="button"
             onClick={handleLikeToggle}
-            className={`p-2 rounded ${isLiked ? 'bg-green-600' : 'bg-gray-600'} text-white`}
+            className={`p-2 rounded ${isLiked === 'Like' ? 'bg-green-600' : 'bg-gray-600'} text-white`}
           >
             <ThumbsUp />
           </button>
@@ -75,11 +75,11 @@ const Feedback = ({ activityId }) => {
       </form>
       <div className="space-y-4 max-h-64 overflow-y-auto">
         {comments.map((comment) => (
-          <div key={comment.id} className="bg-gray-800 p-4 rounded-md">
+          <div key={comment.feedback_id} className="bg-gray-800 p-4 rounded-md">
             <p className="text-sm text-gray-300">{comment.comment}</p>
             <div className="flex items-center justify-between mt-2">
               <span className="text-xs text-gray-500">By: {comment.participant.username}</span>
-              {comment.isLiked && <ThumbsUp className="text-green-500" />}
+              {comment.isLiked === 'Like' && <ThumbsUp className="text-green-500" />}
             </div>
           </div>
         ))}
