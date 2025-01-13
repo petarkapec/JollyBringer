@@ -34,13 +34,13 @@ public class FeedbackServiceJPA implements FeedbackService {
     }
 
     @Override
-    public Feedback createFeedback(String comment, String activityName, String username) {
+    public Feedback createFeedback(String comment, String activityName, String username, String isLiked) {
         Optional<Participant> Optionalparticipant = participantService.findByUsername(username);
         Optional<Activity> Optionalactivity = activityService.findByactivityName(activityName);
         if(Optionalparticipant.isPresent() && Optionalactivity.isPresent()){
             Participant participant = Optionalparticipant.get();
             Activity activity = Optionalactivity.get();
-            return feedbackRepository.save(new Feedback(comment, activity, participant));
+            return feedbackRepository.save(new Feedback(comment, activity, participant, isLiked));
         } else if(Optionalparticipant.isEmpty()){
             throw new RequestDeniedException("No participant with username" + username);
         } else{

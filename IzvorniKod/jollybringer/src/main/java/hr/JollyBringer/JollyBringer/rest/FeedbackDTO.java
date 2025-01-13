@@ -13,7 +13,7 @@ public class FeedbackDTO {
         this.activity_id = activityId;
         this.participant_id = participantId;
         this.comment = comment;
-        this.is_liked = isLiked != null ? isLiked : "None";
+        this.is_liked = isLiked;
     }
 
     public Long getActivity_id() {
@@ -53,6 +53,8 @@ public class FeedbackDTO {
         return "FeedbackDTO{" +
                 "activityId=" + activity_id +
                 ", participantId=" + participant_id +
-                ", comment='" + comment + '\'';
+                ", comment='" + comment + '\'' +
+                ", isLiked='" + is_liked + '\'' +
+                '}';
     }
 }

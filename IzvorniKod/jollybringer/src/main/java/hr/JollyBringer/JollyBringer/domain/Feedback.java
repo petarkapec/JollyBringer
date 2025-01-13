@@ -20,16 +20,20 @@ public class Feedback {
     private Participant participant;
 
     @Enumerated(EnumType.STRING)
-    private IsLiked isLiked = IsLiked.None; //default je none
+    private IsLiked isLiked; //default je none
 
-    public Feedback(String comment, Activity activity, Participant participant) {
+    public Feedback(String comment, Activity activity, Participant participant, String isLiked) {
         Assert.hasText(comment, "Comment must have text");
         Assert.notNull(activity, "Activity must be set");
         Assert.notNull(participant, "Username must be set");
+
         this.comment = comment;
         this.activity = activity;
         this.participant = participant;
-    }
+
+        // Konverzija Stringa u enum
+        this.isLiked = (isLiked != null) ? IsLiked.valueOf(isLiked) : IsLiked.None;
+    }// Prebacivanje Stringa u IsLiked enum
 
     public Long getId() {
         return id;

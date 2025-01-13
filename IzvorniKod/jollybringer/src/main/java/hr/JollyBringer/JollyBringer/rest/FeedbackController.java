@@ -31,10 +31,10 @@ public class FeedbackController {
       //  return ResponseEntity.created(URI.create("/feedbacks/" + saved.getId())).body(saved);
    // }
 
-    @PostMapping("")
+    /*@PostMapping("")
     public Feedback createFeedback(@RequestBody CreateFeedbackDTO dto) {
-        return feedbackService.createFeedback(dto.getComment(), dto.getActivityName(), dto.getUsername());
-    }
+        return feedbackService.createFeedback(dto.getComment(), dto.getActivityName(), dto.getUsername(), dto.);
+    }*/
 
     @PutMapping("/{id}")
     //@Secured("ROLE_ADMIN")

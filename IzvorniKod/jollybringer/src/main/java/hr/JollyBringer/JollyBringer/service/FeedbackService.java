@@ -12,7 +12,7 @@ public interface FeedbackService {
      * @return a list with all Participants
      */
     List<Feedback> listAll();
-    Feedback createFeedback(String comment, String activityName, String username);
+    Feedback createFeedback(String comment, String activityName, String username, String isLiked);
     Feedback createFeedback(Feedback feedback);
     Feedback fetch(long feedbackId);
     Optional<Feedback> findById(long feedbackId);
