@@ -44,7 +44,7 @@ const AdminDashboard = () => {
 
   const handleDeleteGroup = async (groupId) => {
     try {
-      await axios.delete(`http://localhost:8080/groups/${groupId}`, { withCredentials: true });
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/groups/${groupId}`, { withCredentials: true });
       setGroups(groups.filter(group => group.id !== groupId));
       toast.success('Group deleted successfully');
     } catch (error) {
@@ -55,7 +55,7 @@ const AdminDashboard = () => {
 
   const handleDeleteUser = async (userId) => {
     try {
-      await axios.delete(`http://localhost:8080/participants/${userId}`, { withCredentials: true });
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/participants/${userId}`, { withCredentials: true });
       setUsers(users.filter(user => user.id !== userId));
       toast.success('User deleted successfully');
     } catch (error) {
@@ -74,87 +74,93 @@ const AdminDashboard = () => {
         {applications.length === 0 ? (
           <p className="text-gray-400">No pending applications</p>
         ) : (
-          <div className="bg-customGray rounded-lg shadow overflow-hidden">
-            <table className="min-w-full divide-y divide-customGrayLighter">
-              <thead className="bg-customGrayLighter">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">User Name</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">User Email</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Role</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="bg-customGray divide-y divide-customGrayLighter">
-                {applications.map((application) => (
-                  <tr key={application.id}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">{application.user.username}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">{application.user.email}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">{application.user.role.name}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <div className="flex gap-2">
-                        <button onClick={() => handleApproveApplication(application.user.id)} className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded">Approve</button>
-                      </div>
-                    </td>
+          <div className="bg-customGray rounded-lg shadow overflow-hidden max-h-64">
+            <div className="max-h-64 overflow-auto">
+              <table className="min-w-full divide-y divide-customGrayLighter">
+                <thead className="bg-customGrayLighter">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">User Name</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">User Email</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Role</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="bg-customGray divide-y divide-customGrayLighter">
+                  {applications.map((application) => (
+                    <tr key={application.id}>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">{application.user.username}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">{application.user.email}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">{application.user.role.name}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div className="flex gap-2">
+                          <button onClick={() => handleApproveApplication(application.user.id)} className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded">Approve</button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
 
         <h2 className="text-3xl font-bold mb-6 mt-8">Groups</h2>
         {groups.length === 0 ? (
-          <p className="text-customGrayLighter">No groups available</p>
+          <p className="text-gray-400">No groups available</p>
         ) : (
-          <div className="bg-customGray rounded-lg shadow overflow-hidden">
-            <table className="min-w-full divide-y divide-customGrayLighter">
-              <thead className="bg-customGrayLighter">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Group Name</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Group President</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="bg-customGray divide-y divide-customGrayLighter">
-                {groups.map((group) => (
-                  <tr key={group.id}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">{group.name}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">{group.president.username}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <button onClick={() => handleDeleteGroup(group.id)} className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Delete</button>
-                    </td>
+          <div className="bg-customGray rounded-lg shadow overflow-hidden max-h-64">
+            <div className="max-h-64 overflow-auto">
+              <table className="min-w-full divide-y divide-customGrayLighter">
+                <thead className="bg-customGrayLighter">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Group Name</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Group President</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="bg-customGray divide-y divide-customGrayLighter">
+                  {groups.map((group) => (
+                    <tr key={group.id}>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">{group.name}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">{group.president.username}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button onClick={() => handleDeleteGroup(group.id)} className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Delete</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
 
         <h2 className="text-3xl font-bold mb-6 mt-8">Users</h2>
         {users.length === 0 ? (
-          <p className="text-customGrayLighter">No users available</p>
+          <p className="text-gray-400">No users available</p>
         ) : (
-          <div className="bg-customGray rounded-lg shadow overflow-hidden">
-            <table className="min-w-full divide-y divide-customGrayLighter">
-              <thead className="bg-customGrayLighter">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">User Name</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">User Email</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="bg-customGray divide-y divide-customGrayLighter">
-                {users.map((user) => (
-                  <tr key={user.id}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">{user.username}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">{user.email}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <button onClick={() => handleDeleteUser(user.id)} className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Delete</button>
-                    </td>
+          <div className="bg-customGray rounded-lg shadow overflow-hidden max-h-64">
+            <div className="max-h-64 overflow-auto">
+              <table className="min-w-full divide-y divide-customGrayLighter">
+                <thead className="bg-customGrayLighter">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">User Name</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">User Email</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="bg-customGray divide-y divide-customGrayLighter">
+                  {users.map((user) => (
+                    <tr key={user.id}>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">{user.username}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">{user.email}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button onClick={() => handleDeleteUser(user.id)} className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Delete</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </div>
