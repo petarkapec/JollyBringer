@@ -1,4 +1,4 @@
-package hr.JollyBringer.JollyBringer;
+/* package hr.JollyBringer.JollyBringer;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -153,4 +153,4 @@ public class DataInitializer {
   }
 
 
-}
+} */

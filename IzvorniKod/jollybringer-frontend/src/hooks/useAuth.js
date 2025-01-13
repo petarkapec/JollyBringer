@@ -8,6 +8,7 @@ const useAuth = () => {
   const [role, setRole] = useState('');
   const [groups, setGroups] = useState([]);
   const [user, setUser] = useState(null);
+  const User = user;
 
   useEffect(() => {
     const checkAuth = async () => {
