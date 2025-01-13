@@ -37,9 +37,7 @@ const Chat = ({ user }) => {
   const sendMessage = () => {
     if (socket && socket.readyState === WebSocket.OPEN) {
       const message = {
-        participant: {
-          id: user.id,  // Ovo je userId
-        },
+       username: user.email,
         content: newMessage,
         timestamp: new Date().toISOString(),
       };

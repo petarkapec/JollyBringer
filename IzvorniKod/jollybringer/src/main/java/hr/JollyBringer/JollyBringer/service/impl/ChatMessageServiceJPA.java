@@ -5,6 +5,7 @@ import hr.JollyBringer.JollyBringer.rest.ChatMessageDTO;
 import hr.JollyBringer.JollyBringer.domain.Participant;
 import hr.JollyBringer.JollyBringer.dao.ChatMessageRepository;
 
+import hr.JollyBringer.JollyBringer.service.ChatMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ChatMessageServiceJPA {
+public class ChatMessageServiceJPA implements ChatMessageService {
 
     @Autowired
     private ChatMessageRepository chatMessageRepository;
@@ -23,10 +24,10 @@ public class ChatMessageServiceJPA {
     public List<ChatMessageDTO> getLast7Messages() {
         String sevenDaysAgo = LocalDateTime.now().minusDays(7).toString();
         List<ChatMessage> chatMessages = chatMessageRepository.findTop7ByTimestampAfterOrderByTimestampDesc(sevenDaysAgo);
-
+        System.out.println("Dohvacene poruke: " + chatMessages);
         // Prebacivanje u DTO s username-om umjesto ID-a
         return chatMessages.stream().map(chatMessage -> new ChatMessageDTO(
-                chatMessage.getId(),
+
                 chatMessage.getParticipant().getUsername(), // Dohvati username
                 chatMessage.getContent(),
                 chatMessage.getTimestamp()

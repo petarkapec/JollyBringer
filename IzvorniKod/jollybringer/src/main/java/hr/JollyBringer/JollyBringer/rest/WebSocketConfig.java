@@ -1,8 +1,11 @@
 package hr.JollyBringer.JollyBringer.rest;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hr.JollyBringer.JollyBringer.domain.ChatMessage;
 import hr.JollyBringer.JollyBringer.domain.Participant;
+import hr.JollyBringer.JollyBringer.service.ChatMessageService;
+import hr.JollyBringer.JollyBringer.service.ParticipantService;
 import hr.JollyBringer.JollyBringer.service.impl.ChatMessageServiceJPA;
 import hr.JollyBringer.JollyBringer.service.impl.ParticipantServiceJpa;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,9 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Optional;
 
@@ -24,9 +30,9 @@ import java.util.Optional;
 public class WebSocketConfig implements WebSocketConfigurer {
 
     @Autowired
-    private ChatMessageServiceJPA chatMessageService;
+    private ChatMessageService chatMessageService;
     @Autowired
-    private ParticipantServiceJpa participantServiceJpa;
+    private ParticipantService participantServiceJpa;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
@@ -46,29 +52,44 @@ public class WebSocketConfig implements WebSocketConfigurer {
                 // Pretpostavljamo da je poruka JSON format
                 // Parsiraj JSON u objekt (preporučujemo korištenje nekog JSON parsera poput Jacksona)
                 ObjectMapper objectMapper = new ObjectMapper();
-                ChatMessage incomingMessage = objectMapper.readValue(payload, ChatMessage.class);
+                ChatMessageDTO incomingMessage = objectMapper.readValue(payload, ChatMessageDTO.class);
 
-                Long userId = incomingMessage.getId();  // Uzmi ID iz poruke
-                Optional<Participant> optionalParticipant = participantServiceJpa.findById(userId);
+                System.out.println("Received message in object format: " + incomingMessage);
+                String email =  incomingMessage.getUsername();  // Uzmi ID iz poruke
+                Optional<Participant> optionalParticipant = participantServiceJpa.findByEmail(incomingMessage.getUsername());
 
                 // Provjeri ako Participant postoji
                 if (!optionalParticipant.isPresent()) {
                     // Ako ne postoji, pošaljite odgovarajuću grešku
-                    System.out.println("User not found with ID: " + userId);
+                    System.out.println("User not found with username: " + email);
                     ChatMessage responseMessage = new ChatMessage();
-                    responseMessage.setContent("User not found with ID: " + userId);
+                    responseMessage.setContent("User not found with email: " + email);
                     session.sendMessage(new TextMessage(responseMessage.toJson()));
                     return;
                 }
 
                 // Ako Participant postoji, nastavi s obradom poruke
                 Participant participant = optionalParticipant.get();  // Dohvati Participant iz Optional-a
+                String inputTimestamp = incomingMessage.getTimestamp();
+
+                // Parse the input timestamp as an OffsetDateTime
+                OffsetDateTime offsetDateTime = OffsetDateTime.parse(inputTimestamp);
+
+                // Adjust to a specific timezone (e.g., UTC-3 or America/Sao_Paulo)
+                OffsetDateTime adjustedTime = offsetDateTime.withOffsetSameInstant(ZoneOffset.ofHours(-3));
+
+                // Convert to LocalDateTime
+                LocalDateTime localDateTime = adjustedTime.toLocalDateTime();
+
+                // Define the desired output format
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS");
+
+                // Format the LocalDateTime to the desired format
+                String formattedTimestamp = localDateTime.format(formatter);
 
                 // Spremi poruku u bazu podataka povezanu s Participant-om
-                ChatMessage savedMessage = new ChatMessage();
-                savedMessage.setParticipant(participant);  // Poveži s Participant-om iz baze
-                savedMessage.setContent(incomingMessage.getContent());
-                savedMessage.setTimestamp(LocalDateTime.now().toString());
+                ChatMessage savedMessage = new ChatMessage(participant, incomingMessage.getContent(), formattedTimestamp);
+
 
                 // Spremi poruku u bazu
                 chatMessageService.saveMessage(savedMessage);
