@@ -148,9 +148,10 @@ public class ParticipantGroupServiceJPA implements ParticipantGroupService
 
     @Override
     public void deleteGroup(Long id) {
-        feedbackService.deleteRelatedFeedbacks(id);
+
         List<Activity> activities = activityService.findByGroupId(id);
         for (Activity activity : activities) {
+            feedbackService.deleteRelatedFeedbacks(activity.getId());
             activityService.deleteActivity(activity.getId());
         }
         removeMember(id);
