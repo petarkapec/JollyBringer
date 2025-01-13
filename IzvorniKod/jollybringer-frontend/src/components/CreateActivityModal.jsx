@@ -8,7 +8,7 @@ const CreateActivityModal = ({ isOpen, onClose, groupId, onActivityCreated }) =>
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    date: '',
+    day: 1,
     status: 'InProgress'
   });
 
@@ -17,21 +17,22 @@ const CreateActivityModal = ({ isOpen, onClose, groupId, onActivityCreated }) =>
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const currentYear = new Date().getFullYear();
+    const date = new Date(currentYear, 11, formData.day); // December of the current year
+
     const newActivity = {
       activity_name: formData.name,
       description: formData.description,
-      date: formData.date,
+      date: date.toISOString(),
       activity_status: formData.status,
       group_id: groupId,
       created_by: user.username
     };
 
-    console.log(newActivity)
-
     try {
       await axios.post(`http://localhost:8080/groups/${groupId}/activities`, newActivity, { withCredentials: true });
       toast.success('Activity created successfully');
-      setFormData({ name: '', date: '', description: '', status: 'InProgress' });
+      setFormData({ name: '', day: 1, description: '', status: 'InProgress' });
       onActivityCreated();
       onClose();
     } catch (error) {
@@ -65,14 +66,17 @@ const CreateActivityModal = ({ isOpen, onClose, groupId, onActivityCreated }) =>
             />
           </div>
           <div className="mb-4">
-            <label className="block text-white mb-2">Date</label>
-            <input
-              type="date"
-              value={formData.date}
-              onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+            <label className="block text-white mb-2">Day</label>
+            <select
+              value={formData.day}
+              onChange={(e) => setFormData({ ...formData, day: e.target.value })}
               className="w-full p-2 rounded bg-gray-700 text-white"
               required
-            />
+            >
+              {Array.from({ length: 25 }, (_, i) => i + 1).map(day => (
+                <option key={day} value={day}>{day}</option>
+              ))}
+            </select>
           </div>
           <div className="mb-4">
             <label className="block text-white mb-2">Status</label>
