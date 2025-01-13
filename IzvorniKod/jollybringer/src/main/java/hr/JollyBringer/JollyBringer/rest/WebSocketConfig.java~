@@ -76,7 +76,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
                 OffsetDateTime offsetDateTime = OffsetDateTime.parse(inputTimestamp);
 
                 // Adjust to a specific timezone (e.g., UTC-3 or America/Sao_Paulo)
-                OffsetDateTime adjustedTime = offsetDateTime.withOffsetSameInstant(ZoneOffset.ofHours(0));
+                OffsetDateTime adjustedTime = offsetDateTime.withOffsetSameInstant(ZoneOffset.ofHours(-3));
 
                 // Convert to LocalDateTime
                 LocalDateTime localDateTime = adjustedTime.toLocalDateTime();
