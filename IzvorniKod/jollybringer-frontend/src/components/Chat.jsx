@@ -32,7 +32,7 @@ const Chat = ({ user }) => {
 
     const wsUrl = "ws://localhost:8080/chat"; // WebSocket URL
     const ws = createWebSocket(wsUrl, (message) => {
-      setMessages((prevMessages) => [...prevMessages, message]); // Dodaj novu poruku
+      // setMessages((prevMessages) => [...prevMessages, message]); // Dodaj novu poruku
     });
 
     setSocket(ws);
@@ -49,12 +49,14 @@ const Chat = ({ user }) => {
 
   const sendMessage = () => {
     if (socket && socket.readyState === WebSocket.OPEN) {
-      const message = {
+      let message = {
         username: user.email,
         content: newMessage,
         timestamp: new Date().toISOString(),
       };
       socket.send(JSON.stringify(message)); // Pošaljite poruku
+      message.username = user.username; // Change the username to display
+      setMessages((prevMessages) => [...prevMessages, message]); // Add message to the list
       setNewMessage(""); // Očisti input
     } else {
       console.warn("WebSocket is not connected");
