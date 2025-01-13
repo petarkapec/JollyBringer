@@ -90,7 +90,7 @@ public class ActivityController {
     @DeleteMapping("/{id}")
     //@Secured("ROLE_ADMIN")
     public Activity deleteActivity(@PathVariable("id") long id){
-
+        feedbackService.deleteRelatedFeedbacks(id);
         return  activityService.deleteActivity(id);
     }
 

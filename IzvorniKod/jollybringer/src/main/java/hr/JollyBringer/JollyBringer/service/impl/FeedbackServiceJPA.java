@@ -94,6 +94,14 @@ public class FeedbackServiceJPA implements FeedbackService {
     }
 
     @Override
+    public void deleteRelatedFeedbacks(long activityId) {
+        List<Feedback> relatedFeedbacks = feedbackRepository.findByActivityId(activityId);
+        if (!relatedFeedbacks.isEmpty()) {
+            feedbackRepository.deleteAll(relatedFeedbacks);
+        }
+    }
+
+    @Override
     public List<Feedback> findByActivityId(long activityId) {
         return feedbackRepository.findByActivityId(activityId);
     }
