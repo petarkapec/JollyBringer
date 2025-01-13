@@ -64,31 +64,34 @@ const Chat = ({ user }) => {
   };
 
   return (
-    <div className="chat-container">
-      <h2 className="chat-header">Chatroom</h2>
-      <div className="messages-container">
+    <div className="bg-customGray rounded-lg p-4 shadow-md flex flex-col h-full">
+      <h2 className="text-xl font-semibold text-white mb-4">Chat</h2>
+      <div className="bg-customGrayLighter rounded-lg p-4 mb-4 flex-grow overflow-y-auto">
         {messages
           .slice()
           .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)) // Sortiramo po vremenu
           .map((msg, index) => (
-            <div key={index} className="message">
-              <strong className="sender">{msg.username}:</strong>
-              <span>{msg.content}</span>
-              <em className="timestamp">({msg.timestamp})</em>
+            <div key={index} className="mb-2">
+              <strong className="text-green-500">{msg.username}:</strong>
+              <span className="text-white ml-2">{msg.content}</span>
+              <em className="text-gray-400 ml-2 text-sm">({new Date(msg.timestamp).toLocaleTimeString()})</em>
             </div>
           ))}
         {/* Ref za kraj liste poruka */}
         <div ref={messagesEndRef} />
       </div>
-      <div className="input-container">
+      <div className="flex items-center">
         <input
           type="text"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           placeholder="Type a message"
-          className="input-message"
+          className="flex-grow p-2 rounded bg-gray-700 text-white mr-2"
         />
-        <button onClick={sendMessage} className="send-button">
+        <button
+          onClick={sendMessage}
+          className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
+        >
           Send
         </button>
       </div>

@@ -91,13 +91,13 @@ const Dashboard = () => {
   };
 
   return (
-    <div className={'bg-black'}>
+    <div className={'bg-black h-screen flex flex-col'}>
       <Header onGroupSelect={handleGroupSelect} />
-      <div className={'flex justify-between'}>
+      <div className={'flex flex-grow'}>
         <div className={'w-1/2'}>
           <Activities selectedGroup={selectedGroup} role={role} />
         </div>
-        <div className={'w-1/2'}>
+        <div className={'w-1/2 m-4'}>
            <Chat user={user}/>
         </div>
       </div>
