@@ -9,11 +9,12 @@ const Feedback = ({ activityId }) => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
   const [isLiked, setIsLiked] = useState('Dislike');
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/activities/${activityId}/feedbacks`, { withCredentials: true });
+        const response = await axios.get(`${backendUrl}/activities/${activityId}/feedbacks`, { withCredentials: true });
         setComments(response.data);
       } catch (error) {
         toast.error('Failed to fetch comments');
@@ -26,7 +27,7 @@ const Feedback = ({ activityId }) => {
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:8080/activities/${activityId}/feedback`, {
+      const response = await axios.post(`${backendUrl}/activities/${activityId}/feedback`, {
         activity_id: activityId,
         participant_id: user.id,
         comment: newComment,

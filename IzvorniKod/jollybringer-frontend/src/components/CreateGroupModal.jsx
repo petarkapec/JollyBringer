@@ -9,14 +9,15 @@ export default function CreateGroupModal({ isOpen, onClose, onGroupCreated }) {
   const [allUsers, setAllUsers] = useState([]);
   const [groupUsers, setGroupUsers] = useState([]);
   const { role } = useAuth();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     if (role !== 'Participant') {
       const fetchUsersAndGroups = async () => {
         try {
           const [usersResponse, groupsResponse] = await Promise.all([
-            axios.get('http://localhost:8080/participants/only', { withCredentials: true }),
-            axios.get('http://localhost:8080/groups', { withCredentials: true })
+            axios.get(`${backendUrl}/participants/only`, { withCredentials: true }),
+            axios.get(`${backendUrl}/groups`, { withCredentials: true })
           ]);
 
           const users = usersResponse.data;
@@ -37,7 +38,7 @@ export default function CreateGroupModal({ isOpen, onClose, onGroupCreated }) {
   const handleCreateGroup = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8080/groups', {
+      const response = await axios.post(`${backendUrl}/groups`, {
         name: name,
         users: selectedUsers
       }, { withCredentials: true });

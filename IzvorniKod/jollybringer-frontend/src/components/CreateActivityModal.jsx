@@ -19,6 +19,7 @@ const CreateActivityModal = ({ isOpen, onClose, groupId, onActivityCreated }) =>
 
     const currentYear = new Date().getFullYear();
     const date = new Date(currentYear, 11, formData.day); // December of the current year
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
     const newActivity = {
       activity_name: formData.name,
@@ -30,7 +31,7 @@ const CreateActivityModal = ({ isOpen, onClose, groupId, onActivityCreated }) =>
     };
 
     try {
-      await axios.post(`http://localhost:8080/groups/${groupId}/activities`, newActivity, { withCredentials: true });
+      await axios.post(`${backendUrl}/groups/${groupId}/activities`, newActivity, { withCredentials: true });
       toast.success('Activity created successfully');
       setFormData({ name: '', day: 1, description: '', status: 'InProgress' });
       onActivityCreated();

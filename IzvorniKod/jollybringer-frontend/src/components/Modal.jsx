@@ -8,12 +8,13 @@ const Modal = ({ isVisible, onClose, role, updateGroups, onGroupCreated }) => {
   const [newGroupName, setNewGroupName] = useState('');
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     if (role !== 'Participant') {
       const fetchUsers = async () => {
         try {
-          const response = await axios.get('http://localhost:8080/participants/only', { withCredentials: true });
+          const response = await axios.get(`${backendUrl}/participants/only`, { withCredentials: true });
           setAllUsers(response.data);
         } catch (error) {
           console.error('Error fetching users:', error);
@@ -25,7 +26,7 @@ const Modal = ({ isVisible, onClose, role, updateGroups, onGroupCreated }) => {
 
   const handleCreateGroup = async () => {
     try {
-      const response = await axios.post('http://localhost:8080/groups', {
+      const response = await axios.post(`${backendUrl}/groups`, {
         name: newGroupName,
         users: selectedUsers
       }, { withCredentials: true });
@@ -48,7 +49,7 @@ const Modal = ({ isVisible, onClose, role, updateGroups, onGroupCreated }) => {
 
   const handleApplyForPresident = async () => {
     try {
-      await axios.post('http://localhost:8080/apply', {
+      await axios.post(`${backendUrl}/apply`, {
         user_id: user.id,
         applied: true
       }, { withCredentials: true });

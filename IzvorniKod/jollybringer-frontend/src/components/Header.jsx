@@ -18,6 +18,7 @@ const Header = ({ onGroupSelect }) => {
   const [showGroupModal, setShowGroupModal] = useState(false);
   const [userGroups, setUserGroups] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -40,7 +41,7 @@ const Header = ({ onGroupSelect }) => {
 
   const fetchUserGroups = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/groups', { withCredentials: true });
+      const response = await axios.get(`${backendUrl}/groups`, { withCredentials: true });
       const groups = response.data;
       const userGroups = groups.filter(group => group.members.some(member => member.id === user.id));
       setUserGroups(userGroups);
@@ -79,7 +80,7 @@ const Header = ({ onGroupSelect }) => {
 
   const handleApplyForPresident = async () => {
     try {
-      await axios.post('http://localhost:8080/apply', {
+      await axios.post(`${backendUrl}/apply`, {
         user_id: user.id,
         applied: true
       }, { withCredentials: true });

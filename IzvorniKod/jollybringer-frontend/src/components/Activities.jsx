@@ -14,6 +14,8 @@ const Activities = ({ selectedGroup, role }) => {
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
 
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
   useAuth()
 
   useEffect(() => {
@@ -28,7 +30,7 @@ const Activities = ({ selectedGroup, role }) => {
 
   const fetchActivities = async () => {
     try {
-       const response = await axios.get(`http://localhost:8080/groups/${selectedGroup.id}/activities`, {withCredentials: true});
+       const response = await axios.get(`${backendUrl}/groups/${selectedGroup.id}/activities`, {withCredentials: true});
        setActivities(response.data);
     } catch (error) {
       toast.error('Failed to fetch activities');
@@ -43,8 +45,19 @@ const Activities = ({ selectedGroup, role }) => {
   };
 
   const handleActivityDeleted = async (activityId) => {
-    await axios.delete(`http://localhost:8080/activities/${activityId}`, { withCredentials: true });
+    await axios.delete(`${backendUrl}/activities/${activityId}`, { withCredentials: true });
     setActivities((prevActivities) => prevActivities.filter(activity => activity.id !== activityId));
+  };
+
+  const handleCreateWithAI = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8080/ai/create-activity/${selectedGroup.id}`, { withCredentials: true });
+      const newActivity = response.data;
+      setActivities((prevActivities) => [...prevActivities, newActivity]);
+      toast.success('Activity created with AI successfully');
+    } catch (error) {
+      toast.error('Failed to create activity with AI');
+    }
   };
 
   if (!selectedGroup) {
@@ -68,14 +81,24 @@ const Activities = ({ selectedGroup, role }) => {
     <div className="p-4">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Christmas Activities</h2>
-        {(role === 'President' || role === 'Admin') && (
-          <button
-            onClick={() => setShowModal(true)}
-            className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
-          >
-            Create Activity
-          </button>
-        )}
+        <div className="flex gap-2">
+          {(role === 'President' || role === 'Admin') && (
+            <>
+              <button
+                onClick={handleCreateWithAI}
+                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+              >
+                Create with AI
+              </button>
+              <button
+                onClick={() => setShowModal(true)}
+                className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
+              >
+                Create Activity
+              </button>
+            </>
+          )}
+        </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
         {days.map((day) => (

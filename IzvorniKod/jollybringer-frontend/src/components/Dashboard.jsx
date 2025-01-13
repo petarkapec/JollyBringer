@@ -11,6 +11,7 @@ const Dashboard = () => {
   const [groups, setGroups] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState(null);
   const { role, user, loading } = useAuth();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const fetchGroups = async () => {
@@ -78,7 +79,7 @@ const Dashboard = () => {
 
   const updateGroups = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/groups', { withCredentials: true });
+      const response = await axios.get(`${backendUrl}/groups`, { withCredentials: true });
       setGroups(response.data);
     } catch (error) {
       console.error('Error fetching groups:', error);
@@ -91,13 +92,13 @@ const Dashboard = () => {
   };
 
   return (
-    <div className={'bg-black'}>
+    <div className={'bg-black h-screen flex flex-col'}>
       <Header onGroupSelect={handleGroupSelect} />
-      <div className={'flex justify-between'}>
+      <div className={'flex flex-grow'}>
         <div className={'w-1/2'}>
           <Activities selectedGroup={selectedGroup} role={role} />
         </div>
-        <div className={'w-1/2'}>
+        <div className={'w-1/2 m-4'}>
            <Chat user={user}/>
         </div>
       </div>
