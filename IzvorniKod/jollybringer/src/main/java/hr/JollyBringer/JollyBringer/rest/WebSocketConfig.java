@@ -33,7 +33,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
                 // Možemo poslati poruku natrag
 
                 ChatMessage PovratnaPoruka = new ChatMessage();
-                PovratnaPoruka.setContent("Poruka: " + message.getPayload());
+                PovratnaPoruka.setContent("Poruka je " + message.getPayload());
                 PovratnaPoruka.setSender("Baza");
                 Timestamp timestamp = new Timestamp(new Date().getTime());
                 PovratnaPoruka.setTimestamp(timestamp.toString());

@@ -1,11 +1,109 @@
-.chat {
-    flex: 1;
-    color: white;
+/* Chat.css */
+
+/* General Container */
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 600px;
+    margin: 0 auto;
     padding: 20px;
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    background-color: #f9f9f9; /* Svijetla pozadina */
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Header */
+  .chat-header {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333; /* Tamna boja za tekst */
+    text-align: center;
+  }
+  
+  /* Messages Container */
+  .messages-container {
+    width: 100%;
+    max-height: 350px;
+    overflow-y: scroll;
+    border: 1px solid #ddd;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgb(255, 255, 255);
-    background: rgba(255, 0, 0, 0.269);
-    backdrop-filter: blur(8px);
-    z-index: 1;
-}
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: #fff;
+  }
+  
+  /* Single Message */
+  .message {
+    margin-bottom: 12px;
+    padding: 12px;
+    background-color: #f1f1f1;
+    border-radius: 8px;
+    font-size: 16px;
+    word-wrap: break-word;
+    transition: background-color 0.3s ease;
+  }
+  
+  .message:hover {
+    background-color: #e7e7e7; /* Hover efekt za poruke */
+  }
+  
+  /* Sender */
+  .sender {
+    font-weight: 600;
+    color: #007bff; /* Plava boja za ime pošiljatelja */
+  }
+  
+  /* Timestamp */
+  .timestamp {
+    font-size: 12px;
+    color: #888; /* Svijetla boja za vremensku oznaku */
+  }
+  
+  /* Input Container */
+  .input-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+  
+  /* Message Input */
+  .input-message {
+    width: 80%;
+    padding: 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    margin-right: 10px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease;
+  }
+  
+  .input-message:focus {
+    outline: none;
+    border-color: #007bff; /* Plavi border kada je input u fokusu */
+  }
+  
+  /* Send Button */
+  .send-button {
+    padding: 12px 18px;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .send-button:hover {
+    background-color: #0056b3; /* Tamnija plava kada hover */
+    transform: scale(1.05); /* Blagi efekt za povećanje */
+  }
+  
+  .send-button:active {
+    background-color: #004085; /* Još tamnija plava kada je gumb pritisnut */
+    transform: scale(1);
+  }
+  

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { createWebSocket } from "./websocket";
+import '../styles/Chat.css';
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
@@ -35,22 +36,27 @@ const Chat = () => {
   };
 
   return (
-    <div>
-      <h2>Chatroom</h2>
-      <div style={{ border: "1px solid #ccc", height: "300px", overflowY: "scroll" }}>
+    <div className="chat-container">
+      <h2 className="chat-header">Chatroom</h2>
+      <div className="messages-container">
         {messages.map((msg, index) => (
-          <div key={index}>
-            <strong>{msg.sender}:</strong> {msg.content} <em>({msg.timestamp})</em>
+          <div key={index} className="message">
+            <strong className="sender">{msg.sender}:</strong> 
+            <span>{msg.content}</span> 
+            <em className="timestamp">({msg.timestamp})</em>
           </div>
         ))}
       </div>
-      <input
-        type="text"
-        value={newMessage}
-        onChange={(e) => setNewMessage(e.target.value)}
-        placeholder="Type a message"
-      />
-      <button onClick={sendMessage}>Send</button>
+      <div className="input-container">
+        <input
+          type="text"
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          placeholder="Type a message"
+          className="input-message"
+        />
+        <button onClick={sendMessage} className="send-button">Send</button>
+      </div>
     </div>
   );
 };
