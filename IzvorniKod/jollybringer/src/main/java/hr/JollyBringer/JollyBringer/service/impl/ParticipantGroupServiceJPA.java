@@ -1,12 +1,12 @@
 package hr.JollyBringer.JollyBringer.service.impl;
 
+import hr.JollyBringer.JollyBringer.dao.ActivityRepository;
+import hr.JollyBringer.JollyBringer.dao.FeedbackRepository;
 import hr.JollyBringer.JollyBringer.dao.ParticipantGroupRepository;
+import hr.JollyBringer.JollyBringer.domain.Activity;
 import hr.JollyBringer.JollyBringer.domain.Participant;
 import hr.JollyBringer.JollyBringer.domain.ParticipantGroup;
-import hr.JollyBringer.JollyBringer.service.EntityMissingException;
-import hr.JollyBringer.JollyBringer.service.ParticipantGroupService;
-import hr.JollyBringer.JollyBringer.service.ParticipantService;
-import hr.JollyBringer.JollyBringer.service.RequestDeniedException;
+import hr.JollyBringer.JollyBringer.service.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,10 +29,15 @@ public class ParticipantGroupServiceJPA implements ParticipantGroupService
 
     public final ParticipantService participantService;
     public final ParticipantGroupRepository participantGroupRepo;
+    public final FeedbackService feedbackService;
+    public final ActivityService activityService;
 
-    public ParticipantGroupServiceJPA(ParticipantGroupRepository participantGroupRepo, ParticipantService participantService) {
+    public ParticipantGroupServiceJPA(ParticipantGroupRepository participantGroupRepo, ParticipantService participantService,
+                                     FeedbackService feedbackService, ActivityService activityService) {
         this.participantService = participantService;
         this.participantGroupRepo = participantGroupRepo;
+        this.feedbackService = feedbackService;
+        this.activityService = activityService;
     }
 
 
@@ -115,6 +120,21 @@ public class ParticipantGroupServiceJPA implements ParticipantGroupService
     }
 
     @Override
+    public boolean removeMember(long groupId) {
+        ParticipantGroup group = fetch(groupId);
+        Set<Participant> members = group.getMembers();
+        boolean removed = false;
+        if (members != null && !members.isEmpty()) {
+            members.clear();
+            removed = true;
+        }
+        if (removed) {
+            participantGroupRepo.save(group);
+        }
+        return removed;
+    }
+
+    @Override
     public void addMembers(Long id, List<Long> users) {
         for (Long userId : users) {
             addMember(id, userId);
@@ -124,6 +144,17 @@ public class ParticipantGroupServiceJPA implements ParticipantGroupService
     @Override
     public Optional<ParticipantGroup> fetchByName(String name) {
         return participantGroupRepo.findByName(name);
+    }
+
+    @Override
+    public void deleteGroup(Long id) {
+        feedbackService.deleteRelatedFeedbacks(id);
+        List<Activity> activities = activityService.findByGroupId(id);
+        for (Activity activity : activities) {
+            activityService.deleteActivity(activity.getId());
+        }
+        removeMember(id);
+        participantGroupRepo.deleteById(id);
     }
 
     public Optional<ParticipantGroup> findByMember(long participantId) {

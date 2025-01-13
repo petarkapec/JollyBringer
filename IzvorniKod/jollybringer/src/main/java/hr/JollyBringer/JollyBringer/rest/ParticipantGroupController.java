@@ -75,6 +75,11 @@ public class ParticipantGroupController {
         return ResponseEntity.created(URI.create("/groups/" + saved.getId())).body(saved);
     }
 
+    @DeleteMapping("/{groupId}")
+    public void deleteGroup(@PathVariable("groupId") Long groupId) {
+         participantGroupService.deleteGroup(groupId);
+    }
+
     @GetMapping("/{gid}/members") //možda samo admin?
     public Set<Participant> getGroupMembers(@PathVariable("gid") Long id) {
         return participantGroupService.fetch(id).getMembers();
