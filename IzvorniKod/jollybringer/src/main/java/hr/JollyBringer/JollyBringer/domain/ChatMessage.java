@@ -1,5 +1,8 @@
 package hr.JollyBringer.JollyBringer.domain;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class ChatMessage {
     private String sender;
     private String content;
@@ -12,6 +15,16 @@ public class ChatMessage {
         this.sender = sender;
         this.content = content;
         this.timestamp = timestamp;
+    }
+
+    public String toJson() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.writeValueAsString(this); // Convert object to JSON string
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "{}"; // Return empty JSON string in case of error
+        }
     }
 
     // Getters and Setters

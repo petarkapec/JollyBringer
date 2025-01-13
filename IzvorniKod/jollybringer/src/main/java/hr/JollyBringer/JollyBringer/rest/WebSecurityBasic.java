@@ -72,12 +72,15 @@ public class WebSecurityBasic {
                     config.setAllowedOrigins(List.of(frontendUrl, "https://jollybringer-frontend-latest-fdv9.onrender.com"));
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowCredentials(true);
-                    config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+                    config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type","Upgrade", "Connection"));
                     return config;
                 }))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/check-auth").permitAll(); //Todo mozda tu da radi deploy treba permitAll
+                    auth.requestMatchers("/check-auth").permitAll();
+                    auth.requestMatchers("/chat").permitAll();
+                    auth.requestMatchers("/chat/help").permitAll();//Todo mozda tu da radi deploy treba permitAll
+                    auth.requestMatchers("/chat/**").permitAll();
                     auth.requestMatchers("/ai/generate").permitAll();
                     auth.anyRequest().authenticated();
                 })

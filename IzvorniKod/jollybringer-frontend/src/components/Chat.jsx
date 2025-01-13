@@ -1,59 +1,56 @@
-
-import '../styles/Chat.css'
 import React, { useState, useEffect } from "react";
-import { connectToWebSocket } from "./connectToWebSocket";
+import { createWebSocket } from "./websocket";
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const [client, setClient] = useState(null);
-  const { role, user, loading } = useAuth();
+  const [socket, setSocket] = useState(null);
 
-  // Start WebSocket connection
   useEffect(() => {
-    const wsClient = connectToWebSocket((message) => {
-      setMessages((prevMessages) => [...prevMessages, message]); // Add received message
+    const wsUrl = "ws://localhost:8080/chat"; // Replace with your WebSocket server URL
+    const ws = createWebSocket(wsUrl, (message) => {
+      setMessages((prevMessages) => [...prevMessages, message]); // Add the new message to the list
     });
 
-    setClient(wsClient);
+    setSocket(ws);
 
+    // Clean up the WebSocket connection on component unmount
     return () => {
-      wsClient.deactivate(); // Cleanup connection on component unmount
+      ws.close();
     };
   }, []);
 
-  // Send message
   const sendMessage = () => {
-    if (client && client.connected) {
-      client.publish({
-        destination: "/app/sendMessage",
-        body: JSON.stringify({ sender: user.email, content: newMessage, timestamp: new Date().toISOString() }),
-      });
-      setNewMessage(""); // Clear input
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      const message = {
+        sender: "User1",
+        content: newMessage,
+        timestamp: new Date().toISOString(),
+      };
+      socket.send(JSON.stringify(message)); // Send the message
+      setNewMessage(""); // Clear the input
+    } else {
+      console.warn("WebSocket is not connected");
     }
   };
 
   return (
     <div>
-      <div>
-        <h2>Chatroom</h2>
-        <div style={{ border: "1px solid #ccc", height: "300px", overflowY: "scroll" }}>
-          {messages.map((msg, index) => (
-            <div key={index}>
-              <strong>{msg.sender}:</strong> {msg.content} <em>({msg.timestamp})</em>
-            </div>
-          ))}
-        </div>
+      <h2>Chatroom</h2>
+      <div style={{ border: "1px solid #ccc", height: "300px", overflowY: "scroll" }}>
+        {messages.map((msg, index) => (
+          <div key={index}>
+            <strong>{msg.sender}:</strong> {msg.content} <em>({msg.timestamp})</em>
+          </div>
+        ))}
       </div>
-      <div>
-        <input
-          type="text"
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          placeholder="Type a message"
-        />
-        <button onClick={sendMessage}>Send</button>
-      </div>
+      <input
+        type="text"
+        value={newMessage}
+        onChange={(e) => setNewMessage(e.target.value)}
+        placeholder="Type a message"
+      />
+      <button onClick={sendMessage}>Send</button>
     </div>
   );
 };
