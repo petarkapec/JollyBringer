@@ -32,6 +32,11 @@ public class ActivityServiceJPA implements ActivityService {
     }
 
     @Override
+    public List<Activity> findByCreatedBy(String username) {
+        return activityRepository.findByCreatedBy(username);
+    }
+
+    @Override
     public Activity fetch(long activityId) {
         return findById(activityId).orElseThrow(
                 () -> new EntityMissingException(Activity.class, activityId)
