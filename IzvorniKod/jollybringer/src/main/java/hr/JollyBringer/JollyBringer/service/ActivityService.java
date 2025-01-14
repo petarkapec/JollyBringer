@@ -13,6 +13,8 @@ public interface ActivityService {
 
     List<Activity> findByGroupId(long groupId);
 
+    List<Activity> findByCreatedBy(String username);
+
     Activity fetch(long activitytId);
     Activity createActivity(Activity activity);
 

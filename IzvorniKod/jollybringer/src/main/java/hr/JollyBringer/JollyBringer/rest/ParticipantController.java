@@ -1,7 +1,9 @@
 package hr.JollyBringer.JollyBringer.rest;
 
+import hr.JollyBringer.JollyBringer.domain.Activity;
+import hr.JollyBringer.JollyBringer.domain.ChatMessage;
 import hr.JollyBringer.JollyBringer.domain.Participant;
-import hr.JollyBringer.JollyBringer.service.ParticipantService;
+import hr.JollyBringer.JollyBringer.service.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +19,19 @@ import java.util.List;
 public class ParticipantController {
 
     private final ParticipantService participantService;
+    private final FeedbackService feedbackService;
+    private final ActivityService activityService;
+    private final ChatMessageService chatMessageService;
+    private final ParticipantGroupService participantGroupService;
 
-    public ParticipantController(ParticipantService participantService) {
+
+    public ParticipantController(ParticipantService participantService, FeedbackService feedbackService, ActivityService activityService,
+                                 ChatMessageService chatMessageService, ParticipantGroupService participantGroupService) {
         this.participantService = participantService;
+        this.feedbackService = feedbackService;
+        this.activityService = activityService;
+        this.chatMessageService = chatMessageService;
+        this.participantGroupService = participantGroupService;
     }
 
     @GetMapping("")
@@ -59,8 +71,23 @@ public class ParticipantController {
     @DeleteMapping("/{id}")
     //@Secured("ROLE_ADMIN")
     public Participant deleteParticipant(@PathVariable("id") long id){
+        List<Activity> activities = activityService.findByCreatedBy(participantService.fetch(id).getUsername());
+        for (Activity activity : activities) {
+            feedbackService.deleteRelatedFeedbacks(activity.getId());
+            activityService.deleteActivity(activity.getId());
+        }
+        List<ChatMessage> messages = chatMessageService.findByParticipantId(participantService.fetch(id).getId());
+        for(ChatMessage message : messages) {
+            chatMessageService.deleteMessage(message.getId());
+        }
+        Participant deleted = participantService.fetch(id);
+        if(participantGroupService.findByMember(deleted).isPresent()) {
+            participantGroupService.removeMember(participantGroupService.findByMember(deleted).get().getId(), deleted.getId());
+            return  participantService.deleteParticipant(id);
+        } else {
+            return  participantService.deleteParticipant(id);
+        }
 
-        return  participantService.deleteParticipant(id);
     }
 
 

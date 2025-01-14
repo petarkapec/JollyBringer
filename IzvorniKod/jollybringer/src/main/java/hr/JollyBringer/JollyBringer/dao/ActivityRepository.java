@@ -14,6 +14,7 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
     List<Activity> findByGroupId(Long groupId);
 
+    List<Activity> findByCreatedBy(String createdBy);
 
 
 }

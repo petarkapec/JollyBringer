@@ -101,5 +101,6 @@ public interface ParticipantGroupService {
     void deleteGroup(Long id);
 
     boolean removeMember(long participantGroupId);
+    Optional<ParticipantGroup> findByMember(Participant president);
 }
 

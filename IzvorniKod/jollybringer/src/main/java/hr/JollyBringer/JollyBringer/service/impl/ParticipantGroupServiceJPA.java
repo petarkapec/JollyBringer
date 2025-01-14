@@ -135,6 +135,11 @@ public class ParticipantGroupServiceJPA implements ParticipantGroupService
     }
 
     @Override
+    public Optional<ParticipantGroup> findByMember(Participant president) {
+        return participantGroupRepo.findByMember(president);
+    }
+
+    @Override
     public void addMembers(Long id, List<Long> users) {
         for (Long userId : users) {
             addMember(id, userId);
