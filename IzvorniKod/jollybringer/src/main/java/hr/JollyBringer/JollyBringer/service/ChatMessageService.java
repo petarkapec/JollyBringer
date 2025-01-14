@@ -8,4 +8,5 @@ import java.util.List;
 public interface ChatMessageService {
     public List<ChatMessageDTO> getLast7Messages();
     public void saveMessage(ChatMessage savedMessage);
+    public List<ChatMessage> listAll();
 }

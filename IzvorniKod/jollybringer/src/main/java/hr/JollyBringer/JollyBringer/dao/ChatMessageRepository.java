@@ -10,4 +10,6 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> 
     List<ChatMessage> findByParticipantId(Long participantId);
 
     List<ChatMessage> findTop7ByTimestampAfterOrderByTimestampDesc(String timestamp);
+
+
 }

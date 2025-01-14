@@ -25,13 +25,14 @@ public class Activity {
     private String createdBy;
 
 
-    public Activity(String activity_name, String description, String date, String activity_status, String createdBy, ParticipantGroup group) {
+    public Activity(String activity_name, String description, String date, String activity_status, ParticipantGroup group, String createdBy) {
         this.activityName = activity_name;
         this.description = description;
         this.date = date;
         this.activity_status = ActivityStatus.valueOf(activity_status);
-        this.createdBy = createdBy;
+
         this.group = group;
+        this.createdBy = createdBy;
 
     }
 
@@ -77,6 +78,26 @@ public class Activity {
 
     public void setActivity_status(String activity_status) {
         this.activity_status = ActivityStatus.valueOf(activity_status);
+    }
+
+    public void setActivity_status(ActivityStatus activity_status) {
+        this.activity_status = activity_status;
+    }
+
+    public ParticipantGroup getGroup() {
+        return group;
+    }
+
+    public void setGroup(ParticipantGroup group) {
+        this.group = group;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
 
     @Override

@@ -37,4 +37,9 @@ public class ChatMessageServiceJPA implements ChatMessageService {
     public void saveMessage(ChatMessage savedMessage) {
         chatMessageRepository.save(savedMessage);
     }
+
+    @Override
+    public List<ChatMessage> listAll() {
+        return chatMessageRepository.findAll();
+    }
 }

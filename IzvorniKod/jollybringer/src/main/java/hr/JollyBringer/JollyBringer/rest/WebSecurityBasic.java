@@ -81,7 +81,8 @@ public class WebSecurityBasic {
                     auth.requestMatchers("/chat").permitAll();
                     auth.requestMatchers("/chat/help").permitAll();//Todo mozda tu da radi deploy treba permitAll
                     auth.requestMatchers("/chat/**").permitAll();
-                    auth.requestMatchers("/ai/generate").permitAll();
+                    auth.requestMatchers("/ai/create-activity/").permitAll();
+                    auth.requestMatchers("/ai/generate/").permitAll();
                     auth.requestMatchers("/poruke/last7").permitAll();
                     auth.anyRequest().authenticated();
                 })
