@@ -63,7 +63,7 @@ public class WebSecurityBasic {
     }
 
 
-    @Bean
+    /*@Bean
     @Profile("oauth-security")
     public SecurityFilterChain oauthFilterChain(HttpSecurity http) throws Exception {
         http
@@ -101,7 +101,7 @@ public class WebSecurityBasic {
                 .exceptionHandling(handling -> handling.authenticationEntryPoint(new Http403ForbiddenEntryPoint()));
 
         return http.build();
-    }
+    } */
 
     /*
     @Bean

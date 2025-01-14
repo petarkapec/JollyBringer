@@ -10,13 +10,12 @@ import java.util.Optional;
 public interface ChatMessageService {
     public List<ChatMessageDTO> getLast7Messages();
     public void saveMessage(ChatMessage savedMessage);
-
     public List<ChatMessage> findByParticipantId(Long participantId);
 
-    ChatMessage fetch(long chatMessageId);
+    public ChatMessage fetch(long chatMessageId);
 
-    Optional<ChatMessage> findById(long chatMessageId);
+    public Optional<ChatMessage> findById(long chatMessageId);
 
-    void deleteMessage(Long id);
-    List<ChatMessage> listAll();
+    public void deleteMessage(Long id);
+    public List<ChatMessage> listAll();
 }
