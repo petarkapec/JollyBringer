@@ -69,7 +69,7 @@ const Chat = ({ user }) => {
   return (
     <div className="bg-customGray rounded-lg p-4 shadow-md flex flex-col h-auto">
       <h2 className="text-xl font-semibold text-white mb-4 h-auto">Chat</h2>
-      <div className="bg-customGrayLighter rounded-lg p-4 mb-4 flex-grow overflow-y-auto max-h-96">
+      <div className="bg-customGrayLighter rounded-lg p-4 mb-4 flex-grow overflow-y-auto max-h-96 min-h-96">
         {messages
           .slice()
           .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)) // Sortiramo po vremenu
