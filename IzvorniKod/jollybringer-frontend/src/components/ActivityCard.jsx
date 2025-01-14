@@ -4,7 +4,7 @@ import ActivityDetailModal from './ActivityDetailModal';
 const ActivityCard = ({ day, activity, onClick, onActivityDeleted }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
-  const currentDate = new Date('12.12.2024.');
+  const currentDate = new Date('12.25.2024.');
   const cardDate = new Date(currentDate.getFullYear(), 11, day); // December of the current year
   const isEligible = currentDate >= cardDate;
 
