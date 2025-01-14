@@ -70,7 +70,7 @@ public class AIChatController {
                 .map(Activity::getActivityName)
                 .collect(Collectors.joining("\n"));
 
-        String message = "DON'T GENERATE THE SAME ACTIVITY AS THE PREVOIUS PROMPT, Generate  ONLY THE topic and description (max 100 characters) for ONE christmas activity based on these chat messages,with regex \"Topic:(.*?)--Description:(.*)\", DON't GENERATE ANYTHING ELSE: " + "chat messages: ("+ contentsString + ") \n " + "previous activity names:( " + descriptionsString + ")";
+        String message = "DON'T GENERATE THE SAME ACTIVITY AS THE PREVOIUS PROMPT, Generate  ONLY THE topic and description (max 100 characters) for ONE christmas activity based on these chat messages,with regex \"Topic:(.*?)--Description:(.*)\", DON't GENERATE ANYTHING ELSE: " + "chat messages: ("+ contentsString + ") \n " + "previous activity names (don't reuse them if you can):( " + descriptionsString + ")";
         System.out.println(message);
         String input = this.chatModel.call(message);
         System.out.println(input);

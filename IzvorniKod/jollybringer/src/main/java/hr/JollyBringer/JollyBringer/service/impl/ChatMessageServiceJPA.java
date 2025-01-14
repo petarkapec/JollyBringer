@@ -1,6 +1,5 @@
 package hr.JollyBringer.JollyBringer.service.impl;
 
-import hr.JollyBringer.JollyBringer.domain.Activity;
 import hr.JollyBringer.JollyBringer.domain.ChatMessage;
 import hr.JollyBringer.JollyBringer.rest.ChatMessageDTO;
 import hr.JollyBringer.JollyBringer.dao.ChatMessageRepository;
@@ -30,9 +29,9 @@ public class ChatMessageServiceJPA implements ChatMessageService {
 
 
     // Metoda za dohvaćanje zadnjih 7 poruka na temelju timestamp-a
-    public List<ChatMessageDTO> getLast7Messages() {
+    public List<ChatMessageDTO> getLast20Messages() {
         String sevenDaysAgo = LocalDateTime.now().minusDays(7).toString();
-        List<ChatMessage> chatMessages = chatMessageRepository.findTop7ByTimestampAfterOrderByTimestampDesc(sevenDaysAgo);
+        List<ChatMessage> chatMessages = chatMessageRepository.findTop20ByTimestampAfterOrderByTimestampDesc(sevenDaysAgo);
         System.out.println("Dohvacene poruke: " + chatMessages);
         // Prebacivanje u DTO s username-om umjesto ID-a
         return chatMessages.stream().map(chatMessage -> new ChatMessageDTO(

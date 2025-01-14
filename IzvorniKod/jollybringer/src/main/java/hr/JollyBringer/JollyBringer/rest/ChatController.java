@@ -5,9 +5,7 @@ import hr.JollyBringer.JollyBringer.service.ChatMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import hr.JollyBringer.JollyBringer.service.impl.ChatMessageServiceJPA;
 
 import java.util.List;
 
@@ -24,8 +22,8 @@ public class ChatController {
     }
     // Dohvati zadnjih 7 poruka
     @GetMapping("/last7")
-    public List<ChatMessageDTO> getLast7Messages() {
-        return chatMessageService.getLast7Messages();
+    public List<ChatMessageDTO> getLast20Messages() {
+        return chatMessageService.getLast20Messages();
     }
 
     @DeleteMapping("/{id}")
