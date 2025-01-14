@@ -38,16 +38,23 @@ const Header = ({ onGroupSelect }) => {
     };
   }, [menuRef]);
 
-
   const fetchUserGroups = async () => {
     try {
       const response = await axios.get(`${backendUrl}/groups`, { withCredentials: true });
       const groups = response.data;
       const userGroups = groups.filter(group => group.members.some(member => member.id === user.id));
       setUserGroups(userGroups);
+
+      const storedGroup = JSON.parse(localStorage.getItem(SELECTED_GROUP_KEY));
+      if (storedGroup && !userGroups.some(group => group.id === storedGroup.id)) {
+        localStorage.removeItem(SELECTED_GROUP_KEY);
+        setSelectedGroup(null);
+        onGroupSelect(null);
+      }
     } catch (error) {
+      console.error('Error fetching user groups:', error);
     }
-  }
+  };
 
   useEffect(() => {
     fetchUserGroups();
