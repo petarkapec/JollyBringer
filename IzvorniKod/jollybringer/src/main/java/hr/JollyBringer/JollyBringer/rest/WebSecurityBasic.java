@@ -134,15 +134,7 @@ public class WebSecurityBasic {
 
 
 
-    @Bean
-    @Profile({ "basic-security", "form-security", "oauth-security" })
-    @Order(Ordered.HIGHEST_PRECEDENCE)
-    public SecurityFilterChain h2ConsoleSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.securityMatcher(PathRequest.toH2Console());
-        http.csrf(AbstractHttpConfigurer::disable);
-        http.headers((headers) -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
-        return http.build();
-    }
+
 
 
     /*
