@@ -52,9 +52,8 @@ const Activities = ({ selectedGroup, role }) => {
   const handleCreateWithAI = async () => {
     try {
       const response = await axios.get(`http://localhost:8080/ai/create-activity/${selectedGroup.id}`, { withCredentials: true });
-      const newActivity = response.data;
-      setActivities((prevActivities) => [...prevActivities, newActivity]);
       toast.success('Activity created with AI successfully');
+      fetchActivities(); // Refresh activities after creating with AI
     } catch (error) {
       toast.error('Failed to create activity with AI');
     }
