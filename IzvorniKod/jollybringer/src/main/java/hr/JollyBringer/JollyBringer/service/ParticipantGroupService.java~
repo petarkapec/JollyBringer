@@ -101,7 +101,5 @@ public interface ParticipantGroupService {
     void deleteGroup(Long id);
 
     boolean removeMember(long participantGroupId);
-
-
 }
 

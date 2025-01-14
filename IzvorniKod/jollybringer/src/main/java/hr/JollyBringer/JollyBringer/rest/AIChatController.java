@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -59,15 +60,18 @@ public class AIChatController {
         if (participantGroupService.findById(groupId).isEmpty()) return "Group not found";
         //TODO uredit da vraća iz neke određene grupe chat
         List<ChatMessage>  poruke = this.chatMessageService.listAll();
+        List<ChatMessage> latestMessages = poruke.subList(Math.max(poruke.size() - 20, 0), poruke.size());
+        Collections.reverse(latestMessages);
         List<Activity>  aktivnosti = this.activityService.findByGroupId(groupId);
-        String contentsString = poruke.stream()
+        String contentsString = latestMessages.stream()
                 .map(ChatMessage::getContent)
                 .collect(Collectors.joining("\n"));
         String descriptionsString = aktivnosti.stream()
-                .map(Activity::getDescription)
+                .map(Activity::getActivityName)
                 .collect(Collectors.joining("\n"));
-        String message = "Generate  ONLY THE topic and description for ONE christmas activity based on these strings,with regex \"Topic:(.*?)--Description:(.*)\", DON't GENERATE ANYTHING ELSE: " + contentsString + " \n " + descriptionsString;
 
+        String message = "DON'T GENERATE THE SAME ACTIVITY AS THE PREVOIUS PROMPT, Generate  ONLY THE topic and description (max 100 characters) for ONE christmas activity based on these chat messages,with regex \"Topic:(.*?)--Description:(.*)\", DON't GENERATE ANYTHING ELSE: " + "chat messages: ("+ contentsString + ") \n " + "previous activity names:( " + descriptionsString + ")";
+        System.out.println(message);
         String input = this.chatModel.call(message);
         System.out.println(input);
         Pattern pattern = Pattern.compile("Topic:(.*?)--Description:(.*)");
@@ -76,13 +80,14 @@ public class AIChatController {
         if (matcher.find()) {
             String topic = matcher.group(1).trim();
             String description = matcher.group(2).trim();
-
-            LocalDate today = LocalDate.now();
-            LocalDate nextMonth = today.plusMonths(1);
-
-            int dayOfMonth = new Random().nextInt(nextMonth.lengthOfMonth()) + 1;
-            LocalDate randomDate = nextMonth.withDayOfMonth(dayOfMonth);
+            System.out.println(topic);
+            System.out.println("----------------");
+            System.out.println(description);
+            int currentYear = LocalDate.now().getYear();
+            int dayOfMonth = new Random().nextInt(31) + 1;
+            LocalDate randomDate = LocalDate.of(currentYear, 12, dayOfMonth);
             Activity activity = new Activity(topic, description, randomDate.toString(), "InProgress", participantGroupService.findById(groupId).get(), "AI AGENT");
+            System.out.println(activity);
             activityService.createActivity(activity);
             ActivityDTO activityDTO = new ActivityDTO(
                     activity.getActivityName(),
