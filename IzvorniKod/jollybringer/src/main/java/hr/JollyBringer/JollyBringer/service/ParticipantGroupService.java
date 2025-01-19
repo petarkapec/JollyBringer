@@ -1,8 +1,8 @@
 package hr.JollyBringer.JollyBringer.service;
 
+import hr.JollyBringer.JollyBringer.domain.ChatMessage;
 import hr.JollyBringer.JollyBringer.domain.ParticipantGroup;
 import hr.JollyBringer.JollyBringer.domain.Participant;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -102,5 +102,8 @@ public interface ParticipantGroupService {
 
     boolean removeMember(long participantGroupId);
     Optional<ParticipantGroup> findByMember(Participant president);
+
+    boolean addMessageToGroup(ChatMessage savedMessage);
+    List<ChatMessage> findMessageByGroupId(Long groupId);
 }
 

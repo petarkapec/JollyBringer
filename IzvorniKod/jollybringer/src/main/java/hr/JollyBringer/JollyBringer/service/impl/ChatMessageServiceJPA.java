@@ -1,14 +1,17 @@
 package hr.JollyBringer.JollyBringer.service.impl;
 
 import hr.JollyBringer.JollyBringer.domain.ChatMessage;
+import hr.JollyBringer.JollyBringer.domain.ParticipantGroup;
 import hr.JollyBringer.JollyBringer.rest.ChatMessageDTO;
 import hr.JollyBringer.JollyBringer.dao.ChatMessageRepository;
 
 import hr.JollyBringer.JollyBringer.service.ChatMessageService;
 import hr.JollyBringer.JollyBringer.service.EntityMissingException;
+import hr.JollyBringer.JollyBringer.service.ParticipantGroupService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,6 +24,7 @@ public class ChatMessageServiceJPA implements ChatMessageService {
 
     public ChatMessageServiceJPA(ChatMessageRepository chatMessageRepository) {
         this.chatMessageRepository = chatMessageRepository;
+
     }
 
     public List<ChatMessage> listAll() {
@@ -28,7 +32,9 @@ public class ChatMessageServiceJPA implements ChatMessageService {
     }
 
 
-    // Metoda za dohvaćanje zadnjih 7 poruka na temelju timestamp-a
+
+
+    // Metoda za dohvaćanje zadnjih 20 poruka na temelju timestamp-a
     public List<ChatMessageDTO> getLast20Messages() {
         String sevenDaysAgo = LocalDateTime.now().minusDays(7).toString();
         List<ChatMessage> chatMessages = chatMessageRepository.findTop20ByTimestampAfterOrderByTimestampDesc(sevenDaysAgo);
