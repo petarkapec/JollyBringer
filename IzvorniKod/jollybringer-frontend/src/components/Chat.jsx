@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { createWebSocket } from "./websocket";
-import '../styles/Chat.css';
+import "../styles/Chat.css";
 
 const Chat = ({ user }) => {
   const [messages, setMessages] = useState([]);
@@ -32,7 +32,7 @@ const Chat = ({ user }) => {
 
     const wsUrl = "ws://localhost:8080/chat"; // WebSocket URL
     const ws = createWebSocket(wsUrl, (message) => {
-      // setMessages((prevMessages) => [...prevMessages, message]); // Dodaj novu poruku
+      setMessages((prevMessages) => [...prevMessages, message]); // Dodaj novu poruku
     });
 
     setSocket(ws);
@@ -55,8 +55,8 @@ const Chat = ({ user }) => {
         timestamp: new Date().toISOString(),
       };
       socket.send(JSON.stringify(message)); // Pošaljite poruku
-      message.username = user.username; // Change the username to display
-      setMessages((prevMessages) => [...prevMessages, message]); // Add message to the list
+      message.username = user.username; // Promeni username za prikaz
+      setMessages((prevMessages) => [...prevMessages, message]); // Dodaj poruku u listu
       setNewMessage(""); // Očisti input
     } else {
       console.warn("WebSocket is not connected");
@@ -69,12 +69,12 @@ const Chat = ({ user }) => {
       <div className="messages-container">
         {messages
           .slice()
-          .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)) // Sortiramo po vremenu
+          .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)) // Sortiraj po vremenu
           .map((msg, index) => (
             <div key={index} className="message">
               <strong className="sender mr-2">{msg.username}:</strong>
-              <span className={'mr-2'}>{msg.content}</span>
-              <em className="timestamp">({new Date(msg.timestamp).toLocaleDateString()})</em>
+              <span className={"mr-2"}>{msg.content}</span>
+              <em className="timestamp">({new Date(msg.timestamp).toLocaleString()})</em>
             </div>
           ))}
         {/* Ref za kraj liste poruka */}

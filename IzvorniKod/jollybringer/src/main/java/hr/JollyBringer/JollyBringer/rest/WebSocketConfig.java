@@ -111,6 +111,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
                 ChatMessage savedMessage = new ChatMessage(participant, incomingMessage.getContent(), formattedTimestamp);
 
 
+
                 // Spremi poruku u bazu
                 chatMessageService.saveMessage(savedMessage);
 
