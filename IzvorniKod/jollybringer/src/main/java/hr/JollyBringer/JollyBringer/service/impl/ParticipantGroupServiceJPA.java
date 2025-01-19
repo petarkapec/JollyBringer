@@ -1,9 +1,8 @@
 package hr.JollyBringer.JollyBringer.service.impl;
 
-import hr.JollyBringer.JollyBringer.dao.ActivityRepository;
-import hr.JollyBringer.JollyBringer.dao.FeedbackRepository;
 import hr.JollyBringer.JollyBringer.dao.ParticipantGroupRepository;
 import hr.JollyBringer.JollyBringer.domain.Activity;
+import hr.JollyBringer.JollyBringer.domain.ChatMessage;
 import hr.JollyBringer.JollyBringer.domain.Participant;
 import hr.JollyBringer.JollyBringer.domain.ParticipantGroup;
 import hr.JollyBringer.JollyBringer.service.*;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -23,6 +23,7 @@ import java.util.Set;
 public class ParticipantGroupServiceJPA implements ParticipantGroupService
 {
 
+
     //TODO placeholder, maybe no limit or other limit
     @Value("${opp.group.max-size}")
     private int groupMaxSize;
@@ -33,11 +34,12 @@ public class ParticipantGroupServiceJPA implements ParticipantGroupService
     public final ActivityService activityService;
 
     public ParticipantGroupServiceJPA(ParticipantGroupRepository participantGroupRepo, ParticipantService participantService,
-                                     FeedbackService feedbackService, ActivityService activityService) {
+                                      FeedbackService feedbackService, ActivityService activityService) {
         this.participantService = participantService;
         this.participantGroupRepo = participantGroupRepo;
         this.feedbackService = feedbackService;
         this.activityService = activityService;
+
     }
 
 
@@ -140,6 +142,22 @@ public class ParticipantGroupServiceJPA implements ParticipantGroupService
     }
 
     @Override
+    public boolean addMessageToGroup(ChatMessage savedMessage) {
+        Participant covjek = savedMessage.getParticipant();
+        if (covjek == null)
+            throw new EntityMissingException(Participant.class, savedMessage.getParticipant().getId());
+        if (findByMember(covjek).isEmpty())
+            throw new RequestDeniedException(covjek + " not member of any group");
+        ParticipantGroup grupa = findByMember(covjek).get();
+
+        participantGroupRepo.save(grupa);
+        boolean added = grupa.getMessages().add(savedMessage);;
+        if (added)
+            participantGroupRepo.save(grupa);
+        return added;
+    }
+
+    @Override
     public void addMembers(Long id, List<Long> users) {
         for (Long userId : users) {
             addMember(id, userId);
@@ -166,5 +184,17 @@ public class ParticipantGroupServiceJPA implements ParticipantGroupService
     public Optional<ParticipantGroup> findByMember(long participantId) {
         return participantGroupRepo.findByMember(participantService.fetch(participantId));
 
+    }
+
+    @Override
+    public List<ChatMessage> findMessageByGroupId(Long groupId) {
+        if(findById(groupId) == null) {
+            throw new EntityMissingException(ParticipantGroup.class, groupId);
+        }
+        else {
+            List<ChatMessage> list = new ArrayList<>(findById(groupId).get().getMessages());
+            return list;
+
+        }
     }
 }

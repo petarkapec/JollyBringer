@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import hr.JollyBringer.JollyBringer.domain.ChatMessage;
 import hr.JollyBringer.JollyBringer.domain.Participant;
 import hr.JollyBringer.JollyBringer.service.ChatMessageService;
+import hr.JollyBringer.JollyBringer.service.ParticipantGroupService;
 import hr.JollyBringer.JollyBringer.service.ParticipantService;
 import hr.JollyBringer.JollyBringer.service.impl.ChatMessageServiceJPA;
 import hr.JollyBringer.JollyBringer.service.impl.ParticipantServiceJpa;
@@ -37,6 +38,9 @@ public class WebSocketConfig implements WebSocketConfigurer {
     private ChatMessageService chatMessageService;
     @Autowired
     private ParticipantService participantServiceJpa;
+
+    @Autowired
+    private ParticipantGroupService participantGroupServiceJpa;
 
     private final CopyOnWriteArrayList<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
 
@@ -113,6 +117,9 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
                 // Spremi poruku u bazu
                 chatMessageService.saveMessage(savedMessage);
+
+                //povezi poruku sa grupom
+                participantGroupServiceJpa.addMessageToGroup(savedMessage);
 
                 // Emituj poruku svim klijentima
                 TextMessage outgoingMessage = new TextMessage(objectMapper.writeValueAsString(incomingMessage));

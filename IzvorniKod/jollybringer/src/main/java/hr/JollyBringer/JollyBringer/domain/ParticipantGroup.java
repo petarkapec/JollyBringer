@@ -26,6 +26,9 @@ public class ParticipantGroup {
     @OneToMany
     private Set<Participant> members; //grupa ima više sudionika
 
+    @OneToMany
+    private Set<ChatMessage> messages;
+
     public ParticipantGroup(String name, Participant president) {
         Assert.hasText(name, "Group name must have text");
         Assert.isTrue(name.length() <= 20,
@@ -34,6 +37,7 @@ public class ParticipantGroup {
         this.name = name;
         this.president = president;
         this.members = new HashSet<>(Arrays.asList(president));
+        this.messages = new HashSet<>(Arrays.asList());
     }
 
     public ParticipantGroup() {
@@ -70,5 +74,13 @@ public class ParticipantGroup {
 
     public void setMembers(Set<Participant> members) {
         this.members = members;
+    }
+
+    public Set<ChatMessage> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(Set<ChatMessage> messages) {
+        this.messages = messages;
     }
 }

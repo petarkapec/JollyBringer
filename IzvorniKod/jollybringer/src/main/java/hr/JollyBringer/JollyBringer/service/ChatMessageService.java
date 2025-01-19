@@ -17,4 +17,6 @@ public interface ChatMessageService {
 
     public void deleteMessage(Long id);
     public List<ChatMessage> listAll();
+
+
 }

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import hr.JollyBringer.JollyBringer.domain.Activity;
 import hr.JollyBringer.JollyBringer.domain.ChatMessage;
 import hr.JollyBringer.JollyBringer.service.ActivityService;
-import hr.JollyBringer.JollyBringer.service.ChatMessageService;
 import hr.JollyBringer.JollyBringer.service.ParticipantGroupService;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatResponse;
@@ -14,6 +13,7 @@ import org.springframework.ai.mistralai.MistralAiChatModel;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
@@ -27,17 +27,18 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @RestController
+
 public class AIChatController {
 
     private final MistralAiChatModel chatModel;
-    private final ChatMessageService chatMessageService;
+
     private final ActivityService activityService;
     private final ParticipantGroupService participantGroupService;
 
     @Autowired
-    public AIChatController(MistralAiChatModel chatModel, ChatMessageService chatMessageService, ActivityService activityService, ParticipantGroupService participantGroupService) {
+    public AIChatController(MistralAiChatModel chatModel, ActivityService activityService, ParticipantGroupService participantGroupService) {
         this.chatModel = chatModel;
-        this.chatMessageService = chatMessageService;
+
         this.activityService = activityService;
         this.participantGroupService = participantGroupService;
     }
@@ -57,9 +58,9 @@ public class AIChatController {
 
     @GetMapping("/ai/create-activity/{groupId}")
     public String generateActivity(@PathVariable Long groupId) throws JsonProcessingException {
-        if (participantGroupService.findById(groupId).isEmpty()) return "Group not found";
+        if (this.participantGroupService.findById(groupId).isEmpty()) return "Group not found";
         //TODO uredit da vraća iz neke određene grupe chat
-        List<ChatMessage>  poruke = this.chatMessageService.listAll();
+        List<ChatMessage>  poruke = this.participantGroupService.findMessageByGroupId(groupId);
         List<ChatMessage> latestMessages = poruke.subList(Math.max(poruke.size() - 20, 0), poruke.size());
         Collections.reverse(latestMessages);
         List<Activity>  aktivnosti = this.activityService.findByGroupId(groupId);
