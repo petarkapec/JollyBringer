@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { createWebSocket } from "./websocket";
 import "../styles/Chat.css";
 
-const Chat = ({ user }) => {
+const Chat = ({ user, selectedGroup }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [socket, setSocket] = useState(null);
@@ -17,18 +17,28 @@ const Chat = ({ user }) => {
 
   // Funkcija za dohvaćanje zadnjih 7 poruka
   const fetchLast7Messages = async () => {
+    if (!selectedGroup?.id) {
+      console.warn("Group ID is not available");
+      return;
+    }
+
     try {
-      const response = await fetch("http://localhost:8080/poruke/last7", { withCredentials: true });
+      const response = await fetch(`http://localhost:8080/poruke/${selectedGroup?.id}`, {
+        withCredentials: true,
+      });
       const data = await response.json();
       setMessages(data); // Postavi zadnjih 7 poruka
+      console.log("poslo se i ovo je dobil:", data);
     } catch (error) {
       console.error("Error fetching last 7 messages:", error);
     }
   };
 
   useEffect(() => {
-    // Dohvati zadnjih 7 poruka kada se komponenta učita
-    fetchLast7Messages();
+    // Dohvati zadnjih 7 poruka kada se komponenta učita ili promeni grupa
+    if (selectedGroup?.id) {
+      fetchLast7Messages();
+    }
 
     const wsUrl = "ws://localhost:8080/chat"; // WebSocket URL
     const ws = createWebSocket(wsUrl, (message) => {
@@ -40,11 +50,12 @@ const Chat = ({ user }) => {
     return () => {
       ws.close(); // Zatvori WebSocket kada komponenta bude demontirana
     };
-  }, []);
+  }, [selectedGroup?.id]);
 
   // Skroluj na dno kada se poruke promene
   useEffect(() => {
     scrollToBottom();
+    console.log("grupica je:", selectedGroup?.id);
   }, [messages]);
 
   const sendMessage = () => {

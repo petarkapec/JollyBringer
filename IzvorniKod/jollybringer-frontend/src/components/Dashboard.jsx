@@ -99,7 +99,7 @@ const Dashboard = () => {
           <Activities selectedGroup={selectedGroup} role={role} />
         </div>
         <div className={'w-1/2 m-4'}>
-           <Chat user={user}/>
+           <Chat user={user} selectedGroup={selectedGroup}/>
         </div>
       </div>
     </div>
