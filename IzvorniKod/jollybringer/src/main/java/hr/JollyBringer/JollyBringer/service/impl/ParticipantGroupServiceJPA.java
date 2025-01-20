@@ -5,6 +5,7 @@ import hr.JollyBringer.JollyBringer.domain.Activity;
 import hr.JollyBringer.JollyBringer.domain.ChatMessage;
 import hr.JollyBringer.JollyBringer.domain.Participant;
 import hr.JollyBringer.JollyBringer.domain.ParticipantGroup;
+import hr.JollyBringer.JollyBringer.domain.Role;
 import hr.JollyBringer.JollyBringer.service.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -39,7 +40,6 @@ public class ParticipantGroupServiceJPA implements ParticipantGroupService
         this.participantGroupRepo = participantGroupRepo;
         this.feedbackService = feedbackService;
         this.activityService = activityService;
-
     }
 
 
@@ -126,10 +126,12 @@ public class ParticipantGroupServiceJPA implements ParticipantGroupService
         ParticipantGroup group = fetch(groupId);
         Set<Participant> members = group.getMembers();
         boolean removed = false;
+
         if (members != null && !members.isEmpty()) {
             members.clear();
             removed = true;
         }
+
         if (removed) {
             participantGroupRepo.save(group);
         }
@@ -139,6 +141,11 @@ public class ParticipantGroupServiceJPA implements ParticipantGroupService
     @Override
     public Optional<ParticipantGroup> findByMember(Participant president) {
         return participantGroupRepo.findByMember(president);
+    }
+
+    @Override
+    public List<ParticipantGroup> findByPresident(Participant president) {
+        return participantGroupRepo.findByPresident(president);
     }
 
     @Override
@@ -173,9 +180,11 @@ public class ParticipantGroupServiceJPA implements ParticipantGroupService
     public void deleteGroup(Long id) {
 
         List<Activity> activities = activityService.findByGroupId(id);
-        for (Activity activity : activities) {
-            feedbackService.deleteRelatedFeedbacks(activity.getId());
-            activityService.deleteActivity(activity.getId());
+        if(activities.size() > 0) {
+            for (Activity activity : activities) {
+                feedbackService.deleteRelatedFeedbacks(activity.getId());
+                activityService.deleteActivity(activity.getId());
+            }
         }
         removeMember(id);
         participantGroupRepo.deleteById(id);
@@ -197,4 +206,6 @@ public class ParticipantGroupServiceJPA implements ParticipantGroupService
 
         }
     }
+
+
 }
