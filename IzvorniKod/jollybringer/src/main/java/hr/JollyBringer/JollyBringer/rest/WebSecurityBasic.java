@@ -5,6 +5,8 @@ import hr.JollyBringer.JollyBringer.domain.Role;
 import hr.JollyBringer.JollyBringer.service.EntityMissingException;
 import hr.JollyBringer.JollyBringer.service.ParticipantService;
 import hr.JollyBringer.JollyBringer.service.RoleService;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +31,7 @@ import org.springframework.security.oauth2.core.user.OAuth2UserAuthority;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
@@ -51,12 +54,14 @@ public class WebSecurityBasic {
 
     private final ParticipantService participantService;
     private final RoleService roleService;
+    private final JwtTokenUtil jwtTokenUtil;
 
 
 
-    public WebSecurityBasic(ParticipantService participantService, RoleService roleService) {
+    public WebSecurityBasic(ParticipantService participantService, RoleService roleService,JwtTokenUtil jwtTokenUtil) {
         this.participantService = participantService;
         this.roleService = roleService;
+        this.jwtTokenUtil = jwtTokenUtil;
 
 
 
@@ -66,27 +71,24 @@ public class WebSecurityBasic {
     @Bean
     @Profile("oauth-security")
     public SecurityFilterChain oauthFilterChain(HttpSecurity http) throws Exception {
+        JwtTokenProvider tokenProvider = new JwtTokenProvider();
         http
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of(frontendUrl, "https://jollybringer-frontend-latest-fdv9.onrender.com"));
+                    config.setAllowedOrigins(List.of(frontendUrl));
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowCredentials(true);
-                    config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type","Upgrade", "Connection"));
+                    config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
                     return config;
                 }))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/check-auth").permitAll();
-                    auth.requestMatchers("/chat").permitAll();
-                    auth.requestMatchers("/chat/help").permitAll();//Todo mozda tu da radi deploy treba permitAll
-                    auth.requestMatchers("/chat/**").permitAll();
-                    auth.requestMatchers("/ai/generate").permitAll();
-                    auth.requestMatchers("/poruke/last7").permitAll();
+                    auth.requestMatchers("/check-auth").permitAll(); //Todo mozda tu da radi deploy treba permitAll
                     auth.anyRequest().authenticated();
                 })
+                .addFilterBefore(new JwtAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login(oauth2 -> oauth2
-                        .successHandler(this::oauth2AuthenticationSuccessHandler)
+                                .successHandler(this::oauth2AuthenticationSuccessHandler)
                         //.userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService()))
                 )
                 .logout(logout -> logout
@@ -108,7 +110,7 @@ public class WebSecurityBasic {
         return new CustomOAuth2UserService(participantService);
     }*/
     private void oauth2AuthenticationSuccessHandler(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {// Extract the OAuth2User details
-       OAuth2User oauthUser = (OAuth2User) authentication.getPrincipal();
+        OAuth2User oauthUser = (OAuth2User) authentication.getPrincipal();
         if (authentication==null){
             System.out.println("Authentication is null");
         }
@@ -128,13 +130,25 @@ public class WebSecurityBasic {
             participantService.createParticipant(new Participant(name, email, roleService.findByName("Participant").get()));
         }
 
-        System.out.println("Redirecting");
-        httpServletResponse.sendRedirect(frontendUrl + "/dashboard");
+        String token = jwtTokenUtil.generateToken(email, 60000);
+
+        // Preusmjeravanje na frontend s tokenom
+        String redirectUrl = frontendUrl + "/?token=" + token;
+        httpServletResponse.sendRedirect(redirectUrl);
     }
 
 
 
 
+    @Bean
+    @Profile({ "basic-security", "form-security", "oauth-security" })
+    @Order(Ordered.HIGHEST_PRECEDENCE)
+    public SecurityFilterChain h2ConsoleSecurityFilterChain(HttpSecurity http) throws Exception {
+        http.securityMatcher(PathRequest.toH2Console());
+        http.csrf(AbstractHttpConfigurer::disable);
+        http.headers((headers) -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
+        return http.build();
+    }
 
 
     /*

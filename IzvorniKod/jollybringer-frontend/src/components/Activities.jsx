@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import ActivityCard from "./ActivityCard.jsx";
 import CreateActivityModal from "./CreateActivityModal.jsx";
 import ActivityDetailModal from "./ActivityDetailModal.jsx";
 import useAuth from "../hooks/useAuth.js";
+import API from './api.js';  // Import the API class
 
 const Activities = ({ selectedGroup, role }) => {
   const [activities, setActivities] = useState([]);
@@ -14,9 +14,7 @@ const Activities = ({ selectedGroup, role }) => {
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
-
-  useAuth()
+  useAuth();
 
   useEffect(() => {
     if (selectedGroup?.id) {
@@ -28,10 +26,11 @@ const Activities = ({ selectedGroup, role }) => {
     }
   }, [selectedGroup?.id]);
 
+  // Fetch activities using the API class
   const fetchActivities = async () => {
     try {
-       const response = await axios.get(`${backendUrl}/groups/${selectedGroup.id}/activities`, {withCredentials: true});
-       setActivities(response.data);
+      const data = await API.get(`/groups/${selectedGroup.id}/activities`);  // Using API class
+      setActivities(data);
     } catch (error) {
       toast.error('Failed to fetch activities');
     } finally {
@@ -39,22 +38,30 @@ const Activities = ({ selectedGroup, role }) => {
     }
   };
 
+  // Handle activity click and open details
   const handleActivityClick = (activity) => {
     setSelectedActivity(activity);
     setShowDetailModal(true);
   };
 
+  // Delete activity using the API class
   const handleActivityDeleted = async (activityId) => {
-    await axios.delete(`${backendUrl}/activities/${activityId}`, { withCredentials: true });
-    setActivities((prevActivities) => prevActivities.filter(activity => activity.id !== activityId));
+    try {
+      await API.delete(`/activities/${activityId}`);  // Using API class
+      setActivities((prevActivities) => prevActivities.filter(activity => activity.id !== activityId));
+    } catch (error) {
+      toast.error('Failed to delete activity');
+    }
   };
 
+  // Create activity with AI
   const handleCreateWithAI = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/ai/create-activity/${selectedGroup.id}`, { withCredentials: true });
-      const newActivity = response.data;
-      setActivities((prevActivities) => [...prevActivities, newActivity]);
-      toast.success('Activity created with AI successfully');
+      const data = await API.get(`/ai/create-activity/${selectedGroup.id}`);  // Using API class
+      const createdActivity = data;
+      const createdDate = new Date(createdActivity.date).getDate();
+      toast.success(`Activity created with AI successfully on day ${createdDate}`);
+      fetchActivities(); // Refresh activities after creating with AI
     } catch (error) {
       toast.error('Failed to create activity with AI');
     }
@@ -105,7 +112,7 @@ const Activities = ({ selectedGroup, role }) => {
           <ActivityCard
             key={day}
             day={day}
-            activity={activities.find(a => 
+            activity={activities.find(a =>
               new Date(a.date).getDate() === day &&
               new Date(a.date).getMonth() === 11
             )}

@@ -26,6 +26,8 @@ public class ChatMessage {
     @Column(nullable = false)
     private String timestamp;
 
+
+
     // Constructors
     public ChatMessage() {}
 

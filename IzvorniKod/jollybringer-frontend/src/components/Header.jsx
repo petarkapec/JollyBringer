@@ -3,10 +3,10 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CountdownTimer from "./CountdownTimer.jsx";
 import { Menu } from "lucide-react";
-import axios from "axios";
 import useAuth from "../hooks/useAuth.js";
 import CreateGroupModal from "./CreateGroupModal.jsx";
 import RoleModal from "./RoleModal.jsx";
+import API from "./api.js";  // Importing the API class
 
 const SELECTED_GROUP_KEY = 'selectedGroup';
 
@@ -18,7 +18,6 @@ const Header = ({ onGroupSelect }) => {
   const [showGroupModal, setShowGroupModal] = useState(false);
   const [userGroups, setUserGroups] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState();
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -38,16 +37,23 @@ const Header = ({ onGroupSelect }) => {
     };
   }, [menuRef]);
 
-
   const fetchUserGroups = async () => {
     try {
-      const response = await axios.get(`${backendUrl}/groups`, { withCredentials: true });
-      const groups = response.data;
+      const response = await API.get('/groups');  // Replaced axios.get with API.get
+      const groups = response;
       const userGroups = groups.filter(group => group.members.some(member => member.id === user.id));
       setUserGroups(userGroups);
+
+      const storedGroup = JSON.parse(localStorage.getItem(SELECTED_GROUP_KEY));
+      if (storedGroup && !userGroups.some(group => group.id === storedGroup.id)) {
+        localStorage.removeItem(SELECTED_GROUP_KEY);
+        setSelectedGroup(null);
+        onGroupSelect(null);
+      }
     } catch (error) {
+      console.error('Error fetching user groups:', error);
     }
-  }
+  };
 
   useEffect(() => {
     fetchUserGroups();
@@ -80,10 +86,10 @@ const Header = ({ onGroupSelect }) => {
 
   const handleApplyForPresident = async () => {
     try {
-      await axios.post(`${backendUrl}/apply`, {
+      await API.post('/apply', {  // Replaced axios.post with API.post
         user_id: user.id,
         applied: true
-      }, { withCredentials: true });
+      });
       setShowRoleModal(false);
       toast.success('Application submitted successfully!');
     } catch (error) {

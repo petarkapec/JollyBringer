@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import hr.JollyBringer.JollyBringer.domain.ChatMessage;
 import hr.JollyBringer.JollyBringer.domain.Participant;
 import hr.JollyBringer.JollyBringer.service.ChatMessageService;
+import hr.JollyBringer.JollyBringer.service.ParticipantGroupService;
 import hr.JollyBringer.JollyBringer.service.ParticipantService;
 import hr.JollyBringer.JollyBringer.service.impl.ChatMessageServiceJPA;
 import hr.JollyBringer.JollyBringer.service.impl.ParticipantServiceJpa;
@@ -26,6 +27,8 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -37,6 +40,9 @@ public class WebSocketConfig implements WebSocketConfigurer {
     private ChatMessageService chatMessageService;
     @Autowired
     private ParticipantService participantServiceJpa;
+
+    @Autowired
+    private ParticipantGroupService participantGroupServiceJpa;
 
     private final CopyOnWriteArrayList<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
 
@@ -90,6 +96,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
                 // Ako Participant postoji, nastavi s obradom poruke
                 Participant participant = optionalParticipant.get();  // Dohvati Participant iz Optional-a
+
                 String inputTimestamp = incomingMessage.getTimestamp();
 
                 // Parse the input timestamp as an OffsetDateTime
@@ -111,11 +118,28 @@ public class WebSocketConfig implements WebSocketConfigurer {
                 ChatMessage savedMessage = new ChatMessage(participant, incomingMessage.getContent(), formattedTimestamp);
 
 
+
                 // Spremi poruku u bazu
                 chatMessageService.saveMessage(savedMessage);
 
+                //povezi poruku sa grupom
+                participantGroupServiceJpa.addMessageToGroup(savedMessage);
+
+                String username = participant.getUsername();
+                String kontent = incomingMessage.getContent();
+                String tajmstemp = formattedTimestamp;
+
+                Map<String, String> messageData = new HashMap<>();
+                messageData.put("username", username);
+                messageData.put("content", kontent);
+                messageData.put("timestamp", tajmstemp);
+                messageData.put("group", String.valueOf(participantGroupServiceJpa.findByMember(participant).get().getId()));
+
+                // Pretvaranje mape u JSON
+
+
                 // Emituj poruku svim klijentima
-                TextMessage outgoingMessage = new TextMessage(objectMapper.writeValueAsString(incomingMessage));
+                TextMessage outgoingMessage = new TextMessage(objectMapper.writeValueAsString(messageData));
                 for (WebSocketSession clientSession : sessions) {
                     if (clientSession.isOpen()) {
                         clientSession.sendMessage(outgoingMessage);

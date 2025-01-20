@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import '../styles/Modal.css';
 import useAuth from '../hooks/useAuth';
+import API from '../api';  // Importing the API class
 
 const Modal = ({ isVisible, onClose, role, updateGroups, onGroupCreated }) => {
   const { user } = useAuth();
@@ -14,8 +14,8 @@ const Modal = ({ isVisible, onClose, role, updateGroups, onGroupCreated }) => {
     if (role !== 'Participant') {
       const fetchUsers = async () => {
         try {
-          const response = await axios.get(`${backendUrl}/participants/only`, { withCredentials: true });
-          setAllUsers(response.data);
+          const response = await API.get(`/participants/only`);  // Replaced axios.get with API.get
+          setAllUsers(response);
         } catch (error) {
           console.error('Error fetching users:', error);
         }
@@ -26,11 +26,11 @@ const Modal = ({ isVisible, onClose, role, updateGroups, onGroupCreated }) => {
 
   const handleCreateGroup = async () => {
     try {
-      const response = await axios.post(`${backendUrl}/groups`, {
+      const response = await API.post(`/groups`, {  // Replaced axios.post with API.post
         name: newGroupName,
         users: selectedUsers
-      }, { withCredentials: true });
-      const newGroup = response.data;
+      });
+      const newGroup = response;
       onClose();
       updateGroups(); // Update the groups list
       onGroupCreated(newGroup); // Set the newly created group as the selected group
@@ -49,10 +49,10 @@ const Modal = ({ isVisible, onClose, role, updateGroups, onGroupCreated }) => {
 
   const handleApplyForPresident = async () => {
     try {
-      await axios.post(`${backendUrl}/apply`, {
+      await API.post(`/apply`, {  // Replaced axios.post with API.post
         user_id: user.id,
         applied: true
-      }, { withCredentials: true });
+      });
       onClose();
     } catch (error) {
       console.log('You have already applied for the role of Christmas president.');

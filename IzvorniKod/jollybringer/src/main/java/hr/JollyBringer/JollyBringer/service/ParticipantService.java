@@ -2,9 +2,11 @@ package hr.JollyBringer.JollyBringer.service;
 
 import hr.JollyBringer.JollyBringer.domain.Participant;
 import hr.JollyBringer.JollyBringer.domain.Participant;
+import hr.JollyBringer.JollyBringer.domain.ParticipantGroup;
 import hr.JollyBringer.JollyBringer.service.EntityMissingException;
 import hr.JollyBringer.JollyBringer.service.RequestDeniedException;
 import hr.JollyBringer.JollyBringer.service.ParticipantService;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -79,4 +81,5 @@ public interface ParticipantService {
 
 
     List<Participant> listAllWithRole(String participant);
+
 }

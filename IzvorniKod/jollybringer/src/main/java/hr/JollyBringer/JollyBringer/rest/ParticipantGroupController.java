@@ -60,7 +60,7 @@ public class ParticipantGroupController {
     @PostMapping("/{groupId}/activities")
     public ResponseEntity<List<Activity>> createActivitiesByGroupId(@RequestBody ActivityDTO dto) {
         System.out.println(dto);
-        Activity activity = new Activity(dto.getActivity_name(), dto.getDescription(), dto.getDate(), dto.getActivity_status(), dto.getCreated_by(), participantGroupService.fetch(dto.getGroup_id()));
+        Activity activity = new Activity(dto.getActivity_name(), dto.getDescription(), dto.getDate(), dto.getActivity_status(), participantGroupService.fetch(dto.getGroup_id()), dto.getCreated_by());
         System.out.println("creating activity");
         activityService.createActivity(activity);
         return ResponseEntity.created(URI.create("/groups/" + dto.getGroup_id() + "/activities/" +  activity.getId())).body(Collections.singletonList(activity));
@@ -73,6 +73,11 @@ public class ParticipantGroupController {
         ParticipantGroup saved = participantGroupService.createGroup(dto.getName(), u.getAttribute("email"));
         if (dto.getUsers() != null) participantGroupService.addMembers(saved.getId(), dto.getUsers() );
         return ResponseEntity.created(URI.create("/groups/" + saved.getId())).body(saved);
+    }
+
+    @DeleteMapping("/{groupId}")
+    public void deleteGroup(@PathVariable("groupId") Long groupId) {
+         participantGroupService.deleteGroup(groupId);
     }
 
     @GetMapping("/{gid}/members") //možda samo admin?

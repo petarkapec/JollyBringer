@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { toast } from 'react-toastify';
-import useAuth from '../hooks/useAuth.js';
+import useAuth from '../hooks/useAuth';
+import API from './api.js'; // Import the API class
 
 const CreateActivityModal = ({ isOpen, onClose, groupId, onActivityCreated }) => {
   const { user } = useAuth();
@@ -9,7 +9,7 @@ const CreateActivityModal = ({ isOpen, onClose, groupId, onActivityCreated }) =>
     name: '',
     description: '',
     day: 1,
-    status: 'InProgress'
+    status: 'InProgress',
   });
 
   if (!isOpen) return null;
@@ -19,7 +19,6 @@ const CreateActivityModal = ({ isOpen, onClose, groupId, onActivityCreated }) =>
 
     const currentYear = new Date().getFullYear();
     const date = new Date(currentYear, 11, formData.day); // December of the current year
-    const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
     const newActivity = {
       activity_name: formData.name,
@@ -27,11 +26,11 @@ const CreateActivityModal = ({ isOpen, onClose, groupId, onActivityCreated }) =>
       date: date.toISOString(),
       activity_status: formData.status,
       group_id: groupId,
-      created_by: user.username
+      created_by: user.username,
     };
 
     try {
-      await axios.post(`${backendUrl}/groups/${groupId}/activities`, newActivity, { withCredentials: true });
+      await API.post(`/groups/${groupId}/activities`, newActivity); // Using API.post()
       toast.success('Activity created successfully');
       setFormData({ name: '', day: 1, description: '', status: 'InProgress' });
       onActivityCreated();
@@ -74,8 +73,10 @@ const CreateActivityModal = ({ isOpen, onClose, groupId, onActivityCreated }) =>
               className="w-full p-2 rounded bg-gray-700 text-white"
               required
             >
-              {Array.from({ length: 25 }, (_, i) => i + 1).map(day => (
-                <option key={day} value={day}>{day}</option>
+              {Array.from({ length: 25 }, (_, i) => i + 1).map((day) => (
+                <option key={day} value={day}>
+                  {day}
+                </option>
               ))}
             </select>
           </div>

@@ -1,5 +1,3 @@
-
-
 export const createWebSocket = (url, onMessage) => {
   const socket = new WebSocket(url);
 
