@@ -133,9 +133,10 @@ public class WebSocketConfig implements WebSocketConfigurer {
                 messageData.put("username", username);
                 messageData.put("content", kontent);
                 messageData.put("timestamp", tajmstemp);
+                messageData.put("group", String.valueOf(participantGroupServiceJpa.findByMember(participant).get().getId()));
 
                 // Pretvaranje mape u JSON
-                
+
 
                 // Emituj poruku svim klijentima
                 TextMessage outgoingMessage = new TextMessage(objectMapper.writeValueAsString(messageData));

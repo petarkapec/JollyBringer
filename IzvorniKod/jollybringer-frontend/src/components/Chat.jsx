@@ -28,7 +28,6 @@ const Chat = ({ user, selectedGroup }) => {
       });
       const data = await response.json();
       setMessages(data); // Postavi zadnjih 7 poruka
-      console.log("poslo se i ovo je dobil:", data);
     } catch (error) {
       console.error("Error fetching last 7 messages:", error);
     }
@@ -42,7 +41,12 @@ const Chat = ({ user, selectedGroup }) => {
 
     const wsUrl = "ws://localhost:8080/chat"; // WebSocket URL
     const ws = createWebSocket(wsUrl, (message) => {
-      setMessages((prevMessages) => [...prevMessages, message]); // Dodaj novu poruku
+      // Provjerite ako je group u poruci isti kao selectedGroup?.id
+      console.log(message.group, selectedGroup);
+      if (String(message.group) === String(selectedGroup?.id)) {
+        setMessages((prevMessages) => [...prevMessages, message]); // Dodaj novu poruku u poruke
+      }
+      
     });
 
     setSocket(ws);
@@ -63,7 +67,7 @@ const Chat = ({ user, selectedGroup }) => {
       let message = {
         username: user.email,
         content: newMessage,
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       };
       socket.send(JSON.stringify(message)); // Pošaljite poruku
       message.username = user.username; // Promeni username za prikaz
@@ -88,6 +92,7 @@ const Chat = ({ user, selectedGroup }) => {
               <em className="timestamp">({new Date(msg.timestamp).toLocaleString()})</em>
             </div>
           ))}
+
         {/* Ref za kraj liste poruka */}
         <div ref={messagesEndRef} />
       </div>
