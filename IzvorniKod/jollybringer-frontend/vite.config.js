@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
-import { NodePolyfills } from 'vite-plugin-node-polyfills';
+import NodePolyfills from 'vite-plugin-node-polyfills';
 
 export default defineConfig({
   plugins: [
