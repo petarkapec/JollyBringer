@@ -1,35 +1,43 @@
-// src/hooks/useAuth.js
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const useAuth = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [role, setRole] = useState('');
+  const [role, setRole] = useState(null);
   const [groups, setGroups] = useState([]);
   const [user, setUser] = useState(null);
-  const User = user;
 
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/check-auth`, { withCredentials: true });
-        setIsAuthenticated(response.data.isAuthenticated);
-        setRole(response.data.role);
-        setGroups(response.data.groups);
-        setUser({
-          id: response.data.user_id,
-          username: response.data.username,
-          email: response.data.email,
-        });
-      } catch (error) {
-        setIsAuthenticated(false);
-      } finally {
-        setLoading(false);
-      }
-    };
+    const token = localStorage.getItem('authToken');
+    console.log("Token:", token);
 
-    checkAuth();
+    if (token) {
+      axios
+        .get(`${import.meta.env.VITE_BACKEND_URL}/check-auth`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => {
+          setIsAuthenticated(true);
+          setRole(response.data.role); 
+          setGroups(response.data.groups); // Postavi grupe
+          setUser({
+            id: response.data.user_id,
+            username: response.data.username,
+            email: response.data.email,
+          }); // Postavi korisnika
+        })
+        .catch((error) => {
+          console.error('Error fetching user data:', error);
+          setIsAuthenticated(false);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      setIsAuthenticated(false);
+      setLoading(false);
+    }
   }, []);
 
   return { isAuthenticated, loading, role, groups, user };
