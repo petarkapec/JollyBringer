@@ -27,6 +27,8 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -94,6 +96,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
                 // Ako Participant postoji, nastavi s obradom poruke
                 Participant participant = optionalParticipant.get();  // Dohvati Participant iz Optional-a
+
                 String inputTimestamp = incomingMessage.getTimestamp();
 
                 // Parse the input timestamp as an OffsetDateTime
@@ -122,8 +125,20 @@ public class WebSocketConfig implements WebSocketConfigurer {
                 //povezi poruku sa grupom
                 participantGroupServiceJpa.addMessageToGroup(savedMessage);
 
+                String username = participant.getUsername();
+                String kontent = incomingMessage.getContent();
+                String tajmstemp = formattedTimestamp;
+
+                Map<String, String> messageData = new HashMap<>();
+                messageData.put("username", username);
+                messageData.put("content", kontent);
+                messageData.put("timestamp", tajmstemp);
+
+                // Pretvaranje mape u JSON
+                
+
                 // Emituj poruku svim klijentima
-                TextMessage outgoingMessage = new TextMessage(objectMapper.writeValueAsString(incomingMessage));
+                TextMessage outgoingMessage = new TextMessage(objectMapper.writeValueAsString(messageData));
                 for (WebSocketSession clientSession : sessions) {
                     if (clientSession.isOpen()) {
                         clientSession.sendMessage(outgoingMessage);

@@ -67,7 +67,7 @@ const Chat = ({ user, selectedGroup }) => {
       };
       socket.send(JSON.stringify(message)); // Pošaljite poruku
       message.username = user.username; // Promeni username za prikaz
-      setMessages((prevMessages) => [...prevMessages, message]); // Dodaj poruku u listu
+      
       setNewMessage(""); // Očisti input
     } else {
       console.warn("WebSocket is not connected");

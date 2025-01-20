@@ -84,7 +84,7 @@ public class WebSecurityBasic {
                     auth.requestMatchers("/ai/create-activity/").permitAll();
                     auth.requestMatchers("/ai/generate/").permitAll();
                     auth.requestMatchers("/poruke/last7").permitAll();
-                    auth.anyRequest().authenticated();
+                    auth.anyRequest().permitAll();
                 })
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler(this::oauth2AuthenticationSuccessHandler)
