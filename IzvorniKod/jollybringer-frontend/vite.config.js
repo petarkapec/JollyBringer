@@ -1,19 +1,17 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
-import NodePolyfills from 'vite-plugin-node-polyfills';
+import { NodePolyfills } from 'vite-plugin-node-polyfills';
 
 export default defineConfig({
   plugins: [
     react(),
     NodePolyfills({
-      // Omogućava polyfill za "crypto" i ostale Node.js module.
-      crypto: true,
+      crypto: true, // Omogućite polyfill za "crypto"
     }),
   ],
   resolve: {
     alias: {
-      // Koristi `crypto-browserify` kao polyfill za "crypto".
-      crypto: 'crypto-browserify',
+      crypto: 'crypto-browserify', // Polyfill za "crypto"
     },
   },
 });
