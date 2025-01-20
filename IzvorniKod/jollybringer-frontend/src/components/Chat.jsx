@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { createWebSocket } from "./websocket";
 import "../styles/Chat.css";
+import API from './api.js'; // Import the API class
 
 const Chat = ({ user, selectedGroup }) => {
   const [messages, setMessages] = useState([]);
@@ -21,15 +22,12 @@ const Chat = ({ user, selectedGroup }) => {
       console.warn("Group ID is not available");
       return;
     }
-
+  
     try {
-      const response = await fetch(`http://localhost:8080/poruke/${selectedGroup?.id}`, {
-        withCredentials: true,
-      });
-      const data = await response.json();
+      const data = await API.get(`/poruke/${selectedGroup.id}`);
       setMessages(data); // Postavi zadnjih 7 poruka
     } catch (error) {
-      console.error("Error fetching last 7 messages:", error);
+      console.error("Error fetching last 7 messages:", error.message);
     }
   };
 

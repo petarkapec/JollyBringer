@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import Header from "./Header.jsx";
+import API from './api.js';  // Import the API class
 
 const AdminDashboard = () => {
   const [applications, setApplications] = useState([]);
@@ -12,12 +12,12 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchAdminData = async () => {
       try {
-        const groupsResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/groups`, { withCredentials: true });
-        const usersResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/participants`, { withCredentials: true });
-        const applicationsResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/applications`, { withCredentials: true });
-        setGroups(groupsResponse.data);
-        setUsers(usersResponse.data);
-        setApplications(applicationsResponse.data);
+        const groupsResponse = await API.get('/groups');  // Using API class
+        const usersResponse = await API.get('/participants');  // Using API class
+        const applicationsResponse = await API.get('/applications');  // Using API class
+        setGroups(groupsResponse);
+        setUsers(usersResponse);
+        setApplications(applicationsResponse);
       } catch (error) {
         console.error('Error fetching admin data:', error);
       } finally {
@@ -30,10 +30,10 @@ const AdminDashboard = () => {
 
   const handleApproveApplication = async (userId) => {
     try {
-      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/approve`, {
+      await API.post('/approve', {
         user_id: userId,
         applied: true
-      }, { withCredentials: true });
+      });  // Using API class
       setApplications(applications.filter(application => application.user.id !== userId));
       toast.success('Application approved');
     } catch (error) {
@@ -44,7 +44,7 @@ const AdminDashboard = () => {
 
   const handleDeleteGroup = async (groupId) => {
     try {
-      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/groups/${groupId}`, { withCredentials: true });
+      await API.delete(`/groups/${groupId}`);  // Using API class
       setGroups(groups.filter(group => group.id !== groupId));
       toast.success('Group deleted successfully');
     } catch (error) {
@@ -55,7 +55,7 @@ const AdminDashboard = () => {
 
   const handleDeleteUser = async (userId) => {
     try {
-      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/participants/${userId}`, { withCredentials: true });
+      await API.delete(`/participants/${userId}`);  // Using API class
       setUsers(users.filter(user => user.id !== userId));
       toast.success('User deleted successfully');
     } catch (error) {

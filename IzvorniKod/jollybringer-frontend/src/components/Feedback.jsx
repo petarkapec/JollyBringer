@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { ThumbsUp } from 'lucide-react';
 import useAuth from '../hooks/useAuth.js';
+import API from './api.js'; // Import the API class
 
 const Feedback = ({ activityId }) => {
   const { user } = useAuth();
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
   const [isLiked, setIsLiked] = useState('Dislike');
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const response = await axios.get(`${backendUrl}/activities/${activityId}/feedbacks`, { withCredentials: true });
+        const response = await API.get(`/activities/${activityId}/feedbacks`); // Using API.get() instead of axios.get()
         setComments(response.data);
       } catch (error) {
         toast.error('Failed to fetch comments');
@@ -27,12 +26,12 @@ const Feedback = ({ activityId }) => {
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${backendUrl}/activities/${activityId}/feedback`, {
+      const response = await API.post(`/activities/${activityId}/feedback`, { // Using API.post() instead of axios.post()
         activity_id: activityId,
         participant_id: user.id,
         comment: newComment,
         is_liked: isLiked
-      }, { withCredentials: true });
+      });
       setComments([...comments, response.data]);
       setNewComment('');
       setIsLiked('Dislike');

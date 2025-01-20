@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import axios from 'axios';
 import useAuth from '../hooks/useAuth.js';
+import API from './api.js'; // Import the API class
 
 export default function CreateGroupModal({ isOpen, onClose, onGroupCreated }) {
   const [name, setName] = useState('');
@@ -16,8 +16,8 @@ export default function CreateGroupModal({ isOpen, onClose, onGroupCreated }) {
       const fetchUsersAndGroups = async () => {
         try {
           const [usersResponse, groupsResponse] = await Promise.all([
-            axios.get(`${backendUrl}/participants/only`, { withCredentials: true }),
-            axios.get(`${backendUrl}/groups`, { withCredentials: true })
+            API.get('/participants/only'), // Using API.get() instead of axios.get()
+            API.get('/groups') // Using API.get() for fetching groups
           ]);
 
           const users = usersResponse.data;
@@ -38,10 +38,10 @@ export default function CreateGroupModal({ isOpen, onClose, onGroupCreated }) {
   const handleCreateGroup = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${backendUrl}/groups`, {
+      const response = await API.post('/groups', {
         name: name,
         users: selectedUsers
-      }, { withCredentials: true });
+      }); // Using API.post() instead of axios.post()
       const newGroup = response.data;
       onClose();
       onGroupCreated(newGroup); // Set the newly created group as the selected group
