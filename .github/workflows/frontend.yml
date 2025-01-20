@@ -20,7 +20,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'  # Koristi verziju Node.js koja je kompatibilna sa tvojim projektom
+          node-version: '20.18.0'  # Koristi verziju Node.js koja je kompatibilna sa tvojim projektom
 
       - name: Cache npm dependencies
         uses: actions/cache@v3
