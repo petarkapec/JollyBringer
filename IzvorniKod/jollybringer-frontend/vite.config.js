@@ -1,7 +1,15 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react-swc';
+import NodePolyfills from 'vite-plugin-node-polyfills';
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
-})
+  plugins: [
+    react(),
+    NodePolyfills({
+      // Omogućite podršku za `crypto` i druge Node.js module
+      crypto: true,
+      buffer: true,
+      process: true,
+    }),
+  ],
+});
