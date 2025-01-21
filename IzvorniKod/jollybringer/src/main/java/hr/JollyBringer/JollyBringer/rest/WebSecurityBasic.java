@@ -43,9 +43,11 @@ import java.util.*;
 
 
 import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 @EnableMethodSecurity(securedEnabled = true, prePostEnabled = false)
 public class WebSecurityBasic {
+
 
     @Value("${progi.frontend.url}")
     private String frontendUrl;
@@ -54,37 +56,46 @@ public class WebSecurityBasic {
     private final RoleService roleService;
     private final JwtTokenUtil jwtTokenUtil;
 
-    public WebSecurityBasic(ParticipantService participantService, RoleService roleService, JwtTokenUtil jwtTokenUtil) {
+
+
+    public WebSecurityBasic(ParticipantService participantService, RoleService roleService,JwtTokenUtil jwtTokenUtil) {
         this.participantService = participantService;
         this.roleService = roleService;
         this.jwtTokenUtil = jwtTokenUtil;
+
+
+
     }
+
 
     @Bean
     @Profile("oauth-security")
     public SecurityFilterChain oauthFilterChain(HttpSecurity http) throws Exception {
         JwtTokenProvider tokenProvider = new JwtTokenProvider();
-
         http
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
                     config.setAllowedOrigins(List.of(frontendUrl));
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    config.setAllowCredentials(true);
                     config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
-                    config.setExposedHeaders(List.of("Authorization")); // Expose headers if needed by the client
                     return config;
                 }))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/check-auth").permitAll();
-                    auth.requestMatchers("/oauth2/authorization/google").permitAll();
-                    auth.requestMatchers("/login").permitAll();// Public endpoint
-                    auth.anyRequest().authenticated(); // Require authentication for all other endpoints
+                    auth.requestMatchers("/check-auth").permitAll(); //Todo mozda tu da radi deploy treba permitAll
+                    auth.anyRequest().authenticated();
                 })
                 .addFilterBefore(new JwtAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login(oauth2 -> oauth2
+                                .successHandler(this::oauth2AuthenticationSuccessHandler)
+                        //.userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService()))
+                )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessHandler((request, response, authentication) -> response.setStatus(HttpServletResponse.SC_NO_CONTENT))
+                        .logoutSuccessHandler((request, response, authentication) -> {
+                            response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+                        })
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
                 )
@@ -93,14 +104,27 @@ public class WebSecurityBasic {
         return http.build();
     }
 
-    private void oauth2AuthenticationSuccessHandler(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {
+    /*
+    @Bean
+    public CustomOAuth2UserService customOAuth2UserService() {
+        return new CustomOAuth2UserService(participantService);
+    }*/
+    private void oauth2AuthenticationSuccessHandler(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {// Extract the OAuth2User details
         OAuth2User oauthUser = (OAuth2User) authentication.getPrincipal();
-
+        if (authentication==null){
+            System.out.println("Authentication is null");
+        }
+        else System.out.println("Authentication is NOT null");
+        // You can retrieve user information like this
         String email = oauthUser.getAttribute("email");
         String name = oauthUser.getAttribute("name");
 
-        if (participantService.findByEmail(email).isEmpty()) {
-            if (roleService.findByName("Participant").isEmpty()) {
+        // Save the user details to your database
+
+        //TODO roles need to be in database on startup
+        if(participantService.findByEmail(email).isEmpty()){
+
+            if(roleService.findByName("Participant").isEmpty()){
                 throw new EntityMissingException(Role.class, "Participant");
             }
             participantService.createParticipant(new Participant(name, email, roleService.findByName("Participant").get()));
@@ -108,8 +132,45 @@ public class WebSecurityBasic {
 
         String token = jwtTokenUtil.generateToken(email, 60000000);
 
-        // Redirect to the frontend with the token
+        // Preusmjeravanje na frontend s tokenom
         String redirectUrl = frontendUrl + "/?token=" + token;
         httpServletResponse.sendRedirect(redirectUrl);
     }
+
+
+
+
+
+
+
+    /*
+    @Bean
+    public GrantedAuthoritiesMapper authorityMapper() {
+        return (authorities) -> {
+            Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
+
+            authorities.forEach(authority -> {
+                if (authority instanceof OAuth2UserAuthority) {
+                    OAuth2UserAuthority oauth2UserAuthority = (OAuth2UserAuthority) authority;
+                    Map<String, Object> attributes = oauth2UserAuthority.getAttributes();
+
+                    String email = (String) attributes.get("email");
+                    Participant participant = participantService.findByEmail(email).orElse(null);
+
+                    if (participant != null) {
+                        String roleName = "ROLE_" + participant.getRole().getName().toUpperCase();
+                        mappedAuthorities.add(new SimpleGrantedAuthority(roleName));
+                    } else {
+                        mappedAuthorities.add(new SimpleGrantedAuthority("ROLE_PARTICIPANT"));
+
+                    }
+                }
+                else System.out.println("Authorities NOT mapped");
+            });
+
+            return mappedAuthorities;
+        };
+    }
+    */
+
 }
