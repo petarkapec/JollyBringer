@@ -2,15 +2,14 @@ package hr.JollyBringer.JollyBringer.service.impl;
 
 import hr.JollyBringer.JollyBringer.dao.ActivityRepository;
 import hr.JollyBringer.JollyBringer.domain.Activity;
-import hr.JollyBringer.JollyBringer.domain.Participant;
 import hr.JollyBringer.JollyBringer.service.ActivityService;
 import hr.JollyBringer.JollyBringer.service.EntityMissingException;
-import hr.JollyBringer.JollyBringer.service.FeedbackService;
 import hr.JollyBringer.JollyBringer.service.RequestDeniedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,6 +82,30 @@ public class ActivityServiceJPA implements ActivityService {
         Activity activity = fetch(activityId);
        activityRepository.delete(activity);
         return activity;
+    }
+
+    @Override
+    public List<Activity> findByGroupIdRegular(Long groupId) {
+        List<Activity> activities = activityRepository.findByGroupId(groupId);
+        List<Activity> activitiesRegular = new ArrayList<>();
+        for (Activity activity : activities) {
+            if (!activity.isInCalendar()) {
+                activitiesRegular.add(activity);
+            }
+        }
+        return activitiesRegular;
+    }
+
+    @Override
+    public List<Activity> findByGroupIdCalendar(Long groupId) {
+        List<Activity> activities = activityRepository.findByGroupId(groupId);
+        List<Activity> activitiesRegular = new ArrayList<>();
+        for (Activity activity : activities) {
+            if (activity.isInCalendar()) {
+                activitiesRegular.add(activity);
+            }
+        }
+        return activitiesRegular;
     }
 
     private void validate(Activity activity) {

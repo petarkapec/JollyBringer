@@ -52,15 +52,36 @@ public class ParticipantGroupController {
     }
 
     @GetMapping("/{groupId}/activities")
-    public ResponseEntity<List<Activity>> getActivitiesByGroupId(@PathVariable Long groupId) {
+    public ResponseEntity<List<Activity>> getActivitiesByGroupIdCalendar(@PathVariable Long groupId) {
+        List<Activity> activities = activityService.findByGroupIdCalendar(groupId);
+        return ResponseEntity.ok(activities);
+    }
+
+    @GetMapping("/{groupId}/activities/regular")
+    public ResponseEntity<List<Activity>> getActivitiesByGroupIdRegular(@PathVariable Long groupId) {
+        List<Activity> activities = activityService.findByGroupIdRegular(groupId);
+        return ResponseEntity.ok(activities);
+    }
+
+    @GetMapping("/{groupId}/activities/all")
+    public ResponseEntity<List<Activity>> getActivitiesByGroupIdAll(@PathVariable Long groupId) {
         List<Activity> activities = activityService.findByGroupId(groupId);
         return ResponseEntity.ok(activities);
     }
 
     @PostMapping("/{groupId}/activities")
-    public ResponseEntity<List<Activity>> createActivitiesByGroupId(@RequestBody ActivityDTO dto) {
+    public ResponseEntity<List<Activity>> createActivitiesByGroupIdCalendar(@RequestBody ActivityDTO dto) {
         System.out.println(dto);
         Activity activity = new Activity(dto.getActivity_name(), dto.getDescription(), dto.getDate(), dto.getActivity_status(), participantGroupService.fetch(dto.getGroup_id()), dto.getCreated_by(), true);
+        System.out.println("creating activity");
+        activityService.createActivity(activity);
+        return ResponseEntity.created(URI.create("/groups/" + dto.getGroup_id() + "/activities/" +  activity.getId())).body(Collections.singletonList(activity));
+    }
+
+    @PostMapping("/{groupId}/activities/regular")
+    public ResponseEntity<List<Activity>> createActivitiesByGroupIdRegular(@RequestBody ActivityDTO dto) {
+        System.out.println(dto);
+        Activity activity = new Activity(dto.getActivity_name(), dto.getDescription(), dto.getDate(), dto.getActivity_status(), participantGroupService.fetch(dto.getGroup_id()), dto.getCreated_by(), false);
         System.out.println("creating activity");
         activityService.createActivity(activity);
         return ResponseEntity.created(URI.create("/groups/" + dto.getGroup_id() + "/activities/" +  activity.getId())).body(Collections.singletonList(activity));
