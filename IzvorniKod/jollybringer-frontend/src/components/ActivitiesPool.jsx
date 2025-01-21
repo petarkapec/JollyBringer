@@ -44,7 +44,7 @@ const ActivitiesPool = ({ groupId, onActivityCreated }) => {
   };
 
   return (
-    <div className="p-4 bg-gray-800 rounded-lg">
+    <div className="p-4 bg-customGray rounded-lg">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold text-white">All Activities</h2>
         <button
@@ -56,7 +56,7 @@ const ActivitiesPool = ({ groupId, onActivityCreated }) => {
       </div>
       <ul className="space-y-2">
         {activities.map((activity) => (
-          <li key={activity.id} className="bg-gray-700 p-2 rounded text-white flex justify-between items-center">
+          <li key={activity.id} className="bg-customGrayLighter p-2 rounded text-white flex justify-between items-center">
             <div>
               <h3 className="font-semibold">{activity.activity_name}</h3>
               <p>{activity.description}</p>
