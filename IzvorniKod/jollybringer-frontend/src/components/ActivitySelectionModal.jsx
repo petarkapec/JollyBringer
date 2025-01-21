@@ -33,7 +33,7 @@ const ActivitySelectionModal = ({ isOpen, onClose, groupId, onSelectActivity }) 
               className="bg-gray-700 p-2 rounded text-white cursor-pointer"
               onClick={() => onSelectActivity(activity)}
             >
-              <h3 className="font-semibold">{activity.activity_name}</h3>
+              <h3 className="font-semibold">{activity.activityName}</h3>
               <p>{activity.description}</p>
             </li>
           ))}

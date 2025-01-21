@@ -55,7 +55,7 @@ const CreateActivityModal = ({ isOpen, onClose, groupId, onActivityCreated, pref
   const handleSelectActivity = (activity) => {
     setFormData({
       ...formData,
-      name: activity.activity_name,
+      name: activity.activityName,
       description: activity.description,
     });
     setIsSelectionModalOpen(false);

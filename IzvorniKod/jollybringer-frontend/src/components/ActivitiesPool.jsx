@@ -14,7 +14,7 @@ const ActivitiesPool = ({ groupId, onActivityCreated }) => {
 
   const fetchAllActivities = async () => {
     try {
-      const data = await API.get(`/activities/${groupId}/pool`);
+      const data = await API.get(`/groups/${groupId}/activities/regular`);
       setActivities(data);
     } catch (error) {
       toast.error('Failed to fetch activities');
@@ -24,15 +24,6 @@ const ActivitiesPool = ({ groupId, onActivityCreated }) => {
   useEffect(() => {
     if (groupId) {
       fetchAllActivities();
-    } else {
-      // Hardcoded activities for testing purposes
-      setActivities([
-        { id: 1, activity_name: 'Decorate the Christmas Tree', description: 'Decorate the Christmas tree with lights and ornaments.', date: '2023-01-01' },
-        { id: 2, activity_name: 'Bake Christmas Cookies', description: 'Bake delicious Christmas cookies.', date: '2023-02-14' },
-        { id: 3, activity_name: 'Write Letters to Santa', description: 'Write letters to Santa Claus.', date: '2023-03-25' },
-        { id: 4, activity_name: 'Watch a Christmas Movie', description: 'Watch a classic Christmas movie.', date: '2023-04-10' },
-        { id: 5, activity_name: 'Make a Gingerbread House', description: 'Build and decorate a gingerbread house.', date: '2023-05-05' },
-      ]);
     }
   }, [groupId]);
 
@@ -50,6 +41,14 @@ const ActivitiesPool = ({ groupId, onActivityCreated }) => {
   const handleActivityClick = (activity) => {
     setSelectedActivity(activity);
     setIsDetailModalOpen(true);
+  };
+
+  const handleActivityDeleted = async (activityId) => {
+    try {
+      await API.delete(`/activities/${activityId}`);  // Using API class
+      setActivities((prevActivities) => prevActivities.filter(activity => activity.id !== activityId));
+    } catch (error) {
+    }
   };
 
   return (
@@ -99,7 +98,7 @@ const ActivitiesPool = ({ groupId, onActivityCreated }) => {
           activity={selectedActivity}
           isOpen={isDetailModalOpen}
           onClose={() => setIsDetailModalOpen(false)}
-          onActivityDeleted={fetchAllActivities}
+          onActivityDeleted={handleActivityDeleted}
         />
       )}
     </div>
