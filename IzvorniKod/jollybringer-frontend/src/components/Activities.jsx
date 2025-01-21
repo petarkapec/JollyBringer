@@ -93,7 +93,7 @@ const Activities = ({ selectedGroup, role }) => {
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Christmas Activities</h2>
         <div className="flex gap-2 items-center">
-          {(role === 'President' || role === 'Admin') && location.pathname !== '/dashboard/activities' && (
+          {location.pathname !== '/dashboard/activities' && (
             <SquareArrowOutUpRight
               className="cursor-pointer text-white hover:text-gray-300 mr-3"
               onClick={() => navigate('/dashboard/activities', { state: { selectedGroupId: selectedGroup.id } })}

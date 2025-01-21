@@ -3,8 +3,10 @@ import API from './api.js';  // Import the API class
 import { toast } from 'react-toastify';
 import CreateActivityModal from './CreateActivityModal.jsx';
 import AddToPoolModal from './AddToPoolModal.jsx';
+import useAuth from '../hooks/useAuth.js'; // Import useAuth hook
 
 const ActivitiesPool = ({ groupId, onActivityCreated }) => {
+  const { role } = useAuth(); // Get the user's role
   const [activities, setActivities] = useState([]);
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -61,12 +63,14 @@ const ActivitiesPool = ({ groupId, onActivityCreated }) => {
               <h3 className="font-semibold">{activity.activity_name}</h3>
               <p>{activity.description}</p>
             </div>
-            <button
-              onClick={() => handleAddToCalendar(activity)}
-              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-            >
-              Add to Calendar
-            </button>
+            {(role === 'President' || role === 'Admin') && (
+              <button
+                onClick={() => handleAddToCalendar(activity)}
+                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+              >
+                Add to Calendar
+              </button>
+            )}
           </li>
         ))}
       </ul>
