@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { ThumbsUp } from 'lucide-react';
+import { ThumbsUp, ThumbsDown } from 'lucide-react'; // Import ThumbsDown icon
 import useAuth from '../hooks/useAuth.js';
 import API from './api.js'; // Import the API class
 
@@ -79,7 +79,11 @@ const Feedback = ({ activityId }) => {
             <p className="text-sm text-gray-300">{comment.comment}</p>
             <div className="flex items-center justify-between mt-2">
               <span className="text-xs text-gray-500">By: {comment.participant.username}</span>
-              {comment.isLiked === 'Like' && <ThumbsUp className="text-green-500" />}
+              {comment.isLiked === 'Like' ? (
+                <ThumbsUp className="text-green-500" />
+              ) : (
+                <ThumbsDown className="text-red-500" />
+              )}
             </div>
           </div>
         ))}
