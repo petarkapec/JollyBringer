@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import useAuth from '../hooks/useAuth';
 import API from './api.js'; // Import the API class
+import ActivitySelectionModal from './ActivitySelectionModal.jsx'; // Import the ActivitySelectionModal component
 
 const CreateActivityModal = ({ isOpen, onClose, groupId, onActivityCreated, prefillData }) => {
   const { user } = useAuth();
@@ -11,6 +12,7 @@ const CreateActivityModal = ({ isOpen, onClose, groupId, onActivityCreated, pref
     day: 1,
     status: 'InProgress',
   });
+  const [isSelectionModalOpen, setIsSelectionModalOpen] = useState(false);
 
   useEffect(() => {
     if (prefillData) {
@@ -50,6 +52,15 @@ const CreateActivityModal = ({ isOpen, onClose, groupId, onActivityCreated, pref
     }
   };
 
+  const handleSelectActivity = (activity) => {
+    setFormData({
+      ...formData,
+      name: activity.activity_name,
+      description: activity.description,
+    });
+    setIsSelectionModalOpen(false);
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-customGray rounded-lg p-6 max-w-md w-full mx-4">
@@ -74,6 +85,15 @@ const CreateActivityModal = ({ isOpen, onClose, groupId, onActivityCreated, pref
               rows="3"
               required
             />
+          </div>
+          <div className="mb-4">
+            <button
+              type="button"
+              onClick={() => setIsSelectionModalOpen(true)}
+              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+            >
+              Select from Existing Activities
+            </button>
           </div>
           <div className="mb-4">
             <label className="block text-white mb-2">Day</label>
@@ -119,6 +139,14 @@ const CreateActivityModal = ({ isOpen, onClose, groupId, onActivityCreated, pref
           </div>
         </form>
       </div>
+      {isSelectionModalOpen && (
+        <ActivitySelectionModal
+          isOpen={isSelectionModalOpen}
+          onClose={() => setIsSelectionModalOpen(false)}
+          groupId={groupId}
+          onSelectActivity={handleSelectActivity}
+        />
+      )}
     </div>
   );
 };
