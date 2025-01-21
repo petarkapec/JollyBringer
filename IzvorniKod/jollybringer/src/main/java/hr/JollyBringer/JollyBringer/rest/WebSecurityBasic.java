@@ -76,7 +76,9 @@ public class WebSecurityBasic {
                 }))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/check-auth").permitAll(); // Public endpoint
+                    auth.requestMatchers("/check-auth").permitAll();
+                    auth.requestMatchers("/oauth2/authorization/google").permitAll();
+                    auth.requestMatchers("/login").permitAll();// Public endpoint
                     auth.anyRequest().authenticated(); // Require authentication for all other endpoints
                 })
                 .addFilterBefore(new JwtAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
