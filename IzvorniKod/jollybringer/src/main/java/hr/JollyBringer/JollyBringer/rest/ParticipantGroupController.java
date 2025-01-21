@@ -60,7 +60,7 @@ public class ParticipantGroupController {
     @PostMapping("/{groupId}/activities")
     public ResponseEntity<List<Activity>> createActivitiesByGroupId(@RequestBody ActivityDTO dto) {
         System.out.println(dto);
-        Activity activity = new Activity(dto.getActivity_name(), dto.getDescription(), dto.getDate(), dto.getActivity_status(), participantGroupService.fetch(dto.getGroup_id()), dto.getCreated_by());
+        Activity activity = new Activity(dto.getActivity_name(), dto.getDescription(), dto.getDate(), dto.getActivity_status(), participantGroupService.fetch(dto.getGroup_id()), dto.getCreated_by(), true);
         System.out.println("creating activity");
         activityService.createActivity(activity);
         return ResponseEntity.created(URI.create("/groups/" + dto.getGroup_id() + "/activities/" +  activity.getId())).body(Collections.singletonList(activity));
