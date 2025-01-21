@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+import React, {useEffect, useState} from 'react';
+import {toast} from 'react-toastify';
 import ActivityCard from "./ActivityCard.jsx";
 import CreateActivityModal from "./CreateActivityModal.jsx";
 import ActivityDetailModal from "./ActivityDetailModal.jsx";
 import useAuth from "../hooks/useAuth.js";
-import API from './api.js';  // Import the API class
-import { SquareArrowOutUpRight } from 'lucide-react'; // Import the icon
-import { useLocation, useNavigate } from 'react-router-dom'; // Import useLocation and useNavigate
+import API from './api.js'; // Import the API class
+import {SquareArrowOutUpRight} from 'lucide-react'; // Import the icon
+import {useLocation, useNavigate} from 'react-router-dom'; // Import useLocation and useNavigate
 
 const Activities = ({ selectedGroup, role }) => {
   const [activities, setActivities] = useState([]);
@@ -61,8 +61,7 @@ const Activities = ({ selectedGroup, role }) => {
   // Create activity with AI
   const handleCreateWithAI = async () => {
     try {
-      const data = await API.get(`/ai/create-activity/${selectedGroup.id}`);  // Using API class
-      const createdActivity = data;
+      const createdActivity = await API.get(`/ai/create-activity/${selectedGroup.id}`);
       const createdDate = new Date(createdActivity.date).getDate();
       toast.success(`Activity created with AI successfully on day ${createdDate}`);
       fetchActivities(); // Refresh activities after creating with AI
@@ -91,7 +90,7 @@ const Activities = ({ selectedGroup, role }) => {
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">Christmas Activities</h2>
+        <h2 className="text-2xl font-bold text-white">Christmas Activities</h2>
         <div className="flex gap-2 items-center">
           {location.pathname !== '/dashboard/activities' && (
             <SquareArrowOutUpRight
