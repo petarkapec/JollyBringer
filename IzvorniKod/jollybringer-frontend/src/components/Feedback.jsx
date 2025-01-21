@@ -14,7 +14,7 @@ const Feedback = ({ activityId }) => {
     const fetchComments = async () => {
       try {
         const response = await API.get(`/activities/${activityId}/feedbacks`); // Using API.get() instead of axios.get()
-        setComments(response.data);
+        setComments(response);
       } catch (error) {
         toast.error('Failed to fetch comments');
       }
@@ -32,7 +32,7 @@ const Feedback = ({ activityId }) => {
         comment: newComment,
         is_liked: isLiked
       });
-      setComments([...comments, response.data]);
+      setComments([...comments, response]);
       setNewComment('');
       setIsLiked('Dislike');
       toast.success('Comment added successfully');
