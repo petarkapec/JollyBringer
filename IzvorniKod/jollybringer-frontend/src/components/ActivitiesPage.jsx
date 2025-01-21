@@ -3,12 +3,13 @@ import Header from './Header.jsx';
 import Activities from './Activities.jsx';
 import ActivitiesPool from './ActivitiesPool.jsx';
 import useAuth from '../hooks/useAuth.js';
-import { useLocation } from 'react-router-dom'; // Import useLocation
+import { useLocation } from 'react-router-dom';
 
 const ActivitiesPage = () => {
   const { role, user } = useAuth();
   const [selectedGroup, setSelectedGroup] = useState(null);
-  const location = useLocation(); // Get the current location
+  const location = useLocation();
+  const [activitiesKey, setActivitiesKey] = useState(0); // Key to force re-render
 
   useEffect(() => {
     if (location.state?.selectedGroupId) {
@@ -20,15 +21,19 @@ const ActivitiesPage = () => {
     setSelectedGroup(group);
   };
 
+  const handleActivityCreated = () => {
+    setActivitiesKey(prevKey => prevKey + 1);
+  };
+
   return (
     <div className="bg-black h-screen flex flex-col">
       <Header onGroupSelect={handleGroupSelect} />
       <div className="flex flex-grow">
         <div className="w-1/2 m-4">
-          <Activities selectedGroup={selectedGroup} role={role} />
+          <Activities key={activitiesKey} selectedGroup={selectedGroup} role={role} />
         </div>
         <div className="w-1/2 m-4">
-          <ActivitiesPool groupId={selectedGroup?.id} />
+          <ActivitiesPool groupId={selectedGroup?.id} onActivityCreated={handleActivityCreated} />
         </div>
       </div>
     </div>

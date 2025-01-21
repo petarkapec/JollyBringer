@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import useAuth from '../hooks/useAuth';
 import API from './api.js'; // Import the API class
 
-const CreateActivityModal = ({ isOpen, onClose, groupId, onActivityCreated }) => {
+const CreateActivityModal = ({ isOpen, onClose, groupId, onActivityCreated, prefillData }) => {
   const { user } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
@@ -11,6 +11,16 @@ const CreateActivityModal = ({ isOpen, onClose, groupId, onActivityCreated }) =>
     day: 1,
     status: 'InProgress',
   });
+
+  useEffect(() => {
+    if (prefillData) {
+      setFormData({
+        ...formData,
+        name: prefillData.activity_name,
+        description: prefillData.description,
+      });
+    }
+  }, [prefillData]);
 
   if (!isOpen) return null;
 
