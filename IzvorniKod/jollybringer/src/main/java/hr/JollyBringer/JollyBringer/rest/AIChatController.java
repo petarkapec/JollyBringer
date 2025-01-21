@@ -136,8 +136,9 @@ public class AIChatController {
             System.out.println("----------------");
             System.out.println(description);
             int currentYear = LocalDate.now().getYear();
-            int dayOfMonth = new Random().nextInt(25) + 1;
-            LocalDate randomDate = LocalDate.of(currentYear, 12, dayOfMonth);
+            int dayOfMonth = new Random().nextInt(21) + 1;
+            int month = new Random().nextInt(12) + 1;
+            LocalDate randomDate = LocalDate.of(currentYear, month, dayOfMonth);
             Activity activity = new Activity(topic, description, randomDate.toString(), "InProgress", participantGroupService.findById(groupId).get(), "AI AGENT", false);
             System.out.println(activity);
             activityService.createActivity(activity);
