@@ -22,7 +22,6 @@ export const createWebSocket = (url, onMessage) => {
 
   // Event: Error occurred
   socket.onerror = (error) => {
-    console.error("WebSocket error:", error);
   };
 
   return socket;

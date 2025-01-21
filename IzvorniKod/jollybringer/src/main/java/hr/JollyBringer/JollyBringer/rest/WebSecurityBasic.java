@@ -130,7 +130,7 @@ public class WebSecurityBasic {
             participantService.createParticipant(new Participant(name, email, roleService.findByName("Participant").get()));
         }
 
-        String token = jwtTokenUtil.generateToken(email, 60000);
+        String token = jwtTokenUtil.generateToken(email, 60000000);
 
         // Preusmjeravanje na frontend s tokenom
         String redirectUrl = frontendUrl + "/?token=" + token;

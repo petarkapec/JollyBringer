@@ -1,12 +1,12 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import React, {useEffect, useRef, useState} from 'react';
+import {toast, ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CountdownTimer from "./CountdownTimer.jsx";
-import { Menu } from "lucide-react";
+import {Menu} from "lucide-react";
 import useAuth from "../hooks/useAuth.js";
 import CreateGroupModal from "./CreateGroupModal.jsx";
 import RoleModal from "./RoleModal.jsx";
-import API from "./api.js";  // Importing the API class
+import API from "./api.js"; // Importing the API class
 
 const SELECTED_GROUP_KEY = 'selectedGroup';
 
@@ -38,9 +38,10 @@ const Header = ({ onGroupSelect }) => {
   }, [menuRef]);
 
   const fetchUserGroups = async () => {
+    if (!user) return; // Add this check to ensure user is defined
+
     try {
-      const response = await API.get('/groups');  // Replaced axios.get with API.get
-      const groups = response;
+      const groups = await API.get('/groups');
       const userGroups = groups.filter(group => group.members.some(member => member.id === user.id));
       setUserGroups(userGroups);
 

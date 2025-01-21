@@ -23,4 +23,8 @@ public interface ActivityService {
 
     Activity updateActivity(Activity activity);
     Activity deleteActivity(long activityId);
+
+    List<Activity> findByGroupIdRegular(Long groupId);
+
+    List<Activity> findByGroupIdCalendar(Long groupId);
 }

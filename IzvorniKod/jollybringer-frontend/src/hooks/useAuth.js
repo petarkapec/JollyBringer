@@ -30,6 +30,10 @@ const useAuth = () => {
         .catch((error) => {
           console.error('Error fetching user data:', error);
           setIsAuthenticated(false);
+          if (error.response && error.response.status === 401) {
+            localStorage.removeItem('authToken');
+            window.location.href = '/';
+          }
         })
         .finally(() => {
           setLoading(false);
@@ -37,6 +41,7 @@ const useAuth = () => {
     } else {
       setIsAuthenticated(false);
       setLoading(false);
+      window.location.href = '/';
     }
   }, []);
 

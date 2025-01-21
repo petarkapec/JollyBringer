@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -15,6 +16,8 @@ public interface ParticipantGroupRepository extends JpaRepository<ParticipantGro
 
     @Query("SELECT g FROM ParticipantGroup g WHERE :s MEMBER OF g.members")
     Optional<ParticipantGroup> findByMember(@Param("s") Participant president);
+
+    List<ParticipantGroup> findByPresident(Participant president);
 
     Optional<ParticipantGroup> findByName(String groupName);
 

@@ -24,8 +24,10 @@ public class Activity {
     //TODO napraviti createdBy atribut i njegovu logiku
     private String createdBy;
 
+    private boolean isInCalendar;
 
-    public Activity(String activity_name, String description, String date, String activity_status, ParticipantGroup group, String createdBy) {
+
+    public Activity(String activity_name, String description, String date, String activity_status, ParticipantGroup group, String createdBy, boolean isInCalendar) {
         this.activityName = activity_name;
         this.description = description;
         this.date = date;
@@ -33,6 +35,7 @@ public class Activity {
 
         this.group = group;
         this.createdBy = createdBy;
+        this.isInCalendar = isInCalendar;
 
     }
 
@@ -100,6 +103,13 @@ public class Activity {
         this.createdBy = createdBy;
     }
 
+    public boolean isInCalendar() {
+        return isInCalendar;
+    }
+
+    public void setInCalendar(boolean inCalendar) {
+        isInCalendar = inCalendar;
+    }
     @Override
     public String toString() {
         return "Activity{" +

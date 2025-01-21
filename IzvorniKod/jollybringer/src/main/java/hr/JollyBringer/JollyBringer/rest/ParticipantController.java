@@ -1,8 +1,6 @@
 package hr.JollyBringer.JollyBringer.rest;
 
-import hr.JollyBringer.JollyBringer.domain.Activity;
-import hr.JollyBringer.JollyBringer.domain.ChatMessage;
-import hr.JollyBringer.JollyBringer.domain.Participant;
+import hr.JollyBringer.JollyBringer.domain.*;
 import hr.JollyBringer.JollyBringer.service.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -10,7 +8,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-
+import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -80,7 +80,40 @@ public class ParticipantController {
         for(ChatMessage message : messages) {
             chatMessageService.deleteMessage(message.getId());
         }
+
         Participant deleted = participantService.fetch(id);
+
+        if (deleted.isPresident()) {
+            List<ParticipantGroup> groups = participantGroupService.findByPresident(deleted);
+            if (groups != null) {
+                for (ParticipantGroup group : groups) {
+                    Set<Participant> members = group.getMembers();
+
+                    if (members.size() > 1) {
+                        // Filtriramo člana koji nije jednak `deleted` i biramo slučajnog
+                        List<Participant> eligibleMembers = members.stream()
+                                .filter(member -> !member.equals(deleted))
+                                .collect(Collectors.toList());
+
+                        if (!eligibleMembers.isEmpty()) {
+                            Participant newPresident = eligibleMembers.get(
+                                    new Random().nextInt(eligibleMembers.size())); // Random izbor
+
+                            newPresident.setRole(new Role(2L, "President"));
+                            group.setPresident(newPresident);
+                            participantService.updateParticipant(newPresident);
+                        }
+                    } else {
+                        group.setPresident(null);
+                        participantGroupService.deleteGroup(group.getId());
+                    }
+                }
+            }
+        }
+
+        deleted.setRole(new Role(1L, "Participant"));
+        participantService.updateParticipant(deleted);
+
         if(participantGroupService.findByMember(deleted).isPresent()) {
             participantGroupService.removeMember(participantGroupService.findByMember(deleted).get().getId(), deleted.getId());
             return  participantService.deleteParticipant(id);

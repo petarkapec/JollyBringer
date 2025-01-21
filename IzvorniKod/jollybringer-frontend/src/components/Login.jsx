@@ -34,7 +34,6 @@ const Login = () => {
     
         
     <div className={'login-background flex justify-center h-dvh items-center'}>
-      <Header/>
       <div className={'login-wrapper border border-white rounded-[8px] p-12 py-[60px] flex flex-col justify-center items-center gap-7 backdrop-blur bg-black bg-opacity-50'}>
         <h1 className={'text-4xl text-white'}>Login</h1>
         <button

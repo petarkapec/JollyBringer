@@ -2,17 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import useAuth from '../hooks/useAuth';
 import API from './api.js'; // Import the API class
-import ActivitySelectionModal from './ActivitySelectionModal.jsx'; // Import the ActivitySelectionModal component
 
-const CreateActivityModal = ({ isOpen, onClose, groupId, onActivityCreated, prefillData }) => {
+const CreateRegularActivityModal = ({ isOpen, onClose, groupId, onActivityCreated, prefillData }) => {
   const { user } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    day: 1,
+    date: '',
     status: 'InProgress',
   });
-  const [isSelectionModalOpen, setIsSelectionModalOpen] = useState(false);
 
   useEffect(() => {
     if (prefillData) {
@@ -29,22 +27,19 @@ const CreateActivityModal = ({ isOpen, onClose, groupId, onActivityCreated, pref
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const currentYear = new Date().getFullYear();
-    const date = new Date(currentYear, 11, formData.day); // December of the current year
-
     const newActivity = {
       activity_name: formData.name,
       description: formData.description,
-      date: date.toISOString(),
+      date: new Date(formData.date).toISOString(),
       activity_status: formData.status,
       group_id: groupId,
       created_by: user.username,
     };
 
     try {
-      await API.post(`/groups/${groupId}/activities`, newActivity); // Using API.post()
+      await API.post(`/groups/${groupId}/activities/regular`, newActivity); // Using API.post()
       toast.success('Activity created successfully');
-      setFormData({ name: '', day: 1, description: '', status: 'InProgress' });
+      setFormData({ name: '', date: '', description: '', status: 'InProgress' });
       onActivityCreated();
       onClose();
     } catch (error) {
@@ -52,19 +47,10 @@ const CreateActivityModal = ({ isOpen, onClose, groupId, onActivityCreated, pref
     }
   };
 
-  const handleSelectActivity = (activity) => {
-    setFormData({
-      ...formData,
-      name: activity.activityName,
-      description: activity.description,
-    });
-    setIsSelectionModalOpen(false);
-  };
-
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-customGray rounded-lg p-6 max-w-md w-full mx-4">
-        <h2 className="text-xl font-semibold text-white mb-4">Create Activity</h2>
+        <h2 className="text-xl font-semibold text-white mb-4">Create Regular Activity</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-white mb-2">Name</label>
@@ -87,28 +73,14 @@ const CreateActivityModal = ({ isOpen, onClose, groupId, onActivityCreated, pref
             />
           </div>
           <div className="mb-4">
-            <button
-              type="button"
-              onClick={() => setIsSelectionModalOpen(true)}
-              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-            >
-              Select from Existing Activities
-            </button>
-          </div>
-          <div className="mb-4">
-            <label className="block text-white mb-2">Day</label>
-            <select
-              value={formData.day}
-              onChange={(e) => setFormData({ ...formData, day: e.target.value })}
+            <label className="block text-white mb-2">Date</label>
+            <input
+              type="date"
+              value={formData.date}
+              onChange={(e) => setFormData({ ...formData, date: e.target.value })}
               className="w-full p-2 rounded bg-gray-700 text-white"
               required
-            >
-              {Array.from({ length: 25 }, (_, i) => i + 1).map((day) => (
-                <option key={day} value={day}>
-                  {day}
-                </option>
-              ))}
-            </select>
+            />
           </div>
           <div className="mb-4">
             <label className="block text-white mb-2">Status</label>
@@ -139,16 +111,8 @@ const CreateActivityModal = ({ isOpen, onClose, groupId, onActivityCreated, pref
           </div>
         </form>
       </div>
-      {isSelectionModalOpen && (
-        <ActivitySelectionModal
-          isOpen={isSelectionModalOpen}
-          onClose={() => setIsSelectionModalOpen(false)}
-          groupId={groupId}
-          onSelectActivity={handleSelectActivity}
-        />
-      )}
     </div>
   );
 };
 
-export default CreateActivityModal;
+export default CreateRegularActivityModal;

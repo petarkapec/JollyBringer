@@ -105,5 +105,7 @@ public interface ParticipantGroupService {
 
     boolean addMessageToGroup(ChatMessage savedMessage);
     List<ChatMessage> findMessageByGroupId(Long groupId);
+
+    List<ParticipantGroup> findByPresident(Participant president);
 }
 
