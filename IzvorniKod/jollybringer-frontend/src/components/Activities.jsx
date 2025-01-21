@@ -5,6 +5,8 @@ import CreateActivityModal from "./CreateActivityModal.jsx";
 import ActivityDetailModal from "./ActivityDetailModal.jsx";
 import useAuth from "../hooks/useAuth.js";
 import API from './api.js';  // Import the API class
+import { SquareArrowOutUpRight } from 'lucide-react'; // Import the icon
+import { useLocation, useNavigate } from 'react-router-dom'; // Import useLocation and useNavigate
 
 const Activities = ({ selectedGroup, role }) => {
   const [activities, setActivities] = useState([]);
@@ -13,6 +15,8 @@ const Activities = ({ selectedGroup, role }) => {
   const [isPresident, setIsPresident] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
+  const location = useLocation(); // Get the current URL
+  const navigate = useNavigate(); // Get the navigate function
 
   useAuth();
 
@@ -88,7 +92,13 @@ const Activities = ({ selectedGroup, role }) => {
     <div className="p-4">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Christmas Activities</h2>
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
+          {(role === 'President' || role === 'Admin') && location.pathname !== '/dashboard/activities' && (
+            <SquareArrowOutUpRight
+              className="cursor-pointer text-white hover:text-gray-300 mr-3"
+              onClick={() => navigate('/dashboard/activities', { state: { selectedGroupId: selectedGroup.id } })}
+            />
+          )}
           {(role === 'President' || role === 'Admin') && (
             <>
               <button
