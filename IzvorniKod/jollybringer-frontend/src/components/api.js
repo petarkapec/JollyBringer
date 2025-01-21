@@ -4,8 +4,8 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 class API {
   static instance = axios.create({
-    baseURL: backendUrl,
-    withCredentials: true,
+    baseURL: backendUrl
+    
   });
 
   static getAuthToken() {
