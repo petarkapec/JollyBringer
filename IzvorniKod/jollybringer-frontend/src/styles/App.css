@@ -25,14 +25,17 @@
 }
 
 #root {
-    background-color: black;
-    height: 100vh;
+    background: url("/assets/img/christmas.webp") no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center 100%;
     width: 100vw;
+    top: 0;
+    left: 0;
 }
 
 html, body {
-    background-color: black;
-    height: 100%;
-    width: 100%;
+    height: auto;
+    width: auto;
 }
 

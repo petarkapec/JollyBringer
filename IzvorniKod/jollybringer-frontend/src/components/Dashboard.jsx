@@ -131,7 +131,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className={'bg-black h-screen flex flex-col'}>
+    <div className="dashboard-container">
       <Header onGroupSelect={handleGroupSelect} />
       <div className={'flex flex-grow'}>
         <div className={'w-1/2'}>

@@ -111,7 +111,7 @@ const Header = ({ onGroupSelect }) => {
 
   return (
     <>
-      <div className={'text-white flex items-center justify-between h-12 border-b py-[34px] px-5 bg-black'}>
+      <div className={'text-white flex items-center justify-between h-12 border-b py-[34px] px-5 bg-red-950'}>
         <h1 className={'text-3xl hover:cursor-pointer'} onClick={() => {
           window.location.href = "/dashboard";
         }}>Jollybringer</h1>
@@ -123,7 +123,7 @@ const Header = ({ onGroupSelect }) => {
           )}
           <Menu
             data-menu-icon
-            className={`size-8 cursor-pointer ${isMenuOpen ? 'text-red-600' : ''}`}
+            className={`size-8 cursor-pointer ${isMenuOpen ? 'text-white' : ''}`}
             onClick={toggleMenu}
           />
           <button className={'text-2xl'} onClick={handleLogout}>
@@ -132,7 +132,7 @@ const Header = ({ onGroupSelect }) => {
         </div>
         {isMenuOpen && (
           <div ref={menuRef}
-               className={'absolute top-[71px] right-16 border shadow-md rounded-md p-4 backdrop-blur-md'}>
+               className={'absolute top-[71px] right-16 border shadow-md rounded-md p-4 backdrop-blur-md z-[9999]'}>
             <ul className={'flex gap-2 flex-col'}>
               {userGroups
                 .filter(group => group.name !== 'NO_GROUP')
@@ -140,7 +140,7 @@ const Header = ({ onGroupSelect }) => {
                   <li
                     key={group.id}
                     onClick={() => handleGroupClick(group)}
-                    className={'py-2 px-4 hover:bg-gray-200 cursor-pointer bg-white rounded-[6px] text-black text-center'}
+                    className={'py-2 px-4 hover:bg-gray-200 cursor-pointer bg-white rounded-[6px] text-black text-center z-[9999]'}
                   >
                     {group.name}
                   </li>
@@ -158,7 +158,7 @@ const Header = ({ onGroupSelect }) => {
                 <>
                   <hr />
                   <li onClick={handleAdminRedirect}
-                      className={'py-2 px-4 hover:bg-gray-200 cursor-pointer bg-white rounded-[6px] text-black text-center'}>
+                      className={'py-2 px-4 hover:bg-gray-200 cursor-pointer bg-white rounded-[6px] text-black text-center z-[9999]'}>
                     Admin
                   </li>
                 </>

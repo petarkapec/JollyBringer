@@ -26,10 +26,10 @@ const ActivitiesPage = () => {
   };
 
   return (
-    <div className="bg-black h-screen flex flex-col">
+    <div className="h-screen flex flex-col">
       <Header onGroupSelect={handleGroupSelect} />
       <div className="flex flex-grow">
-        <div className="w-1/2 m-4">
+        <div className="w-1/2 m-4 overflow-y-auto max-h-[80vh]">
           <Activities key={activitiesKey} selectedGroup={selectedGroup} role={role} />
         </div>
         <div className="w-1/2 m-4">
