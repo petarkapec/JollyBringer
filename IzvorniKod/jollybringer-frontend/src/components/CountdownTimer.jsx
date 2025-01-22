@@ -15,7 +15,7 @@ const CountdownTimer = ({page}) => {
   }, [timeLeft])
 
   return (
-    <div className={page === 'Login' ? 'login-countdown-wrapper' : 'countdown-wrapper'}>
+    <div className={page === 'Login' ? 'login-countdown-wrapper' : 'countdown-wrapper mobile:hidden'}>
       {Object.keys(timeLeft).length ? (
         <div>
           {Object.keys(timeLeft).map((interval) => (

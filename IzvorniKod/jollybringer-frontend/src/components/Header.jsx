@@ -112,7 +112,7 @@ const Header = ({ onGroupSelect }) => {
   return (
     <>
       <div className={'text-white flex items-center justify-between h-12 border-b py-[34px] px-5 bg-black'}>
-        <h1 className={'text-3xl hover:cursor-pointer'} onClick={() => {
+        <h1 className={'text-3xl hover:cursor-pointer mobile:hidden'} onClick={() => {
           window.location.href = "/dashboard";
         }}>Jollybringer</h1>
         <CountdownTimer page />
