@@ -28,11 +28,11 @@ const ActivitiesPage = () => {
   return (
     <div className="h-screen flex flex-col">
       <Header onGroupSelect={handleGroupSelect} />
-      <div className="flex flex-grow">
-        <div className="w-1/2 m-4 overflow-y-auto max-h-[80vh]">
+      <div className="flex flex-grow flex-row md:flex-row bg-cover bg-fixed bg-center" style={{ backgroundImage: "url('/assets/img/christmas.webp')" }}>
+        <div className="w-full md:w-1/2 p-4">
           <Activities key={activitiesKey} selectedGroup={selectedGroup} role={role} />
         </div>
-        <div className="w-1/2 m-4">
+        <div className="w-full md:w-1/2 p-4">
           <ActivitiesPool groupId={selectedGroup?.id} onActivityCreated={handleActivityCreated} />
         </div>
       </div>
