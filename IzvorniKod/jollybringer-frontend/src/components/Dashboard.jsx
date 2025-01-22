@@ -57,7 +57,7 @@ const Dashboard = () => {
     };
 
     fetchUserData();
-  }, []); // Runs once when the component loads
+  }, []);
 
   // Fetch groups from the backend
   useEffect(() => {
@@ -71,7 +71,7 @@ const Dashboard = () => {
     };
 
     fetchGroups();
-  }, []); // Fetch groups on load
+  }, []);
 
   // Group selection logic and localStorage sync
   useEffect(() => {
@@ -131,13 +131,13 @@ const Dashboard = () => {
   };
 
   return (
-    <div className={'bg-black h-screen flex flex-col'}>
+    <div className="bg-black h-screen flex flex-col">
       <Header onGroupSelect={handleGroupSelect} />
-      <div className={'flex flex-grow'}>
-        <div className={'w-1/2'}>
+      <div className="flex flex-grow flex-col md:flex-row">
+        <div className="w-full md:w-1/2 p-4">
           <Activities selectedGroup={selectedGroup} role={role} />
         </div>
-        <div className={'w-1/2 m-4'}>
+        <div className="w-full md:w-1/2 p-4">
           <Chat user={user} selectedGroup={selectedGroup} />
         </div>
       </div>
