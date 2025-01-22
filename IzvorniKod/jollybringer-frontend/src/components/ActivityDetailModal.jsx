@@ -1,8 +1,8 @@
 import React from 'react';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import useAuth from '../hooks/useAuth.js';
 import Feedback from './Feedback.jsx';
+import API from './api.js'; // Import the API class
 
 const ActivityDetailModal = ({ activity, isOpen, onClose, onActivityDeleted }) => {
   const { role } = useAuth();
@@ -15,8 +15,18 @@ const ActivityDetailModal = ({ activity, isOpen, onClose, onActivityDeleted }) =
       toast.success('Activity deleted successfully');
       onClose();
     } catch (error) {
-      console.log(error)
       toast.error('Failed to delete activity');
+    }
+  };
+
+  const handleMarkAsDone = async () => {
+    try {
+      await API.put(`/activities/${activity.id}`, { activity_status: 'Completed' });
+      toast.success('Activity marked as done');
+      onClose();
+    } catch (error) {
+      console.log(error);
+      toast.error('Failed to mark activity as done');
     }
   };
 
@@ -25,7 +35,7 @@ const ActivityDetailModal = ({ activity, isOpen, onClose, onActivityDeleted }) =
       <div className="absolute inset-0 bg-black opacity-70" onClick={onClose}></div>
       <div className="bg-customGray rounded-lg p-6 max-w-md w-full mx-4 z-10">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-white">{activity.ACTIVITY_NAME}</h2>
+          <h2 className="text-xl font-semibold text-white">{activity.activityName}</h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-white"
@@ -42,12 +52,20 @@ const ActivityDetailModal = ({ activity, isOpen, onClose, onActivityDeleted }) =
             Status: {activity.activity_status}
           </p>
           {(role === 'President' || role === 'Admin') && (
-            <button
-              onClick={handleDelete}
-              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-            >
-              Delete Activity
-            </button>
+            <div className="flex gap-4">
+              <button
+                onClick={handleDelete}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+              >
+                Delete Activity
+              </button>
+              <button
+                onClick={handleMarkAsDone}
+                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+              >
+                Mark as Done
+              </button>
+            </div>
           )}
           <Feedback activityId={activity.id}/>
         </div>
