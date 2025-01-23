@@ -30,12 +30,12 @@
     background-size: cover;
     background-position: center 100%;
     width: 100vw;
-    top: 0;
-    left: 0;
+    min-height: 100vh;
 }
 
 html, body {
-    height: auto;
-    width: auto;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
 }
 

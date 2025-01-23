@@ -56,14 +56,14 @@ const ActivitiesPool = ({ groupId, onActivityCreated }) => {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold text-red-700">All Activities</h2>
         <div className="flex gap-2 items-center">
-          <button
+              <button
                 onClick={handleCreateWithAI} 
                 className="flex flex-col items-center cursor-pointer">
                 <img src="\assets\img\elf.png" alt="Elf Icon" className="w-16 h-16" />
                 <span className='text-red-700'>Create with AI</span>
               </button>
               <button
-                onClick={() => setShowModal(true)}
+                onClick={() => setIsModalOpen(true)}
                 className="flex flex-col items-center cursor-pointer"
               >
                 <img src='/assets/img/gingerbread.png' className='w-16 h-16 md:w-16 md:h-16'></img>

@@ -2,9 +2,9 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
     height: 100vh;
     width: 100%;
-    overflow: hidden;  
     background: url("/assets/img/christmas.webp") repeat;
     background-size: cover;
     background-position: center 100%;
@@ -19,7 +19,6 @@
     background: url("/assets/img/christmas.webp") repeat;
     background-size: cover;
     background-position: center 100%;
-    background-repeat: no-repeat;
     filter: blur(8px);
     z-index: -1;
 }

@@ -133,7 +133,7 @@ const Dashboard = () => {
   return (
     <div className="dashboard-container">
       <Header onGroupSelect={handleGroupSelect} />
-      <div className="flex flex-grow flex-row md:flex-row">
+      <div className="flex flex-row md:flex-row">
         <div className="w-full md:w-1/2 p-4">
           <Activities selectedGroup={selectedGroup} role={role} />
         </div>

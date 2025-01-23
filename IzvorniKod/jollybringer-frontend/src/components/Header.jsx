@@ -111,7 +111,7 @@ const Header = ({ onGroupSelect }) => {
 
   return (
     <>
-      <div className={'text-white flex items-center justify-between h-12 border-b py-[34px] px-5 bg-red-950'}>
+      <div className={'text-white flex items-center justify-between h-12 border-b relative py-[34px] px-5 bg-red-950'}>
         <h1 className={'text-3xl hover:cursor-pointer'} onClick={() => {
           window.location.href = "/dashboard";
         }}>Jollybringer</h1>
