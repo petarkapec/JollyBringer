@@ -88,9 +88,9 @@ const AdminDashboard = () => {
   if (isLoading) return <div className="flex justify-center items-center h-full">Loading...</div>;
 
   return (
-    <div className="h-dvh w-dvw text-white bg-transparent">
+    <div className="w-dvw text-white bg-transparent">
       <Header />
-      <div className="p-8">
+      <div className="p-8 bg-transparent">
         <h1 className="text-3xl font-bold mb-6">President Role Applications</h1>
         {applications.length === 0 ? (
           <p className="text-gray-400">No pending applications</p>
