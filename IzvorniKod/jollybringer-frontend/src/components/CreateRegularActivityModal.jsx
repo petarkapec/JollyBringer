@@ -9,7 +9,6 @@ const CreateRegularActivityModal = ({ isOpen, onClose, groupId, onActivityCreate
     name: '',
     description: '',
     date: '',
-    status: 'InProgress',
   });
 
   useEffect(() => {
@@ -31,7 +30,7 @@ const CreateRegularActivityModal = ({ isOpen, onClose, groupId, onActivityCreate
       activity_name: formData.name,
       description: formData.description,
       date: new Date(formData.date).toISOString(),
-      activity_status: formData.status,
+      activity_status: 'InProgress', // Always send status as 'InProgress'
       group_id: groupId,
       created_by: user.username,
     };
@@ -39,7 +38,7 @@ const CreateRegularActivityModal = ({ isOpen, onClose, groupId, onActivityCreate
     try {
       await API.post(`/groups/${groupId}/activities/regular`, newActivity); // Using API.post()
       toast.success('Activity created successfully');
-      setFormData({ name: '', date: '', description: '', status: 'InProgress' });
+      setFormData({ name: '', date: '', description: '' });
       onActivityCreated();
       onClose();
     } catch (error) {
@@ -81,18 +80,6 @@ const CreateRegularActivityModal = ({ isOpen, onClose, groupId, onActivityCreate
               className="w-full p-2 rounded bg-red-700 text-white"
               required
             />
-          </div>
-          <div className="mb-4">
-            <label className="block text-red-700 mb-2">Status</label>
-            <select
-              value={formData.status}
-              onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-              className="w-full p-2 rounded bg-red-700 text-white"
-              required
-            >
-              <option value="Pending">Pending</option>
-              <option value="Completed">Completed</option>
-            </select>
           </div>
           <div className="flex justify-end gap-4">
             <button
