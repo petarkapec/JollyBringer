@@ -66,6 +66,8 @@ public class ApplicationServiceJPA implements ApplicationService {
     @Override
     public ApplicationRequest deleteApplicationRequest(long appId) {
         ApplicationRequest applicationRequest = fetch(appId);
+        if (applicationRequest == null)
+            throw new EntityMissingException(ApplicationRequest.class, appId);
         appRepo.delete(applicationRequest);
         return applicationRequest;
     }
