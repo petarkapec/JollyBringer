@@ -73,7 +73,7 @@ const Activities = ({ selectedGroup, role }) => {
   if (!selectedGroup) {
     return (
       <div className="p-4">
-        <h2 className="text-2xl font-bold mb-6 text-white">Christmas Activities</h2>
+        <h2 className="text-2xl font-bold mb-6">Christmas Activities</h2>
         <div className="p-4 text-center text-gray-400">
           Please select a group first
         </div>
@@ -93,10 +93,10 @@ const Activities = ({ selectedGroup, role }) => {
         <h2 className="text-2xl font-bold text-white">Christmas Activities</h2>
         <div className="flex gap-2 items-center">
           {location.pathname !== '/dashboard/activities' && (
-            <SquareArrowOutUpRight
-              className="cursor-pointer text-white hover:text-gray-300 mr-3"
-              onClick={() => navigate('/dashboard/activities', { state: { selectedGroupId: selectedGroup.id } })}
-            />
+            <div className="flex items-center cursor-pointer text-white hover:text-gray-300 mr-3" onClick={() => navigate('/dashboard/activities', { state: { selectedGroupId: selectedGroup.id } })}>
+              <SquareArrowOutUpRight className="mr-1" />
+              <span>Go to Dashboard</span>
+            </div>
           )}
           {(role === 'President' || role === 'Admin') && (
             <>
