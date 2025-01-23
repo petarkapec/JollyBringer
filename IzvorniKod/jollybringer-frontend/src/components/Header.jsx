@@ -6,6 +6,7 @@ import {Menu} from "lucide-react";
 import useAuth from "../hooks/useAuth.js";
 import CreateGroupModal from "./CreateGroupModal.jsx";
 import RoleModal from "./RoleModal.jsx";
+import AddMembersModal from "./AddMembersModal.jsx"; // Import the AddMembersModal component
 import API from "./api.js"; // Importing the API class
 
 const SELECTED_GROUP_KEY = 'selectedGroup';
@@ -16,6 +17,7 @@ const Header = ({ onGroupSelect }) => {
   const [showRoleModal, setShowRoleModal] = useState(false);
   const menuRef = useRef(null);
   const [showGroupModal, setShowGroupModal] = useState(false);
+  const [showAddMembersModal, setShowAddMembersModal] = useState(false); // State for AddMembersModal
   const [userGroups, setUserGroups] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState();
 
@@ -109,6 +111,11 @@ const Header = ({ onGroupSelect }) => {
     setIsMenuOpen(false);
   };
 
+  const handleAddMembers = () => {
+    setShowAddMembersModal(true);
+    setIsMenuOpen(false);
+  };
+
   return (
     <>
       <div className={'text-white flex items-center justify-between h-12 border-b relative py-[34px] px-5 bg-red-950'}>
@@ -163,6 +170,15 @@ const Header = ({ onGroupSelect }) => {
                   </li>
                 </>
               )}
+              {role === 'President' && selectedGroup && (
+                <>
+                  <hr />
+                  <li onClick={handleAddMembers}
+                      className={'py-2 px-4 hover:bg-gray-200 cursor-pointer bg-white rounded-[6px] text-black text-center z-[9999]'}>
+                    Add Members
+                  </li>
+                </>
+              )}
             </ul>
           </div>
         )}
@@ -174,6 +190,14 @@ const Header = ({ onGroupSelect }) => {
           onGroupCreated={() => fetchUserGroups()}  // Add this prop
         />
       )}
+      {showAddMembersModal && (
+        <AddMembersModal
+          isOpen={showAddMembersModal}
+          onClose={() => setShowAddMembersModal(false)}
+          groupId={selectedGroup} // Pass the selected group ID
+        />
+      )}
+      {console.log(selectedGroup)}
       <RoleModal
         isOpen={showRoleModal}
         onClose={() => setShowRoleModal(false)}
