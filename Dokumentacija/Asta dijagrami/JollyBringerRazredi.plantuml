@@ -1,0 +1,638 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class AIChatController {
+  + AIChatController(MistralAiChatModel, ActivityService, ParticipantGroupService): 
+  + generate(String): Map<String, String>
+  + generateActivity(Long): String
+  + generateStream(String): Flux<ChatResponse>
+  + generateActivityRegular(Long): String
+}
+class Activity {
+  + Activity(String, String, String, String, ParticipantGroup, String, boolean): 
+  + Activity(): 
+  - id: Long
+  - createdBy: String
+  - date: String
+  - activityName: String
+  - activity_status: ActivityStatus
+  - group: ParticipantGroup
+  - isInCalendar: boolean
+  - description: String
+  + setActivity_status(String): void
+  + toString(): String
+   description: String
+   id: Long
+   activityName: String
+   activity_status: ActivityStatus
+   date: String
+   group: ParticipantGroup
+   isInCalendar: boolean
+   createdBy: String
+}
+class ActivityController {
+  + ActivityController(FeedbackService, FeedbackServiceJPA, ActivityService, ActivityServiceJPA, ParticipantService, ParticipantServiceJpa): 
+  + getActivity(long): Activity
+  + createActivity(Activity): ResponseEntity<Activity>
+  + getFeedbackByActivityId(Long): ResponseEntity<List<Feedback>>
+  + deleteActivity(long): Activity
+  + addFeedback(Long, FeedbackDTO): ResponseEntity<Feedback>
+  + updateActivityCompleted(long): ResponseEntity<Activity>
+  + updateActivity(long, Activity): ResponseEntity<Activity>
+   activities: List<Activity>
+}
+class ActivityDTO {
+  + ActivityDTO(): 
+  + ActivityDTO(String, String, String, String, Long, String): 
+  - date: String
+  - activity_status: String
+  - group_id: Long
+  - created_by: String
+  - description: String
+  - activity_name: String
+  + toString(): String
+   description: String
+   created_by: String
+   date: String
+   group_id: Long
+   activity_status: String
+   activity_name: String
+}
+interface ActivityRepository << interface >> {
+  + findByActivityName(String): Optional<Activity>
+  + findByCreatedBy(String): List<Activity>
+  + existsByActivityNameAndIdNot(String, Long): boolean
+  + findByGroupId(Long): List<Activity>
+}
+interface ActivityService << interface >> {
+  + deleteActivity(long): Activity
+  + findByCreatedBy(String): List<Activity>
+  + fetch(long): Activity
+  + createActivity(Activity): Activity
+  + findByactivityName(String): Optional<Activity>
+  + listAll(): List<Activity>
+  + findByGroupIdRegular(Long): List<Activity>
+  + updateActivity(Activity): Activity
+  + findByGroupId(long): List<Activity>
+  + findById(long): Optional<Activity>
+  + findByGroupIdCalendar(Long): List<Activity>
+}
+class ActivityServiceJPA {
+  + ActivityServiceJPA(): 
+  + findById(long): Optional<Activity>
+  + findByCreatedBy(String): List<Activity>
+  + findByGroupIdRegular(Long): List<Activity>
+  + deleteActivity(long): Activity
+  + findByGroupId(long): List<Activity>
+  + createActivity(Activity): Activity
+  + listAll(): List<Activity>
+  + findByactivityName(String): Optional<Activity>
+  - validate(Activity): void
+  + fetch(long): Activity
+  + updateActivity(Activity): Activity
+  + findByGroupIdCalendar(Long): List<Activity>
+}
+enum ActivityStatus << enumeration >> {
+  + ActivityStatus(): 
+  + values(): ActivityStatus[]
+  + valueOf(String): ActivityStatus
+}
+class AddMembersDTO {
+  + AddMembersDTO(List<Long>): 
+  + AddMembersDTO(): 
+  - users: List<Long>
+   users: List<Long>
+}
+class ApplicationController {
+  + ApplicationController(ApplicationService, ParticipantService, RoleService): 
+  + approveApplication(ApplicationDTO): ResponseEntity<ApplicationRequest>
+  + listParticipants(): List<ApplicationRequest>
+  + applyForPresident(ApplicationDTO): ResponseEntity<ApplicationRequest>
+}
+class ApplicationDTO {
+  + ApplicationDTO(Long, boolean): 
+  - user_id: Long
+  - applied: boolean
+   user_id: Long
+   applied: boolean
+}
+interface ApplicationRepository << interface >> {
+  + countByUser(Participant): int
+  + existsByUser(Participant): boolean
+  + findByUserId(long): Optional<ApplicationRequest>
+}
+class ApplicationRequest {
+  + ApplicationRequest(Participant, boolean): 
+  + ApplicationRequest(): 
+  - user: Participant
+  - isApplied: boolean
+  - id: Long
+   id: Long
+   user: Participant
+   isApplied: boolean
+}
+interface ApplicationService << interface >> {
+  + fetch(long): ApplicationRequest
+  + listAll(): List<ApplicationRequest>
+  + findById(long): Optional<ApplicationRequest>
+  + deleteApplicationRequest(long): ApplicationRequest
+  + updateApplicationRequest(ApplicationRequest): ApplicationRequest
+  + findByUserId(long): Optional<ApplicationRequest>
+  + createApplicationRequest(ApplicationRequest): ApplicationRequest
+}
+class ApplicationServiceJPA {
+  + ApplicationServiceJPA(ApplicationRepository): 
+  + listAll(): List<ApplicationRequest>
+  + findByUserId(long): Optional<ApplicationRequest>
+  + updateApplicationRequest(ApplicationRequest): ApplicationRequest
+  + findById(long): Optional<ApplicationRequest>
+  + deleteApplicationRequest(long): ApplicationRequest
+  + fetch(long): ApplicationRequest
+  + createApplicationRequest(ApplicationRequest): ApplicationRequest
+}
+class AuthCheckController {
+  + AuthCheckController(ParticipantService, ParticipantGroupService, JwtTokenUtil): 
+  + checkAuth(String): ResponseEntity<?>
+}
+class AuthController {
+  + AuthController(): 
+  + login(LoginRequest): ResponseEntity<?>
+}
+class ChatController {
+  + ChatController(): 
+  + sendMessage(ChatMessage): ChatMessage
+  + deleteMessage(long): void
+  + getMessagesByGroupId(Long): List<ChatMessageDTO>
+   last20Messages: List<ChatMessageDTO>
+   messages: List<ChatMessage>
+}
+class ChatMessage {
+  + ChatMessage(Participant, String, String): 
+  + ChatMessage(): 
+  - content: String
+  - id: Long
+  - timestamp: String
+  - participant: Participant
+  + toJson(): String
+  + toString(): String
+   content: String
+   id: Long
+   timestamp: String
+   participant: Participant
+}
+class ChatMessageDTO {
+  + ChatMessageDTO(): 
+  + ChatMessageDTO(String, String, String): 
+  - timestamp: String
+  - content: String
+  - username: String
+   content: String
+   timestamp: String
+   username: String
+}
+interface ChatMessageRepository << interface >> {
+  + findByParticipantId(Long): List<ChatMessage>
+  + findTop20ByTimestampAfterOrderByTimestampDesc(String): List<ChatMessage>
+}
+interface ChatMessageService << interface >> {
+  + fetch(long): ChatMessage
+  + saveMessage(ChatMessage): void
+  + findByParticipantId(Long): List<ChatMessage>
+  + listAll(): List<ChatMessage>
+  + findById(long): Optional<ChatMessage>
+  + deleteMessage(Long): void
+   last20Messages: List<ChatMessageDTO>
+}
+class ChatMessageServiceJPA {
+  + ChatMessageServiceJPA(ChatMessageRepository): 
+  + deleteMessage(Long): void
+  + findByParticipantId(Long): List<ChatMessage>
+  + saveMessage(ChatMessage): void
+  + listAll(): List<ChatMessage>
+  + fetch(long): ChatMessage
+  + findById(long): Optional<ChatMessage>
+   last20Messages: List<ChatMessageDTO>
+}
+class ControllerTests {
+  + ControllerTests(ParticipantService, ParticipantGroupService, ActivityService, ApplicationController, ParticipantGroupController): 
+  + testApplyForPresident(): void
+  + setUp2(): void
+  + setUp(): void
+  + testCreateActivity(): void
+  + testDeleteNonExistentGroupWithController(): void
+  + tearDown(): void
+}
+class CreateFeedbackDTO {
+  + CreateFeedbackDTO(): 
+  - activityName: String
+  - comment: String
+  - username: String
+   activityName: String
+   comment: String
+   username: String
+}
+class CreateGroupDTO {
+  + CreateGroupDTO(): 
+  - name: String
+  - leadUsername: String
+  - users: List<Long>
+   name: String
+   users: List<Long>
+   leadUsername: String
+}
+class CustomOAuth2User {
+  + CustomOAuth2User(OAuth2User, Collection<GrantedAuthority>): 
+  - authorities: Collection<GrantedAuthority>
+   name: String
+   attributes: Map<String, Object>
+   authorities: Collection<GrantedAuthority>
+}
+class CustomOAuth2UserService {
+  + CustomOAuth2UserService(ParticipantService): 
+  + loadUser(OAuth2UserRequest): OAuth2User
+}
+class DashboardController {
+  + DashboardController(): 
+  ~ login(): String
+  ~ loginGoogle(): String
+  ~ secured(): String
+  ~ dashboard(): String
+  ~ index(): String
+}
+class EntityMissingException {
+  + EntityMissingException(Class<?>, Object): 
+}
+class Feedback {
+  + Feedback(String): 
+  + Feedback(String, Activity, Participant, String): 
+  + Feedback(): 
+  - id: Long
+  - activity: Activity
+  - comment: String
+  - isLiked: IsLiked
+  - participant: Participant
+  + toString(): String
+   activity: Activity
+   comment: String
+   id: Long
+   isLiked: IsLiked
+   participant: Participant
+}
+class FeedbackController {
+  + FeedbackController(): 
+  + getFeedback(long): Feedback
+  + updateFeedback(long, Feedback): ResponseEntity<Feedback>
+  + deleteFeedback(long): Feedback
+   activities: List<Feedback>
+}
+class FeedbackDTO {
+  + FeedbackDTO(Long, Long, String, String): 
+  + FeedbackDTO(): 
+  - activity_id: Long
+  - is_liked: String
+  - participant_id: Long
+  - comment: String
+  + toString(): String
+   comment: String
+   is_liked: String
+   participant_id: Long
+   activity_id: Long
+}
+interface FeedbackRepository << interface >> {
+  + findByActivityId(Long): List<Feedback>
+  + existsByIdNot(Long): boolean
+}
+interface FeedbackService << interface >> {
+  + findById(long): Optional<Feedback>
+  + createFeedback(Feedback): Feedback
+  + deleteRelatedFeedbacks(long): void
+  + findByActivityId(long): List<Feedback>
+  + createFeedback(String, String, String, String): Feedback
+  + fetch(long): Feedback
+  + listAll(): List<Feedback>
+  + deleteFeedback(long): Feedback
+  + updateFeedback(Feedback): Feedback
+}
+class FeedbackServiceJPA {
+  + FeedbackServiceJPA(ParticipantService, ActivityService): 
+  + createFeedback(String, String, String, String): Feedback
+  + findByActivityId(long): List<Feedback>
+  + findById(long): Optional<Feedback>
+  + listAll(): List<Feedback>
+  + deleteFeedback(long): Feedback
+  + deleteRelatedFeedbacks(long): void
+  + updateFeedback(Feedback): Feedback
+  - validate(Feedback): void
+  + createFeedback(Feedback): Feedback
+  + fetch(long): Feedback
+}
+class GroupDTO {
+  + GroupDTO(): 
+  - groupname: String
+  - users: List<String>
+  - presidentEmail: String
+   presidentEmail: String
+   groupname: String
+   users: List<String>
+}
+enum IsLiked << enumeration >> {
+  + IsLiked(): 
+  + valueOf(String): IsLiked
+  + values(): IsLiked[]
+}
+class JollyBringerApplication {
+  + JollyBringerApplication(): 
+  + pswdEncoder(): PasswordEncoder
+  + main(String[]): void
+}
+class JollyBringerApplicationTests {
+  + JollyBringerApplicationTests(): 
+  ~ contextLoads(): void
+}
+class JwtAuthenticationFilter {
+  + JwtAuthenticationFilter(JwtTokenProvider): 
+  - extractToken(HttpServletRequest): String?
+  # doFilterInternal(HttpServletRequest, HttpServletResponse, FilterChain): void
+}
+class JwtTokenProvider {
+  + JwtTokenProvider(): 
+  + validateToken(String): boolean
+  + getEmailFromToken(String): String
+  - getClaims(String): Claims
+}
+class JwtTokenUtil {
+  + JwtTokenUtil(): 
+  + validateToken(String): boolean
+  + getEmailFromToken(String): String
+  + generateToken(String, long): String
+}
+class LoginRequest {
+  + LoginRequest(): 
+  - password: String
+  - username: String
+   password: String
+   username: String
+}
+class LoginResponse {
+  + LoginResponse(String): 
+  - message: String
+   message: String
+}
+class OAuth2LoginSuccessHandler {
+  + OAuth2LoginSuccessHandler(ParticipantService): 
+  + onAuthenticationSuccess(HttpServletRequest, HttpServletResponse, Authentication): void
+}
+class Participant {
+  + Participant(String, String, Role): 
+  + Participant(): 
+  - email: String
+  - id: Long
+  - username: String
+   admin: boolean
+   role: Role
+   username: String
+   id: Long
+   email: String
+   president: boolean
+}
+class ParticipantController {
+  + ParticipantController(ParticipantService, FeedbackService, ActivityService, ChatMessageService, ParticipantGroupService, ApplicationService): 
+  + createParticipant(Participant): ResponseEntity<Participant>
+  + updateParticipant(long, Participant): ResponseEntity<Participant>
+  + listOnlyParticipants(): List<Participant>
+  + getParticipant(long): Participant
+  + listParticipants(): List<Participant>
+  + deleteParticipant(long): Participant
+}
+class ParticipantGroup {
+  + ParticipantGroup(): 
+  + ParticipantGroup(String, Participant): 
+  - president: Participant
+  - members: Set<Participant>
+  - messages: Set<ChatMessage>
+  - name: String
+  - id: Long
+   name: String
+   president: Participant
+   members: Set<Participant>
+   messages: Set<ChatMessage>
+   id: Long
+}
+class ParticipantGroupController {
+  + ParticipantGroupController(ParticipantService, ParticipantGroupService, ParticipantGroupServiceJPA, ActivityService, ActivityServiceJPA): 
+  + addGroupMembers(Long, AddMembersDTO, OAuth2User): ResponseEntity<?>
+  + patchName(Long, CreateGroupDTO, User): ParticipantGroup
+  + getGroup(Long): ParticipantGroup
+  + createActivitiesByGroupIdCalendar(ActivityDTO): ResponseEntity<List<Activity>>
+  + createGroup(CreateGroupDTO, OAuth2User): ResponseEntity<ParticipantGroup>
+  + getActivitiesByGroupIdAll(Long): ResponseEntity<List<Activity>>
+  + deleteGroup(Long): void
+  + getGroupMembers(Long): Set<Participant>
+  + getActivitiesByGroupIdRegular(Long): ResponseEntity<List<Activity>>
+  + removeGroupMember(Long, Long, User): ResponseEntity<?>
+  + listGroups(): List<ParticipantGroup>
+  + createActivitiesByGroupIdRegular(ActivityDTO): ResponseEntity<List<Activity>>
+  - checkAllowedToChangeMembers(Long, String): void
+  + getActivitiesByGroupIdCalendar(Long): ResponseEntity<List<Activity>>
+}
+interface ParticipantGroupRepository << interface >> {
+  + existsByNameAndIdNot(String, long): boolean
+  + findByMember(Participant): Optional<ParticipantGroup>
+  + findByPresident(Participant): List<ParticipantGroup>
+  + findByName(String): Optional<ParticipantGroup>
+}
+interface ParticipantGroupService << interface >> {
+  + createGroup(String, String): ParticipantGroup
+  + addMembers(Long, List<Long>): void
+  + findById(long): Optional<ParticipantGroup>
+  + fetch(long): ParticipantGroup
+  + updateGroupName(long, String): ParticipantGroup
+  + removeMember(long, long): boolean
+  + deleteGroup(Long): void
+  + removeMember(long): boolean
+  + fetchByName(String): Optional<ParticipantGroup>
+  + addMessageToGroup(ChatMessage): boolean
+  + listMembers(long): Set<Participant>
+  + addMember(long, long): boolean
+  + findByMember(Participant): Optional<ParticipantGroup>
+  + findMessageByGroupId(Long): List<ChatMessage>
+  + listAll(): List<ParticipantGroup>
+  + findByPresident(Participant): List<ParticipantGroup>
+}
+class ParticipantGroupServiceJPA {
+  + ParticipantGroupServiceJPA(ParticipantGroupRepository, ParticipantService, FeedbackService, ActivityService): 
+  + updateGroupName(long, String): ParticipantGroup
+  + deleteGroup(Long): void
+  + createGroup(String, String): ParticipantGroup
+  + addMessageToGroup(ChatMessage): boolean
+  + fetchByName(String): Optional<ParticipantGroup>
+  + findByMember(Participant): Optional<ParticipantGroup>
+  + listMembers(long): Set<Participant>
+  + removeMember(long, long): boolean
+  + findByMember(long): Optional<ParticipantGroup>
+  + addMembers(Long, List<Long>): void
+  + findByPresident(Participant): List<ParticipantGroup>
+  + findMessageByGroupId(Long): List<ChatMessage>
+  + fetch(long): ParticipantGroup
+  + listAll(): List<ParticipantGroup>
+  + addMember(long, long): boolean
+  + findById(long): Optional<ParticipantGroup>
+  + removeMember(long): boolean
+}
+interface ParticipantRepository << interface >> {
+  + countByUsername(String): int
+  + findByEmail(String): Optional<Participant>
+  + findByUsername(String): Optional<Participant>
+  + existsByUsernameAndIdNot(String, Long): boolean
+  + findAllWithRole(String): List<Participant>
+  + countByEmail(String): int
+}
+class ParticipantRepositoryTest {
+  + ParticipantRepositoryTest(): 
+  ~ testFindByUsername(): void
+  ~ testExistsByUsernameAndIdNot(): void
+  ~ setUp(): void
+  ~ testCountByUsername(): void
+}
+interface ParticipantService << interface >> {
+  + findByUsername(String): Optional<Participant>
+  + deleteParticipant(long): Participant
+  + updateParticipant(Participant): Participant
+  + listAllWithRole(String): List<Participant>
+  + findById(long): Optional<Participant>
+  + fetch(long): Participant
+  + findByEmail(String): Optional<Participant>
+  + createParticipant(Participant): Participant
+  + listAll(): List<Participant>
+}
+class ParticipantServiceJpa {
+  + ParticipantServiceJpa(ParticipantRepository): 
+  + findByUsername(String): Optional<Participant>
+  + fetch(long): Participant
+  - validate(Participant): void
+  + listAll(): List<Participant>
+  + findByEmail(String): Optional<Participant>
+  + deleteParticipant(long): Participant
+  + listAllWithRole(String): List<Participant>
+  + findById(long): Optional<Participant>
+  + createParticipant(Participant): Participant
+  + updateParticipant(Participant): Participant
+}
+class ParticipantUserDetailsService {
+  + ParticipantUserDetailsService(ParticipantService): 
+  + loadUserByUsername(String): UserDetails
+  - authorities(Participant): List<GrantedAuthority>
+}
+class PointsService {
+  + PointsService(): 
+  + addPoints(): void
+}
+class RequestDeniedException {
+  + RequestDeniedException(String): 
+}
+class RestExceptionHandler {
+  + RestExceptionHandler(): 
+  # handleIllegalArgument(Exception, WebRequest): ResponseEntity<?>
+}
+class Role {
+  + Role(Long, String): 
+  + Role(): 
+  - name: String
+   name: String
+   id: long
+}
+class RoleDTO {
+  + RoleDTO(): 
+  - role_name: String
+  - role_id: Long
+   role_id: Long
+   role_name: String
+}
+enum RoleId << enumeration >> {
+  + RoleId(): 
+  + values(): RoleId[]
+  + valueOf(String): RoleId
+}
+interface RoleRepository << interface >> {
+  + findByName(String): Optional<Role>
+  + countByName(String): double
+  + existsByNameAndIdNot(String, Long): boolean
+}
+interface RoleService << interface >> {
+  + deleteRole(long): Role
+  + fetch(long): Role
+  + updateRole(Role): Role
+  + listAll(): List<Role>
+  + createRole(Role): Role
+  + findById(long): Optional<Role>
+  + findByName(String): Optional<Role>
+}
+class RoleServiceJPA {
+  + RoleServiceJPA(RoleRepository): 
+  + deleteRole(long): Role
+  + listAll(): List<Role>
+  + fetch(long): Role
+  + findById(long): Optional<Role>
+  + updateRole(Role): Role
+  - validate(Role): void
+  + createRole(Role): Role
+  + findByName(String): Optional<Role>
+}
+class SecurityConfig {
+  + SecurityConfig(): 
+  + securityFilterChain(HttpSecurity): SecurityFilterChain
+  - oauth2SuccessHandler(): AuthenticationSuccessHandler
+}
+class ServiceTests {
+  + ServiceTests(ParticipantService, ParticipantGroupService, ActivityService, FeedbackService, ApplicationController, ActivityController, ParticipantGroupController): 
+  + setUp(): void
+  + setUp2(): void
+  + testSameGroupName(): void
+  + testDeleteFeedbackforNoActivity(): void
+  + testNonimplementedMethod(): void
+  + tearDown(): void
+}
+class UserController {
+  + UserController(): 
+  + getCurrentUser(OAuth2User): OAuth2User
+}
+class UserDTO {
+  + UserDTO(): 
+  - email: String
+  - username: String
+  - role_id: Long
+   email: String
+   role_id: Long
+   username: String
+}
+class WebConfig {
+  + WebConfig(): 
+  + corsConfigurer(): WebMvcConfigurer
+}
+class WebSecurityBasic {
+  + WebSecurityBasic(ParticipantService, RoleService, JwtTokenUtil): 
+  - oauth2AuthenticationSuccessHandler(HttpServletRequest, HttpServletResponse, Authentication): void
+  + h2ConsoleSecurityFilterChain(HttpSecurity): SecurityFilterChain
+  + oauthFilterChain(HttpSecurity): SecurityFilterChain
+}
+class WebSocketConfig {
+  + WebSocketConfig(): 
+  + webSocketHandler(): WebSocketHandler
+  + registerWebSocketHandlers(WebSocketHandlerRegistry): void
+}
+class kontroler {
+  + kontroler(): 
+  + helloWorld(): String
+}
+
+ActivityServiceJPA             -[#008200,dashed]-^  ActivityService               
+ApplicationServiceJPA          -[#008200,dashed]-^  ApplicationService            
+ChatMessageServiceJPA          -[#008200,dashed]-^  ChatMessageService            
+FeedbackServiceJPA             -[#008200,dashed]-^  FeedbackService               
+ParticipantGroupServiceJPA     -[#008200,dashed]-^  ParticipantGroupService       
+ParticipantServiceJpa          -[#008200,dashed]-^  ParticipantService            
+RoleServiceJPA                 -[#008200,dashed]-^  RoleService                   
+@enduml
