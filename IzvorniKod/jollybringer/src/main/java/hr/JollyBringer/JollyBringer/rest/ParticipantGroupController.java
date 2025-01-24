@@ -121,15 +121,16 @@ public class ParticipantGroupController {
     }
 
     //only the president can add members, if he's the president of the searched group
-    @PutMapping("/{gid}/members/{pid}")
+    @PostMapping("/{gid}/add-members")
     //@Secured("ROLE_LEAD")
-    public ResponseEntity<?> addGroupMember(
+    public ResponseEntity<?> addGroupMembers(
             @PathVariable("gid") Long gid,
-            @PathVariable("pid") Long pid,
-            @AuthenticationPrincipal User u)
+            @RequestBody AddMembersDTO pids,
+            @AuthenticationPrincipal OAuth2User u)
     {
-        checkAllowedToChangeMembers(gid, u.getUsername());
-        return ResponseEntity.ok(participantGroupService.addMember(gid, pid));
+        checkAllowedToChangeMembers(gid, u.getAttribute("email").toString());
+        participantGroupService.addMembers(gid, pids.getUsers());
+        return ResponseEntity.ok(participantGroupService.fetch(gid));
     }
 
     //only the president can remove members, if he's the president of the searched group
@@ -144,12 +145,12 @@ public class ParticipantGroupController {
         return ResponseEntity.ok(participantGroupService.removeMember(gid, pid));
     }
 
-    private void checkAllowedToChangeMembers(Long gid, String username) {
-        String presidentUsername = participantGroupService.fetch(gid).getPresident().getUsername();
-        if (!presidentUsername.equals(username))
+    private void checkAllowedToChangeMembers(Long gid, String mail) {
+        String presidentUsername = participantGroupService.fetch(gid).getPresident().getEmail();
+        if (!presidentUsername.equals(mail))
             throw new RequestDeniedException(
                     "Only the Christmas president (" + presidentUsername + ") can add to group #" + gid
-                            + ", not: " + username
+                            + ", not: " + mail
             );
 
     }

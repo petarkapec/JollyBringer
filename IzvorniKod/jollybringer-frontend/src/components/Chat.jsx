@@ -8,6 +8,34 @@ const Chat = ({ user, selectedGroup }) => {
   const [newMessage, setNewMessage] = useState("");
   const [socket, setSocket] = useState(null);
 
+  const generateSnowflakes = () => {
+    const snowflakesCount = 50;  // Broj snježnih pahulja
+    const snowflakesArray = [];
+
+    for (let i = 0; i < snowflakesCount; i++) {
+      snowflakesArray.push(
+        <div
+          key={i}
+          className="snowflake"
+          style={{
+            left: `${Math.random() * 100}%`,  // Random pozicija horizontalno
+            animationDuration: `${Math.random() * 5 + 5}s`,  // Random trajanje animacije
+            animationDelay: `${Math.random() * 5}s`,  // Random kašnjenje animacije
+            width: `${Math.random() * 5 + 5}px`,  // Random veličina pahulje
+            height: `${Math.random() * 5 + 5}px`,  // Random visina pahulje
+          }}
+        ></div>
+      );
+    }
+
+    return snowflakesArray;
+  };
+
+  useEffect(() => {
+    // Dodaj snježne pahulje prilikom učitavanja komponente
+    generateSnowflakes();
+  }, []);
+
   // Ref za automatsko skrolovanje
   const messagesEndRef = useRef(null);
 
@@ -106,6 +134,7 @@ const Chat = ({ user, selectedGroup }) => {
           Send
         </button>
       </div>
+      {generateSnowflakes()}
     </div>
   );
 };

@@ -73,8 +73,8 @@ const Activities = ({ selectedGroup, role }) => {
   if (!selectedGroup) {
     return (
       <div className="p-4">
-        <h2 className="text-2xl font-bold mb-6">Christmas Activities</h2>
-        <div className="p-4 text-center text-gray-400">
+        <h2 className="text-2xl font-bold mb-6 text-white">Christmas Activities</h2>
+        <div className="p-4 text-center text-white">
           Please select a group first
         </div>
       </div>
@@ -93,30 +93,33 @@ const Activities = ({ selectedGroup, role }) => {
         <h2 className="text-2xl font-bold text-white">Christmas Activities</h2>
         <div className="flex gap-2 items-center">
           {location.pathname !== '/dashboard/activities' && (
-            <SquareArrowOutUpRight
-              className="cursor-pointer text-white hover:text-gray-300 mr-3"
-              onClick={() => navigate('/dashboard/activities', { state: { selectedGroupId: selectedGroup.id } })}
-            />
+            <div className="flex items-center cursor-pointer text-white hover:text-gray-300 mr-3" onClick={() => navigate('/dashboard/activities', { state: { selectedGroupId: selectedGroup.id } })}>
+              <SquareArrowOutUpRight className="mr-1" />
+              <span>Go to Dashboard</span>
+            </div>
           )}
           {(role === 'President' || role === 'Admin') && (
             <>
               <button
-                onClick={handleCreateWithAI}
-                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-              >
-                Create with AI
+                onClick={handleCreateWithAI} 
+                className="flex flex-col items-center cursor-pointer">
+                <img src="\assets\img\elf.png" alt="Elf Icon" className="w-16 h-16" />
+                <span className='text-white'>Create with AI</span>
               </button>
+
               <button
                 onClick={() => setShowModal(true)}
-                className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
+                className="flex flex-col items-center cursor-pointer"
               >
-                Create Activity
+                <img src='/assets/img/gingerbread.png' className='w-16 h-16 md:w-16 md:h-16'></img>
+                <span className='text-white'>Create Activity</span>
               </button>
             </>
           )}
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 min-h-screen">
+
         {days.map((day) => (
           <ActivityCard
             key={day}

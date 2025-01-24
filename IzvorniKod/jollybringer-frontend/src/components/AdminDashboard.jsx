@@ -7,6 +7,7 @@ const AdminDashboard = () => {
   const [applications, setApplications] = useState([]);
   const [groups, setGroups] = useState([]);
   const [users, setUsers] = useState([]);
+  const [activities, setActivities] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -15,9 +16,11 @@ const AdminDashboard = () => {
         const groupsResponse = await API.get('/groups');  // Using API class
         const usersResponse = await API.get('/participants');  // Using API class
         const applicationsResponse = await API.get('/applications');  // Using API class
+        const activitiesResponse = await API.get('/activities');  // Using API class
         setGroups(groupsResponse);
         setUsers(usersResponse);
         setApplications(applicationsResponse);
+        setActivities(activitiesResponse);
       } catch (error) {
         console.error('Error fetching admin data:', error);
       } finally {
@@ -64,12 +67,30 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleDeleteActivity = async (activityId) => {
+    try {
+      await API.delete(`/activities/${activityId}`);  // Using API class
+      setActivities(activities.filter(activity => activity.id !== activityId));
+      toast.success('Activity deleted successfully');
+    } catch (error) {
+      console.error('Error deleting activity:', error);
+      toast.error('Failed to delete activity');
+    }
+  };
+
+  const truncateDescription = (description, maxLength) => {
+    if (description.length > maxLength) {
+      return description.substring(0, maxLength) + '...';
+    }
+    return description;
+  };
+
   if (isLoading) return <div className="flex justify-center items-center h-full">Loading...</div>;
 
   return (
-    <div className="h-dvh w-dvw text-white">
+    <div className="w-dvw text-white bg-transparent">
       <Header />
-      <div className="p-8">
+      <div className="p-8 bg-transparent">
         <h1 className="text-3xl font-bold mb-6">President Role Applications</h1>
         {applications.length === 0 ? (
           <p className="text-gray-400">No pending applications</p>
@@ -155,6 +176,38 @@ const AdminDashboard = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm">{user.email}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <button onClick={() => handleDeleteUser(user.id)} className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Delete</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        <h2 className="text-3xl font-bold mb-6 mt-8">Activities</h2>
+        {activities.length === 0 ? (
+          <p className="text-gray-400">No activities available</p>
+        ) : (
+          <div className="bg-customGray rounded-lg shadow overflow-hidden max-h-64">
+            <div className="max-h-64 overflow-auto">
+              <table className="min-w-full divide-y divide-customGrayLighter">
+                <thead className="bg-customGrayLighter">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Activity Name</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Description</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Date</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-customGray divide-y divide-customGrayLighter">
+                  {activities.map((activity) => (
+                    <tr key={activity.id}>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">{activity.activityName}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">{truncateDescription(activity.description, 50)}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">{new Date(activity.date).toLocaleDateString()}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button onClick={() => handleDeleteActivity(activity.id)} className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Delete</button>
                       </td>
                     </tr>
                   ))}

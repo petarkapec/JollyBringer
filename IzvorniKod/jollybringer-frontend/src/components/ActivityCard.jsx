@@ -35,21 +35,21 @@ const ActivityCard = ({ day, activity, onClick, onActivityDeleted }) => {
   return (
     <>
       <div 
-        className={`p-4 rounded-lg ${isFlipped ? 'bg-customGrayLighter' : 'bg-customGray'} ${isEligible ? 'cursor-pointer' : 'cursor-not-allowed'}`}
+        className={`p-4 rounded-lg ${isFlipped ? 'bg-white/80' : 'bg-white'} ${isEligible ? 'cursor-pointer' : 'cursor-not-allowed'}`}
         onClick={handleClick}
         style={{ cursor: isEligible ? 'pointer' : 'not-allowed' }}
       >
         <div className="text-xl font-bold mb-2 text-red-600">Day {day}</div>
         {isFlipped ? (
           activity ? (
-            <h3 className="text-lg font-semibold text-gray-300 text-[16px]">
+            <h3 className="text-lg font-semibold text-green-600 text-[16px]">
               {activity.activityName}
             </h3>
           ) : (
-            <p className="text-gray-400">No activity planned</p>
+            <p className="text-green-600">No activity planned</p>
           )
         ) : (
-          <p className="text-gray-400">Click to reveal</p>
+          <p className="text-green-600">Click to reveal</p>
         )}
       </div>
       {activity && (
