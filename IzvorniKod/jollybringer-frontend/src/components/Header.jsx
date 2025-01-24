@@ -108,6 +108,8 @@ const Header = ({ onGroupSelect }) => {
 
   const handleGroupClick = (group) => {
     onGroupSelect(group);
+    setSelectedGroup(group.name);
+    localStorage.setItem(SELECTED_GROUP_KEY, JSON.stringify(group));
     setIsMenuOpen(false);
   };
 

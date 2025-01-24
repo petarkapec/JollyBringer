@@ -73,8 +73,8 @@ const Activities = ({ selectedGroup, role }) => {
   if (!selectedGroup) {
     return (
       <div className="p-4">
-        <h2 className="text-2xl font-bold mb-6">Christmas Activities</h2>
-        <div className="p-4 text-center text-gray-400">
+        <h2 className="text-2xl font-bold mb-6 text-white">Christmas Activities</h2>
+        <div className="p-4 text-center text-white">
           Please select a group first
         </div>
       </div>
