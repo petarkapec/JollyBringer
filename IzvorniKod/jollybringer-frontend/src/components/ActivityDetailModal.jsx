@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import useAuth from '../hooks/useAuth.js';
 import Feedback from './Feedback.jsx';
@@ -6,6 +6,7 @@ import API from './api.js'; // Import the API class
 
 const ActivityDetailModal = ({ activity, isOpen, onClose, onActivityDeleted }) => {
   const { role } = useAuth();
+  const [activityStatus, setActivityStatus] = useState(activity?.activity_status);
 
   if (!isOpen || !activity) return null;
 
@@ -22,8 +23,8 @@ const ActivityDetailModal = ({ activity, isOpen, onClose, onActivityDeleted }) =
   const handleMarkAsDone = async () => {
     try {
       await API.put(`/activities/${activity.id}/completed`, { activity_status: 'Completed' });
+      setActivityStatus('Done'); // Update the local state
       toast.success('Activity marked as done');
-      onClose();
     } catch (error) {
       console.log(error);
       toast.error('Failed to mark activity as done');
@@ -49,7 +50,7 @@ const ActivityDetailModal = ({ activity, isOpen, onClose, onActivityDeleted }) =
             Date: {new Date(activity.date).toLocaleDateString()}
           </p>
           <p className="text-xs text-red-600">
-            Status: {activity.activity_status}
+            Status: {activityStatus}
           </p>
           {(role === 'President' || role === 'Admin') && (
             <div className="flex gap-4">

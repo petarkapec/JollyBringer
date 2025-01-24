@@ -12,7 +12,9 @@ const AddMembersModal = ({ isOpen, onClose, groupId }) => {
       try {
         const users = await API.get('/participants/only');
         const groups = await API.get('/groups');
-        setAllUsers(users);
+        const usersInGroups = groups.flatMap(group => group.members.map(user => user.id));
+        const usersNotInGroups = users.filter(user => !usersInGroups.includes(user.id));
+        setAllUsers(usersNotInGroups);
         setGroups(groups);
       } catch (error) {
         toast.error('Failed to fetch users or groups');
