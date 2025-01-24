@@ -21,7 +21,7 @@ const ActivityDetailModal = ({ activity, isOpen, onClose, onActivityDeleted }) =
 
   const handleMarkAsDone = async () => {
     try {
-      await API.put(`/activities/${activity.id}`, { activity_status: 'Completed' });
+      await API.put(`/activities/${activity.id}/completed`, { activity_status: 'Completed' });
       toast.success('Activity marked as done');
       onClose();
     } catch (error) {
