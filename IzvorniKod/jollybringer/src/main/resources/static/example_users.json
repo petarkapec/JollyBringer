@@ -1,0 +1,168 @@
+[
+  {
+
+    "username": "John_Doe",
+    "email": "johndoe@example.com",
+    "role_id": 1
+  },
+  {
+
+    "username": "Jane_Smith",
+    "email": "janesmith@example.com",
+    "role_id": 1
+  },
+  {
+
+    "username": "Michael_Brown",
+    "email": "michaelbrown@example.com",
+    "role_id": 1
+  },
+  {
+
+    "username": "Sarah_Jones",
+    "email": "sarahjones@example.com",
+    "role_id": 1
+  },
+  {
+
+    "username": "David_Johnson",
+    "email": "davidjohnson@example.com",
+    "role_id": 1
+  },
+  {
+
+    "username": "Emily_Davis",
+    "email": "emilydavis@example.com",
+    "role_id": 1
+  },
+  {
+
+    "username": "Chris_Miller",
+    "email": "chrismiller@example.com",
+    "role_id": 1
+  },
+  {
+
+    "username": "Amanda_Wilson",
+    "email": "amandawilson@example.com",
+    "role_id": 1
+  },
+  {
+
+    "username": "James_Moore",
+    "email": "jamesmoore@example.com",
+    "role_id": 1
+  },
+  {
+
+    "username": "Jessica_Taylor",
+    "email": "jessicataylor@example.com",
+    "role_id": 1
+  },
+  {
+
+    "username": "William_Anderson",
+    "email": "williamanderson@example.com",
+    "role_id": 1
+  },
+  {
+
+    "username": "Olivia_Thomas",
+    "email": "oliviathomas@example.com",
+    "role_id": 1
+  },
+  {
+
+    "username": "Ethan_Jackson",
+    "email": "ethanjackson@example.com",
+    "role_id": 1
+  },
+  {
+
+    "username": "Sophia_White",
+    "email": "sophiawhite@example.com",
+    "role_id": 1
+  },
+  {
+
+    "username": "Liam_Harris",
+    "email": "liamharris@example.com",
+    "role_id": 1
+  },
+  {
+
+    "username": "Benjamin_Martin",
+    "email": "benjaminmartin@example.com",
+    "role_id": 1
+  },
+  {
+
+    "username": "Emma_Garcia",
+    "email": "emmagarcia@example.com",
+    "role_id": 2
+  },
+  {
+
+    "username": "Daniel_Rodriguez",
+    "email": "danielrodriguez@example.com",
+    "role_id": 2
+  },
+  {
+
+    "username": "Grace_Lewis",
+    "email": "gracelewis@example.com",
+    "role_id": 2
+  },
+  {
+
+    "username": "Samuel_Walker",
+    "email": "samuelwalker@example.com",
+    "role_id": 2
+  },
+  {
+
+    "username": "Mia_Hall",
+    "email": "miahall@example.com",
+    "role_id": 3
+  },
+  {
+
+    "username": "Alexander_Allen",
+    "email": "alexanderallen@example.com",
+    "role_id": 3
+  },
+  {
+
+    "username": "Ava_Young",
+    "email": "avayoung@example.com",
+    "role_id": 3
+  },
+  {
+
+    "username": "Isabella_King",
+    "email": "isabellaking@example.com",
+    "role_id": 3
+  },
+  {
+
+    "username": "Noah_Wright",
+    "email": "noahwright@example.com",
+    "role_id": 3
+  },
+  {
+    "username": "progitest",
+    "email": "progitest6@gmail.com",
+    "role_id": 2
+  },
+  {
+    "username": "antisa",
+    "email": "antewert1@gmail.com",
+    "role_id": 2
+  },
+
+  {
+    "username": "antem",
+    "email": "antemrkonjic0908@gmail.com",
+    "role_id": 2
+  }
+]

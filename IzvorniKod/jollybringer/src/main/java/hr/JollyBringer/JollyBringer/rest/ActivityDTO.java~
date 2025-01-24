@@ -1,0 +1,86 @@
+package hr.JollyBringer.JollyBringer.rest;
+
+public class ActivityDTO {
+
+    private String activity_name;
+    private String description;
+    private String DATE;
+    private String ACTIVITY_STATUS; // Enum type as a String
+    private Long GROUP_ID; // Matches GROUP_ID in JSON
+    private String CREATED_BY;
+
+    // Constructors
+    public ActivityDTO() {
+    }
+
+    public ActivityDTO(String activity_name, String description, String DATE, String ACTIVITY_STATUS, Long GROUP_ID, String CREATED_BY) {
+        this.activity_name = activity_name;
+        this.description = description;
+        this.DATE = DATE;
+        this.ACTIVITY_STATUS = ACTIVITY_STATUS;
+        this.GROUP_ID = GROUP_ID;
+        this.CREATED_BY = CREATED_BY;
+    }
+
+    // Getters and Setters
+    public String getActivity_name() {
+        return activity_name;
+    }
+
+    public void setActivity_name(String activity_name) {
+        this.activity_name = activity_name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDATE() {
+        return DATE;
+    }
+
+    public void setDATE(String DATE) {
+        this.DATE = DATE;
+    }
+
+    public String getACTIVITY_STATUS() {
+        return ACTIVITY_STATUS;
+    }
+
+    public void setACTIVITY_STATUS(String activity_status) {
+        this.ACTIVITY_STATUS = activity_status;
+    }
+
+    public Long getGROUP_ID() {
+        return GROUP_ID;
+    }
+
+    public void setGROUP_ID(Long GROUP_ID) {
+        this.GROUP_ID = GROUP_ID;
+    }
+
+    public String getCREATED_BY() {
+        return CREATED_BY;
+    }
+
+    public void setCREATED_BY(String CREATED_BY) {
+        this.CREATED_BY = CREATED_BY;
+    }
+
+    // toString() method for debugging
+    @Override
+    public String toString() {
+        return "ActivityDTO{" +
+                "activity_name='" + activity_name + '\'' +
+                ", description='" + description + '\'' +
+                ", DATE='" + DATE + '\'' +
+                ", activity_status='" + ACTIVITY_STATUS + '\'' +
+                ", GROUP_ID=" + GROUP_ID +
+                ", CREATED_BY='" + CREATED_BY + '\'' +
+                '}';
+    }
+}
