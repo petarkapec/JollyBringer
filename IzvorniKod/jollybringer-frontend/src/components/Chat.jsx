@@ -65,9 +65,7 @@ const Chat = ({ user, selectedGroup }) => {
       fetchLast7Messages();
     }
 
-    const wssUrl = import.meta.env.VITE_BACKEND_WS;
-
-    const wsUrl = wssUrl; // WebSocket URL
+    const wsUrl = "ws://localhost:8080/chat"; // WebSocket URL
     const ws = createWebSocket(wsUrl, (message) => {
       // Provjerite ako je group u poruci isti kao selectedGroup?.id
       console.log(message.group, selectedGroup);
