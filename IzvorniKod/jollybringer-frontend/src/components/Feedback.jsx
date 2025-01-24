@@ -61,9 +61,10 @@ const Feedback = ({ activityId }) => {
           <button
             type="button"
             onClick={handleLikeToggle}
-            className={`p-2 rounded bg-green-600 ${isLiked === 'Like' ? 'bg-green-600' : 'bg-gray-600'} text-white`}
+            className={`p-2 rounded ${isLiked === 'Like' ? 'bg-green-600' : 'bg-gray-600'} text-white flex items-center gap-1`}
           >
-            <ThumbsUp />
+            <ThumbsUp className="w-4 h-4" />
+            {isLiked === 'Like' ? 'Liked' : 'Like'}
           </button>
           <button
             type="submit"
