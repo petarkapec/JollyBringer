@@ -117,7 +117,10 @@ public class ParticipantController {
 
         deleted.setRole(new Role(1L, "Participant"));
         participantService.updateParticipant(deleted);
-        applicationService.deleteApplicationRequest(deleted.getId());
+        if (applicationService.findByUserId(deleted.getId()).isPresent()) {
+            applicationService.deleteApplicationRequest(deleted.getId());
+        }
+
         if(participantGroupService.findByMember(deleted).isPresent()) {
             participantGroupService.removeMember(participantGroupService.findByMember(deleted).get().getId(), deleted.getId());
             return  participantService.deleteParticipant(id);

@@ -1,13 +1,13 @@
 package hr.JollyBringer.JollyBringer;
 
-import hr.JollyBringer.JollyBringer.dao.ParticipantRepository;
 import hr.JollyBringer.JollyBringer.domain.*;
 import hr.JollyBringer.JollyBringer.rest.*;
 import hr.JollyBringer.JollyBringer.service.*;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.util.Assert;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -23,19 +23,22 @@ public class ServiceTests {
     private final ParticipantService participantService;
     private final ParticipantGroupService participantGroupService;
     private final ActivityService activityService;
+    private final FeedbackService feedbackService;
 
     private final ApplicationController applicationController;
-
+    private final ActivityController activityController;
     private final ParticipantGroupController participantGroupController;
 
 
 
     @Autowired
-    public ServiceTests(ParticipantService participantService, ParticipantGroupService participantGroupService, ActivityService activityService, ApplicationController applicationController, ParticipantGroupController participantGroupController) {
+    public ServiceTests(ParticipantService participantService, ParticipantGroupService participantGroupService, ActivityService activityService, FeedbackService feedbackService, ApplicationController applicationController, ActivityController activityController, ParticipantGroupController participantGroupController) {
         this.participantService = participantService;
         this.participantGroupService = participantGroupService;
         this.activityService = activityService;
+        this.feedbackService = feedbackService;
         this.applicationController = applicationController;
+        this.activityController = activityController;
         this.participantGroupController = participantGroupController;
     }
 
@@ -58,8 +61,8 @@ public class ServiceTests {
 
     }
 
-    @Test
-    public void testSameGroupName(){
+    @Test //izazivanje iznimke
+    public void testSameGroupName(){ //
         Participant newTester = new Participant("Kreso", "kreso@samplemail.com", new Role(2L, "PRESIDENT"));
         participantService.createParticipant(newTester);
         Exception exception = assertThrows(RequestDeniedException.class, () -> {
@@ -75,7 +78,7 @@ public class ServiceTests {
         assertTrue(actualMessage.contains(expectedMessage), "Exception message does not match!");
     }
 
-    @Test
+    @Test //neimplementirana dunkcija
     public void testNonimplementedMethod(){
         PointsService service = new PointsService();
         Exception exception = assertThrows(UnsupportedOperationException.class, () -> {
@@ -88,9 +91,22 @@ public class ServiceTests {
         assertTrue(actualMessage.contains(expectedMessage), "Exception message does not match!");
     }
 
-    @Test
-    public void testCreateFeedbackforNoActivity(){
-        Feedback feedback = new Feedback("test");
+    @Test //rubni slucaj, brisanje feedbacka bez aktivnosti
+    public void testDeleteFeedbackforNoActivity(){
+
+        Activity activity = new Activity("SampleActivity", "SampleDescription", "2021-01-01", "InProgress", testGroup, tester.getEmail(), true);
+        activityService.createActivity(activity);
+
+        Feedback feedback = new Feedback("SuperFeedback", activityService.findByactivityName("SampleActivity").get(), tester, "Like");
+
+        feedbackService.createFeedback(feedback);
+        List<Feedback> lista = feedbackService.findByActivityId(activityService.findByactivityName("SampleActivity").get().getId());
+        Feedback gotten = new Feedback();
+        for (Feedback f : lista) {
+            gotten = f;
+        }
+        activityController.deleteActivity(activity.getId());
+        assertTrue(feedbackService.findById(gotten.getId()).isEmpty(), "Feedback is not deleted");
     }
 
 

@@ -57,7 +57,7 @@ public class ControllerTests {
 
 
     }
-    @Test
+    @Test //funkcionalnost
     public void testApplyForPresident() {
 
         ApplicationDTO applicationDTO = new ApplicationDTO(tester.getId(), true);
@@ -69,7 +69,7 @@ public class ControllerTests {
         tester = participantService.findByEmail("danko@samplemail.com").get();
         Assert.isTrue(tester.getRole().getName().equals("President"), "User is not president");
     }
-    @Test
+    @Test //funkcionalnost
     public void testCreateActivity(){
         ActivityDTO activityDTO = new ActivityDTO("SampleActivity", "SampleDescription", "2021-01-01", "InProgress", testGroup.getId(), tester.getUsername());
 
@@ -78,7 +78,7 @@ public class ControllerTests {
         Assert.isTrue(activity.getActivityName().equals("SampleActivity"), "Activity not created");
     }
 
-    @Test
+    @Test //izazivanje iznimki
     public void testDeleteNonExistentGroupWithController() {
         Long nonExistentGroupId = -1L;
 
