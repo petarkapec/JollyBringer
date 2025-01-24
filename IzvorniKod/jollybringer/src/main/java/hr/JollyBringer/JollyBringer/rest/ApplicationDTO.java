@@ -4,6 +4,11 @@ public class ApplicationDTO {
     private Long user_id;
     private boolean applied;
 
+    public ApplicationDTO(Long user_id, boolean applied) {
+        this.user_id = user_id;
+        this.applied = applied;
+    }
+
     public Long getUser_id() {
         return user_id;
     }

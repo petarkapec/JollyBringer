@@ -17,7 +17,7 @@ public class Participant  {
     @GeneratedValue
     private Long id;
 
-    //TODO mora biti jedinstven
+
     private String username;
 
     @Column(unique = true, nullable = false)

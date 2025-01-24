@@ -52,31 +52,32 @@ const ActivitiesPool = ({ groupId, onActivityCreated }) => {
   };
 
   return (
-    <div className="p-4 bg-customGray rounded-lg">
+    <div className="p-4 rounded-lg bg-white">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold text-white">All Activities</h2>
+        <h2 className="text-2xl font-bold text-red-700">All Activities</h2>
         <div className="flex gap-2 items-center">
-          <button
-            onClick={handleCreateWithAI}
-            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-          >
-            Create with AI
-          </button>
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
-          >
-            Create Activity
-          </button>
+              <button
+                onClick={handleCreateWithAI} 
+                className="flex flex-col items-center cursor-pointer">
+                <img src="\assets\img\elf.png" alt="Elf Icon" className="w-16 h-16" />
+                <span className='text-red-700'>Create with AI</span>
+              </button>
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="flex flex-col items-center cursor-pointer"
+              >
+                <img src='/assets/img/gingerbread.png' className='w-16 h-16 md:w-16 md:h-16'></img>
+                <span className='text-red-700'>Create Activity</span>
+              </button>
         </div>
       </div>
       <ul className="space-y-2">
         {activities.map((activity) => (
-          <li key={activity.id} className="bg-customGrayLighter p-2 rounded text-white flex justify-between items-center cursor-pointer" onClick={() => handleActivityClick(activity)}>
+          <li key={activity.id} className="bg-red-700 p-2 rounded text-white flex justify-between items-center cursor-pointer" onClick={() => handleActivityClick(activity)}>
             <div>
               <h3 className="font-semibold">{activity.activity_name}</h3>
               <p>{activity.description}</p>
-              <p className="text-sm text-gray-400">Date: {new Date(activity.date).toLocaleDateString()}</p>
+              <p className="text-sm text-white text-opacity-70">Date: {new Date(activity.date).toLocaleDateString()}</p>
             </div>
           </li>
         ))}

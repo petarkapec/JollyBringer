@@ -7,21 +7,17 @@ export default function CreateGroupModal({ isOpen, onClose, onGroupCreated }) {
   const [name, setName] = useState('');
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
-  const [groupUsers, setGroupUsers] = useState([]);
   const { role } = useAuth();
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     if (role !== 'Participant') {
       const fetchUsersAndGroups = async () => {
         try {
-          const [usersResponse, groupsResponse] = await Promise.all([
-            API.get('/participants/only'), // Using API.get() instead of axios.get()
-            API.get('/groups') // Using API.get() for fetching groups
-          ]);
+          const usersResponse = await API.get('/participants/only'); // Using API.get() instead of axios.get()
+          const groupsResponse = await API.get('/groups'); // Using API.get() for fetching groups
 
-          const users = usersResponse.data;
-          const groups = groupsResponse.data;
+          const users = usersResponse;
+          const groups = groupsResponse;
 
           const usersInGroups = groups.flatMap(group => group.members.map(user => user.id));
           const usersNotInGroups = users.filter(user => !usersInGroups.includes(user.id));
@@ -29,6 +25,7 @@ export default function CreateGroupModal({ isOpen, onClose, onGroupCreated }) {
           setAllUsers(usersNotInGroups);
         } catch (error) {
           console.error('Error fetching users or groups:', error);
+          toast.error('Failed to fetch users or groups');
         }
       };
       fetchUsersAndGroups();
@@ -42,11 +39,13 @@ export default function CreateGroupModal({ isOpen, onClose, onGroupCreated }) {
         name: name,
         users: selectedUsers
       }); // Using API.post() instead of axios.post()
-      const newGroup = response.data;
+      const newGroup = response;
       onClose();
       onGroupCreated(newGroup); // Set the newly created group as the selected group
+      toast.success('Group created successfully'); // Add toast notification
     } catch (error) {
       console.error('Error creating group:', error);
+      toast.error('Failed to create group');
     }
   };
 

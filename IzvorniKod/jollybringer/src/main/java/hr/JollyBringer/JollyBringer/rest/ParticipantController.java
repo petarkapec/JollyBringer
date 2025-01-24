@@ -23,15 +23,17 @@ public class ParticipantController {
     private final ActivityService activityService;
     private final ChatMessageService chatMessageService;
     private final ParticipantGroupService participantGroupService;
+    private final ApplicationService applicationService;
 
 
     public ParticipantController(ParticipantService participantService, FeedbackService feedbackService, ActivityService activityService,
-                                 ChatMessageService chatMessageService, ParticipantGroupService participantGroupService) {
+                                 ChatMessageService chatMessageService, ParticipantGroupService participantGroupService, ApplicationService applicationService) {
         this.participantService = participantService;
         this.feedbackService = feedbackService;
         this.activityService = activityService;
         this.chatMessageService = chatMessageService;
         this.participantGroupService = participantGroupService;
+        this.applicationService = applicationService;
     }
 
     @GetMapping("")
@@ -75,6 +77,8 @@ public class ParticipantController {
         for (Activity activity : activities) {
             feedbackService.deleteRelatedFeedbacks(activity.getId());
             activityService.deleteActivity(activity.getId());
+
+
         }
         List<ChatMessage> messages = chatMessageService.findByParticipantId(participantService.fetch(id).getId());
         for(ChatMessage message : messages) {
@@ -113,7 +117,7 @@ public class ParticipantController {
 
         deleted.setRole(new Role(1L, "Participant"));
         participantService.updateParticipant(deleted);
-
+        applicationService.deleteApplicationRequest(deleted.getId());
         if(participantGroupService.findByMember(deleted).isPresent()) {
             participantGroupService.removeMember(participantGroupService.findByMember(deleted).get().getId(), deleted.getId());
             return  participantService.deleteParticipant(id);

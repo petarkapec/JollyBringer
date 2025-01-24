@@ -81,7 +81,16 @@ public class ActivityController {
         if (!activity.getId().equals(id))
             throw new IllegalArgumentException("activity ID must be preserved");
 
-       Activity saved = activityService.updateActivity(activity);
+        Activity saved = activityService.updateActivity(activity);
+        return ResponseEntity.ok(saved);
+    }
+
+    @PutMapping("/{id}/completed")
+    //@Secured("ROLE_ADMIN")
+    public ResponseEntity<Activity> updateActivityCompleted(@PathVariable("id") long id){
+        Activity updated = activityService.fetch(id);
+        updated.setActivity_status("Done");
+        Activity saved = activityService.updateActivity(updated);
         return ResponseEntity.ok(saved);
     }
 
