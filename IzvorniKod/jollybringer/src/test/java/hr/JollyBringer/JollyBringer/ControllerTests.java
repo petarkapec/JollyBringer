@@ -6,9 +6,7 @@ import hr.JollyBringer.JollyBringer.domain.Participant;
 import hr.JollyBringer.JollyBringer.domain.ParticipantGroup;
 import hr.JollyBringer.JollyBringer.domain.Role;
 import hr.JollyBringer.JollyBringer.rest.*;
-import hr.JollyBringer.JollyBringer.service.ActivityService;
-import hr.JollyBringer.JollyBringer.service.ParticipantGroupService;
-import hr.JollyBringer.JollyBringer.service.ParticipantService;
+import hr.JollyBringer.JollyBringer.service.*;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -78,9 +76,20 @@ public class ControllerTests {
         participantGroupController.createActivitiesByGroupIdCalendar(activityDTO);
         Activity activity = activityService.findByactivityName("SampleActivity").get();
         Assert.isTrue(activity.getActivityName().equals("SampleActivity"), "Activity not created");
-
-
     }
+
+    @Test
+    public void testDeleteNonExistentGroupWithController() {
+        Long nonExistentGroupId = -1L;
+
+        Exception exception = Assertions.assertThrows(EntityMissingException.class, () -> {
+            participantGroupController.deleteGroup(nonExistentGroupId);
+        });
+
+        String expectedMessage = "Entity with reference -1";
+        Assertions.assertTrue(exception.getMessage().contains(expectedMessage), "Exception message does not match!");
+    }
+
     @AfterEach
     public void tearDown() {
         participantGroupService.deleteGroup(testGroup.getId());
