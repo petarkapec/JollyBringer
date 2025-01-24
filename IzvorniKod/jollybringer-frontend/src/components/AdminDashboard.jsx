@@ -216,38 +216,6 @@ const AdminDashboard = () => {
             </div>
           </div>
         )}
-
-        <h2 className="text-3xl font-bold mb-6 mt-8">Activities</h2>
-        {activities.length === 0 ? (
-          <p className="text-gray-400">No activities available</p>
-        ) : (
-          <div className="bg-customGray rounded-lg shadow overflow-hidden max-h-64">
-            <div className="max-h-64 overflow-auto">
-              <table className="min-w-full divide-y divide-customGrayLighter">
-                <thead className="bg-customGrayLighter">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Activity Name</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Description</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Date</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-customGray divide-y divide-customGrayLighter">
-                  {activities.map((activity) => (
-                    <tr key={activity.id}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">{activity.activityName}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">{truncateDescription(activity.description, 50)}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">{new Date(activity.date).toLocaleDateString()}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button onClick={() => handleDeleteActivity(activity.id)} className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Delete</button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

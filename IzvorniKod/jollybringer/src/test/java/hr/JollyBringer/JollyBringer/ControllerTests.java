@@ -6,9 +6,7 @@ import hr.JollyBringer.JollyBringer.domain.Participant;
 import hr.JollyBringer.JollyBringer.domain.ParticipantGroup;
 import hr.JollyBringer.JollyBringer.domain.Role;
 import hr.JollyBringer.JollyBringer.rest.*;
-import hr.JollyBringer.JollyBringer.service.ActivityService;
-import hr.JollyBringer.JollyBringer.service.ParticipantGroupService;
-import hr.JollyBringer.JollyBringer.service.ParticipantService;
+import hr.JollyBringer.JollyBringer.service.*;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -59,7 +57,7 @@ public class ControllerTests {
 
 
     }
-    @Test
+    @Test //funkcionalnost
     public void testApplyForPresident() {
 
         ApplicationDTO applicationDTO = new ApplicationDTO(tester.getId(), true);
@@ -71,16 +69,27 @@ public class ControllerTests {
         tester = participantService.findByEmail("danko@samplemail.com").get();
         Assert.isTrue(tester.getRole().getName().equals("President"), "User is not president");
     }
-    @Test
+    @Test //funkcionalnost
     public void testCreateActivity(){
         ActivityDTO activityDTO = new ActivityDTO("SampleActivity", "SampleDescription", "2021-01-01", "InProgress", testGroup.getId(), tester.getUsername());
 
         participantGroupController.createActivitiesByGroupIdCalendar(activityDTO);
         Activity activity = activityService.findByactivityName("SampleActivity").get();
         Assert.isTrue(activity.getActivityName().equals("SampleActivity"), "Activity not created");
-
-
     }
+
+    @Test //izazivanje iznimki
+    public void testDeleteNonExistentGroupWithController() {
+        Long nonExistentGroupId = -1L;
+
+        Exception exception = Assertions.assertThrows(EntityMissingException.class, () -> {
+            participantGroupController.deleteGroup(nonExistentGroupId);
+        });
+
+        String expectedMessage = "Entity with reference -1";
+        Assertions.assertTrue(exception.getMessage().contains(expectedMessage), "Exception message does not match!");
+    }
+
     @AfterEach
     public void tearDown() {
         participantGroupService.deleteGroup(testGroup.getId());
