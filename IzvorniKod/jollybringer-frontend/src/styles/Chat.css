@@ -1,46 +1,17 @@
-
+/*!* Chat.css *!*/
+/* General Container */
 .chat-container {
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 0 auto;
   padding: 20px;
+  background: transparent;
+  backdrop-filter: blur(10px);
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(219, 38, 38, 0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   color: white;
-  overflow: hidden;  
-  background-color: darkred;
 }
-
-.snowflake {
-  position: absolute;
-  top: -10px;
-  background: white;
-  border-radius: 50%;
-  width: 10px;
-  height: 10px;
-  animation: snowfall 10s linear infinite;
-  opacity: 0.7;
-}
-
-@keyframes snowfall {
-  0% {
-    transform: translateY(-10px);
-    opacity: 0.7;
-  }
-  100% {
-    transform: translateY(100vh);
-    opacity: 0.5;
-  }
-}
-
-
-@keyframes generateSnowflakes {
-  0% { opacity: 1; }
-  100% { opacity: 0; }
-}
-
 
 /* Header */
 .chat-header {
@@ -60,6 +31,7 @@
   border-radius: 10px;
   padding: 15px;
   margin-bottom: 20px;
+  background: rgba(0, 0, 0, 0.2);
 }
 
 /* Single Message */
@@ -134,4 +106,27 @@
 .send-button:active {
   background: darkgreen;
   transform: scale(1);
+}
+
+/* Snowflake */
+.snowflake {
+  position: absolute;
+  top: -10px;
+  background: white;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  animation: snowfall 10s linear infinite;
+  opacity: 0.7;
+}
+
+@keyframes snowfall {
+  0% {
+    transform: translateY(-10px);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0.5;
+  }
 }
