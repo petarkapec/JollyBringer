@@ -7,6 +7,7 @@ export default function CreateGroupModal({ isOpen, onClose, onGroupCreated }) {
   const [name, setName] = useState('');
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
+  const [groups, setGroups] = useState([]); // State to store groups
   const { role } = useAuth();
 
   useEffect(() => {
@@ -23,6 +24,7 @@ export default function CreateGroupModal({ isOpen, onClose, onGroupCreated }) {
           const usersNotInGroups = users.filter(user => !usersInGroups.includes(user.id));
 
           setAllUsers(usersNotInGroups);
+          setGroups(groups); // Set the groups state
         } catch (error) {
           console.error('Error fetching users or groups:', error);
           toast.error('Failed to fetch users or groups');
@@ -34,6 +36,14 @@ export default function CreateGroupModal({ isOpen, onClose, onGroupCreated }) {
 
   const handleCreateGroup = async (e) => {
     e.preventDefault();
+
+    // Check if a group with the same name already exists
+    const groupExists = groups.some(group => group.name.toLowerCase() === name.toLowerCase());
+    if (groupExists) {
+      toast.error('A group with this name already exists');
+      return;
+    }
+
     try {
       const response = await API.post('/groups', {
         name: name,
