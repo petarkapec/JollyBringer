@@ -88,7 +88,7 @@ public class WebSecurityBasic {
                     auth.requestMatchers("/check-auth").permitAll(); //Todo mozda tu da radi deploy treba permitAll
                     auth.anyRequest().authenticated();
                 })
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                
 
 
                 .addFilterBefore(new JwtAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
